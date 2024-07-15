@@ -16,7 +16,7 @@ class View_control(QMainWindow):
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
-        pixmap = QPixmap('1x\innotech_min.png')
+        pixmap = QPixmap(r'FILLER INTERFACE\1x\innotech_min.png')
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.4), int(pixmap.height() * 0.4), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 
@@ -72,13 +72,13 @@ class View_control(QMainWindow):
     def image_low(self):
         self.label = QLabel(self)
         self.label.setGeometry(0, 0, self.width(), self.height())
-        self.label.setPixmap(QPixmap('Window_view\images.png'))
+        self.label.setPixmap(QPixmap(r'FILLER INTERFACE\Window_view\images.png'))
         self.label.setScaledContents(True)
         self.label.lower()
 
 
     def update_image(self):
-        pixmap = QPixmap('Window_view\images.jpg')
+        pixmap = QPixmap(r'FILLER INTERFACE\Window_view\images.jpg')
         #scaled_pixmap = pixmap.scaled(int(pixmap.width() * 2), int(pixmap.height() * 2), Qt.KeepAspectRatio)
         self.label.setPixmap(pixmap)
 
