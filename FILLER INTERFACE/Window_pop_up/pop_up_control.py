@@ -9,7 +9,7 @@ from app import app
 class Pop_up_control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Window_pop_up/UI_pop_up.ui', self)
+        uic.loadUi(r'FILLER INTERFACE\Window_pop_up\UI_pop_up.ui', self)
        
         self.statusBar().setHidden(True)
 

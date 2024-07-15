@@ -11,7 +11,7 @@ from app import app
 class Control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Window_datetime/UI_datetime.ui', self)
+        uic.loadUi(r'FILLER INTERFACE\Window_datetime\UI_datetime.ui', self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -20,7 +20,7 @@ class Control(QMainWindow):
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
-        pixmap = QPixmap('1x\innotech_min.png')
+        pixmap = QPixmap(r'FILLER INTERFACE\1x\innotech_min.png')
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 

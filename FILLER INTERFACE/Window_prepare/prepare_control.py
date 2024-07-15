@@ -11,7 +11,7 @@ from app import app
 class Prepare_control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Window_prepare/UI_prepare.ui', self)
+        uic.loadUi(r'FILLER INTERFACE\Window_prepare\UI_prepare.ui', self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -111,7 +111,7 @@ class Prepare_control(QMainWindow):
 
     
     def button_reset_update(self):
-        self.button_reset.setIcon(QIcon('Style_windows/icons_black/icons8-replay-100.png'))
+        self.button_reset.setIcon(QIcon(r'FILLER INTERFACE\Style_windows/icons_black/icons8-replay-100.png'))
 
 
     def reset(self):
@@ -130,7 +130,7 @@ class Prepare_control(QMainWindow):
         button_size = QSize(130, 120)
         self.button_menu.setFixedSize(button_size)
     
-        self.button_menu.setIcon(QIcon(f'Style_windows/icons_black/icons8-menu-100.png'))
+        self.button_menu.setIcon(QIcon(r'FILLER INTERFACE\Style_windows/icons_black/icons8-menu-100.png'))
 
 
     def button_menu_clicked(self):

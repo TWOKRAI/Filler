@@ -9,7 +9,7 @@ from app import app
 class View_control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Window_view/UI_view.ui', self)
+        uic.loadUi(r'FILLER INTERFACE\Window_view\UI_view.ui', self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)

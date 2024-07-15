@@ -4,8 +4,8 @@ from PIL import Image, ImageOps, ImageDraw
 
 class Style():
     def __init__(self):
-        self.icon_path_orig = "Style_windows\icons"
-        self.icon_path = "Style_windows\icons_black"
+        self.icon_path_orig = r"FILLER INTERFACE\Style_windows\icons"
+        self.icon_path = r"FILLER INTERFACE\Style_windows\icons_black"
 
         self.text_color = (65, 69, 67)
 
@@ -23,7 +23,7 @@ class Style():
 
 
     def style(self):
-        with open('Style_windows/style_green.css', 'r') as f:
+        with open(r'FILLER INTERFACE\Style_windows\style_green.css', 'r') as f:
             custom_style = f.read()
 
         return custom_style

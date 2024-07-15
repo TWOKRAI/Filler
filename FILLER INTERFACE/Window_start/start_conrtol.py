@@ -15,7 +15,7 @@ class Start_control(QMainWindow, Ui_MainWindow):
 
         #self.setAttribute(Qt.WA_TranslucentBackground)
 
-        pixmap = QPixmap('1x\innotech_max_2.png')
+        pixmap = QPixmap(r'FILLER INTERFACE\1x\innotech_max_2.png')
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.8), int(pixmap.height() * 0.8), Qt.KeepAspectRatio)
         self.innotech.setPixmap(scaled_pixmap)
 

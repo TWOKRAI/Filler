@@ -9,7 +9,7 @@ from app import app
 class Control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Window_list1/UI.ui', self)
+        uic.loadUi(r'FILLER INTERFACE\Window_list1\UI.ui', self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -78,10 +78,10 @@ class Control(QMainWindow):
 
 
     def set_icons(self):
-        self.button_menu.setIcon(QIcon(f'Style_windows/icons_black/icons8-menu-100.png'))
-        self.button_start.setIcon(QIcon('Style_windows\icons_black\icons8-wine-bar-100.png'))
-        self.button_game.setIcon(QIcon('Style_windows\icons_black\icons8-game-controller-100.png'))
-        self.button_statistics.setIcon(QIcon('Style_windows\icons_black\icons8-pie-chart-100.png'))
+        self.button_menu.setIcon(QIcon(r'FILLER INTERFACE\Style_windows/icons_black/icons8-menu-100.png'))
+        self.button_start.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-wine-bar-100.png'))
+        self.button_game.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-game-controller-100.png'))
+        self.button_statistics.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-pie-chart-100.png'))
 
 
     def language(self, lang):

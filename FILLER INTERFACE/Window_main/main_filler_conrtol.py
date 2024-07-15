@@ -9,7 +9,7 @@ from app import app
 class Main_filler_control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Window_main/UI_main_filler.ui', self)
+        uic.loadUi(r'FILLER INTERFACE\Window_main\UI_main_filler.ui', self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -25,7 +25,7 @@ class Main_filler_control(QMainWindow):
         
 
         self.start_text = [' НАЧАТЬ', ' Start', ' Beginnen', ' 開始']
-        self.button_start.setIcon(QIcon('Style_windows\icons_black\icons8-wine-bar-100.png'))
+        self.button_start.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-wine-bar-100.png'))
         self.button_start.setMinimumSize(button_size)
         self.button_start.setIconSize(icon_size)
         self.button_start.setFont(font)
@@ -34,7 +34,7 @@ class Main_filler_control(QMainWindow):
         
 
         self.game_text = [' РОБОТ', ' Robots', ' Spiele', ' 遊戲']
-        self.button_robot.setIcon(QIcon('Style_windows\icons_black\icons8-robotic-arm-100.png'))
+        self.button_robot.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-robotic-arm-100.png'))
         self.button_robot.setMinimumSize(button_size)
         self.button_robot.setIconSize(icon_size)
         self.button_robot.setFont(font)
@@ -43,7 +43,7 @@ class Main_filler_control(QMainWindow):
 
 
         self.settings_text = [' НАСТРОЙКИ', ' Settings', ' Einstellungen', ' 設定']
-        self.button_settings.setIcon(QIcon('Style_windows\icons_black\icons8-automation-100.png'))
+        self.button_settings.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-automation-100.png'))
         self.button_settings.setMinimumSize(button_size)
         self.button_settings.setIconSize(icon_size)
         self.button_settings.setFont(font)
@@ -52,7 +52,7 @@ class Main_filler_control(QMainWindow):
 
 
         self.view_text = [' ВИД', ' View', ' Sicht', ' 看法']
-        self.button_view.setIcon(QIcon('Style_windows\icons_black\icons8-preview-pane-100.png'))
+        self.button_view.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-preview-pane-100.png'))
         self.button_view.setMinimumSize(button_size)
         self.button_view.setIconSize(icon_size)
         self.button_view.setFont(font)
@@ -61,7 +61,7 @@ class Main_filler_control(QMainWindow):
 
 
         self.statistics_text = [' ПРОМЫВКА', ' Statistics', ' Statistiken', ' 統計數據']
-        self.button_cip.setIcon(QIcon('Style_windows\icons_black\icons8-водяной-шланг-100.png'))
+        self.button_cip.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-водяной-шланг-100.png'))
         self.button_cip.setMinimumSize(button_size)
         self.button_cip.setIconSize(icon_size)
         self.button_cip.setFont(font)
@@ -92,11 +92,11 @@ class Main_filler_control(QMainWindow):
     
     
     def set_icons(self):
-        self.button_start.setIcon(QIcon('Style_windows\icons_black\icons8-wine-bar-100.png'))
-        self.button_robot.setIcon(QIcon('Style_windows\icons_black\icons8-robotic-arm-100.png'))
-        self.button_settings.setIcon(QIcon('Style_windows\icons_black\icons8-automation-100.png'))
-        self.button_view.setIcon(QIcon('Style_windows\icons_black\icons8-preview-pane-100.png'))
-        self.button_cip.setIcon(QIcon('Style_windows\icons_black\icons8-водяной-шланг-100.png'))
+        self.button_start.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-wine-bar-100.png'))
+        self.button_robot.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-robotic-arm-100.png'))
+        self.button_settings.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-automation-100.png'))
+        self.button_view.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-preview-pane-100.png'))
+        self.button_cip.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-водяной-шланг-100.png'))
 
 
     def start(self):

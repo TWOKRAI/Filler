@@ -10,7 +10,7 @@ class filler_control(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi('Window_filler/UI_filler.ui', self)
+        uic.loadUi(r'FILLER INTERFACE\Window_filler\UI_filler.ui', self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -89,7 +89,7 @@ class filler_control(QMainWindow):
         icon_size = QSize(60, 60)
         self.button_menu.setIconSize(icon_size)
 
-        self.button_menu.setIcon(QIcon(f'Style_windows/icons_black/icons8-menu-100.png'))
+        self.button_menu.setIcon(QIcon(r'FILLER INTERFACE\Style_windows/icons_black/icons8-menu-100.png'))
 
 
     def button_menu_clicked(self):
@@ -121,9 +121,9 @@ class filler_control(QMainWindow):
         print(self.play)
 
         if self.play == True:
-            self.button_pause.setIcon(QIcon(f'Style_windows\icons_black\icons8-pause-button-100.png'))
+            self.button_pause.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-pause-button-100.png'))
         else:
-            self.button_pause.setIcon(QIcon(f'Style_windows\icons_black\icons8-circled-play-100.png'))
+            self.button_pause.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-circled-play-100.png'))
 
 
     def button_pause_clicked(self):
@@ -141,7 +141,7 @@ class filler_control(QMainWindow):
         icon_size = QSize(60, 60)
         self.button_view.setIconSize(icon_size)
 
-        self.button_view.setIcon(QIcon('Style_windows\icons_black\icons8-preview-pane-100.png'))
+        self.button_view.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-preview-pane-100.png'))
 
 
     def button_view_clicked(self):

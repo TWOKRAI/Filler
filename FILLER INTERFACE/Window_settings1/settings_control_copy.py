@@ -11,7 +11,7 @@ from filler import filler
 class Control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Window_settings1/UI_settings.ui', self)
+        uic.loadUi(r'FILLER INTERFACE\Window_settings1\UI_settings.ui', self)
        
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -152,12 +152,12 @@ class Control(QMainWindow):
 
     
     def set_icons(self):
-        self.button_menu.setIcon(QIcon(f'Style_windows/icons_black/icons8-menu-100.png'))
-        self.button_reset.setIcon(QIcon('Style_windows/icons_black/icons8-replay-100.png'))
-        self.button_left.setIcon(QIcon('Style_windows/icons_black/icons8-back-100.png'))
-        self.button_right.setIcon(QIcon('Style_windows/icons_black/icons8-forward-100.png'))
-        self.button_minus.setIcon(QIcon('Style_windows\icons_black\icons8-subtract-100.png'))
-        self.button_plus.setIcon(QIcon('Style_windows\icons_black\icons8-plus-math-100.png'))
+        self.button_menu.setIcon(QIcon(r'FILLER INTERFACE\Style_windows/icons_black/icons8-menu-100.png'))
+        self.button_reset.setIcon(QIcon(r'FILLER INTERFACE\Style_windows/icons_black/icons8-replay-100.png'))
+        self.button_left.setIcon(QIcon(r'FILLER INTERFACE\Style_windows/icons_black/icons8-back-100.png'))
+        self.button_right.setIcon(QIcon(r'FILLER INTERFACE\Style_windows/icons_black/icons8-forward-100.png'))
+        self.button_minus.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-subtract-100.png'))
+        self.button_plus.setIcon(QIcon(r'FILLER INTERFACE\Style_windows\icons_black\icons8-plus-math-100.png'))
 
 
     def put_parametrs(self):
