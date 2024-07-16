@@ -42,7 +42,7 @@ class View_control(QMainWindow):
         self.button_raise()
 
         self.timer.stop()
-        self.timer.start(300)
+        self.timer.start(100)
         
         self.show()
         

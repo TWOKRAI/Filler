@@ -28,10 +28,6 @@ class App(QApplication):
         self.time_datetime = 210000
         self.timer_datetime.start(self.time_datetime)
 
-        # self.timer = QTimer()
-        # self.timer.timeout.connect(self.check_input)
-        # self.timer.start(200)
-
         self.installEventFilter(self)
 
     

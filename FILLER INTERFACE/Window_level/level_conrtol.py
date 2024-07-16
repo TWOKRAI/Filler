@@ -64,30 +64,6 @@ class level_control(QMainWindow):
         self.update()
 
 
-    def show_window(self):
-        if app.on_fullscreen: self.fullscreen()
-
-        stylesheet = app.styleSheet()
-        new_stylesheet = stylesheet.replace(
-        'background-color: None',
-        'background-color: qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0, stop: 0 white, stop: 0.5 #DCDCDC, stop: 0.9 #949494);'
-        )
-        
-        app.setStyleSheet(new_stylesheet)
-
-        self.setWindowOpacity(0.0)  
-        self.show()  
-        self.start_animation()
-
-
-    def start_animation(self):
-        self.animation.stop()
-        self.animation.setDuration(2000)  
-        self.animation.setStartValue(0.0)  
-        self.animation.setEndValue(1.0) 
-        self.animation.start()
-    
-
     def close(self):
         self.hide()
 

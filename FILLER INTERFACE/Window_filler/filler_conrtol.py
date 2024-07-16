@@ -64,6 +64,7 @@ class filler_control(QMainWindow):
         self.play = True
 
         self.update()
+        app.window_level.show()
 
     
     def language(self, lang):
