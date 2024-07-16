@@ -80,6 +80,11 @@ class filler_control(QMainWindow):
         self.progressBar_2_update()
         self.value_1_update()
         self.value_2_update()
+        self.label_update()
+        self.label_drink_1_update()
+        self.label_drink_2_update()
+        self.label_value_1_update()
+        self.label_value_2_update()
 
 
     def button_menu_update(self):        
@@ -149,53 +154,45 @@ class filler_control(QMainWindow):
 
 
     def label_update(self):
-        font = QFont()
-        font.setFamily("Siemens AD Sans")
-        font.setPointSize(25)
-        font.setBold(False)
-        font.setWeight(50)
-
-        self.labe_3.setFont(font)
-        self.label_3.setWordWrap(True)
-
         match self.code:
             case 0:
                 label_name = {
                     0: 'Система в норме',
                     1: 'Выставте ttttку робота в нулевую позицию и нажмите продолжить',
                 }
-
-                self.label_3.setText(label_name[self.lang])
-                
             case 1:
                 label_name = {
                     0: 'Закончилась бутылка 2',
                     1: 'Началась rrrr калибровка робота (Подождите)',
                 }
-                                
-                self.label_3.setText(label_name[self.lang])
-
             case 2:
                 label_name = {
                     0: 'Закончилась бутылка 2',
                     1: 'Поставьте rrrr стакан для розлива и нажмите стоп когда пойдет вода',
                 }
-                                
-                self.label_3.setText(label_name[self.lang])
-
             case 3:
                 label_name = {
                     0: 'Поставьте стакан в рабочую область',
                     1: 'Система готова444. Нажмите продолжить',
                 }
-                                
-                self.label_3.setText(label_name[self.lang])
-
             case 4:
                 pass
             case _:
-                self.label_3.setText('')
-    
+                label_name = {
+                    0: '',
+                    1: '',
+                }
+
+        font = QFont()
+        font.setFamily("Siemens AD Sans")
+        font.setPointSize(25)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_3.setFont(font)
+        self.label_3.setWordWrap(True)
+
+        self.label_3.setText(label_name[self.lang])
+
 
     def progressBar_1_update(self):
         pre_value = {
@@ -206,9 +203,10 @@ class filler_control(QMainWindow):
         pre_value = pre_value[self.lang]
 
         self.progressBar_1.setFormat(f"%v {pre_value}")
-        self.progressBar_1.setFont(QFont("Siemens AD Sans", 21))
+        self.progressBar_1.setFont(QFont("Siemens AD Sans", 25))
         self.progressBar_1.setMinimum(0)
         self.progressBar_1.setMaximum(104)
+        self.progressBar_1.setAlignment(Qt.AlignTop) 
 
         self.progressBar_1.setValue(36)
     
@@ -222,9 +220,10 @@ class filler_control(QMainWindow):
         pre_value = pre_value[self.lang]
 
         self.progressBar_2.setFormat(f"%v {pre_value}")
-        self.progressBar_2.setFont(QFont("Siemens AD Sans", 21))
+        self.progressBar_2.setFont(QFont("Siemens AD Sans", 25))
         self.progressBar_2.setMinimum(0)
         self.progressBar_2.setMaximum(104)
+        self.progressBar_2.setAlignment(Qt.AlignTop) 
 
         self.progressBar_2.setValue(36)
 
@@ -250,7 +249,7 @@ class filler_control(QMainWindow):
     def value_1_update(self):
         font = QFont()
         font.setFamily("Siemens AD Sans")
-        font.setPointSize(22)
+        font.setPointSize(35)
         font.setBold(False)
         font.setWeight(50)
 
@@ -271,7 +270,7 @@ class filler_control(QMainWindow):
     def value_2_update(self):
         font = QFont()
         font.setFamily("Siemens AD Sans")
-        font.setPointSize(22)
+        font.setPointSize(35)
         font.setBold(False)
         font.setWeight(50)
 
@@ -287,6 +286,82 @@ class filler_control(QMainWindow):
         value = 12
 
         self.value_2.setText(f'{value} {pre_value}')
+
+    
+    def label_drink_1_update(self):
+        font = QFont()
+        font.setFamily("Siemens AD Sans")
+        font.setPointSize(24)
+        font.setBold(False)
+        font.setWeight(50)
+
+        self.label_drink_1.setFont(font)
+
+        text = {
+            0: 'Бутылка 1', 
+            1: 'Drink 1', 
+        }
+
+        text = text[self.lang]
+
+        self.label_drink_1.setText(f'{text}')
+
+
+    def label_drink_2_update(self):
+        font = QFont()
+        font.setFamily("Siemens AD Sans")
+        font.setPointSize(24)
+        font.setBold(False)
+        font.setWeight(50)
+
+        self.label_drink_2.setFont(font)
+
+        text = {
+            0: 'Бутылка 2', 
+            1: 'Drink 2', 
+        }
+
+        text = text[self.lang]
+
+        self.label_drink_2.setText(f'{text}')
+
+    
+    def label_value_1_update(self):
+        font = QFont()
+        font.setFamily("Siemens AD Sans")
+        font.setPointSize(21)
+        font.setBold(False)
+        font.setWeight(50)
+
+        self.label_value_1.setFont(font)
+
+        text = {
+            0: 'Дозировка 1', 
+            1: 'Dosing 1', 
+        }
+
+        text = text[self.lang]
+
+        self.label_value_1.setText(f'{text}')
+
+
+    def label_value_2_update(self):
+        font = QFont()
+        font.setFamily("Siemens AD Sans")
+        font.setPointSize(21)
+        font.setBold(False)
+        font.setWeight(50)
+
+        self.label_value_2.setFont(font)
+
+        text = {
+            0: 'Дозировка 2', 
+            1: 'Dosing 2', 
+        }
+
+        text = text[self.lang]
+
+        self.label_value_2.setText(f'{text}')
 
 
     

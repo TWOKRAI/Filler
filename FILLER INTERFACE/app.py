@@ -101,6 +101,7 @@ class App(QApplication):
         self.window_cip.language(lang_num)
         self.window_robot.language(lang_num)
         self.window_pop_up.language(lang_num)
+        self.window_level.language(lang_num)
 
 
     def set_style(self):

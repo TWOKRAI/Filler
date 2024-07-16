@@ -1,16 +1,17 @@
+from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel
-from Window_level.level import Ui_MainWindow 
-from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QRect, QSize
-from PyQt5.QtGui import QFont, QPixmap, QPainter, QLinearGradient, QFont, QMovie
-import datetime
+from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QSize
+from PyQt5.QtGui import QFont, QPixmap, QMovie
+
 
 from app import app
 
 
-class level_control(QMainWindow, Ui_MainWindow):
+class level_control(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
+        uic.loadUi(r'FILLER INTERFACE\Window_level\UI_level.ui', self)
+
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
 
@@ -18,12 +19,12 @@ class level_control(QMainWindow, Ui_MainWindow):
 
         self.start_time = 5000
 
-        pixmap = QPixmap('1x\innotech_min.png')
+        pixmap = QPixmap(r'FILLER INTERFACE\1x\innotech_min.png')
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.4), int(pixmap.height() * 0.4), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 
-        pixmap = QPixmap('Style_windows\level\level_2.png')
-        scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.7), int(pixmap.height() * 0.7), Qt.KeepAspectRatio)
+        pixmap = QPixmap(r'FILLER INTERFACE\Style_windows\icons_no_color\error.png')
+        scaled_pixmap = pixmap.scaled(int(pixmap.width()* 0.8), int(pixmap.height()* 0.8), Qt.KeepAspectRatio)
         self.level_img.setPixmap(scaled_pixmap)
 
 
@@ -44,6 +45,9 @@ class level_control(QMainWindow, Ui_MainWindow):
         self.label.setMovie(movie)
         movie.start()
 
+        self.lang = 0
+        self.code = 0
+
 
     def timing(self):
         self.timer.stop()
@@ -51,6 +55,13 @@ class level_control(QMainWindow, Ui_MainWindow):
 
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
+
+
+    def show(self):
+        if app.on_fullscreen: self.fullscreen()
+        super().show()
+
+        self.update()
 
 
     def show_window(self):
@@ -79,6 +90,40 @@ class level_control(QMainWindow, Ui_MainWindow):
 
     def close(self):
         self.hide()
+
+
+    def language(self, lang):
+        self.lang = lang
+
+        self.update()
+
+
+    def update(self):
+        self.label_update()
+
+
+    def label_update(self):
+        match self.code:
+            case 0:
+                label_name = {
+                    0: 'Нажата аварийная кнопка',
+                    1: 'Error',
+                }
+            case _:
+                label_name = {
+                    0: '',
+                    1: '',
+                }
+
+        font = QFont()
+        font.setFamily("Siemens AD Sans")
+        font.setPointSize(28)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_warning.setFont(font)
+        self.label_warning.setWordWrap(True)
+
+        self.label_warning.setText(label_name[self.lang])
 
     
 window_level = level_control()
