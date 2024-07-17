@@ -9,6 +9,23 @@ class ToggleButton:
     def __init__(self, root):
         self.root = root
 
+        self.running = False
+        
+        # Добавление полей для ввода step_value и speed
+        self.step_value_entry = tk.Entry(root)
+        self.step_value_entry.insert(0, "100000")  # Значение по умолчанию
+        self.step_value_entry.pack()
+
+        self.speed_entry = tk.Entry(root)
+        self.speed_entry.insert(0, "0.0001")  # Значение по умолчанию
+        self.speed_entry.pack()
+
+        self.stop_button = tk.Button(root, text="Stop", command=self.stop)
+        self.stop_button.pack()
+
+        spacer = tk.Frame(root, height=20)
+        spacer.pack()
+
 
         self.pin_enable = 13
         pins.set_value(self.pin_enable , False)
@@ -206,26 +223,28 @@ class ToggleButton:
 
     
     def step_while(self, pin):
-        step_value = 100000
-        speed = 0.01
+        self.running = True
+        step_value = int(self.step_value_entry.get())
+        speed = float(self.speed_entry.get())
         i = 0
 
-        while i < step_value:
+        while i < step_value and self.running:
             pins.set_value(pin, True)
-            
             pins.get_value(pin)
             time.sleep(speed)
 
             pins.set_value(pin, False)
-            
             pins.get_value(pin)
-            time.sleep(int(speed))
+            time.sleep(speed)
 
             i += 1
             print(i)
         
         pins.set_value(pin, False)
 
+        
+    def stop(self):
+        self.running = False
 
 
 if __name__ == "__main__":

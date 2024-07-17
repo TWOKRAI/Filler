@@ -10,11 +10,12 @@ class Pins():
         self.motor_dir = 19
         self.motor_enable = 13
 
-        self.button = 7
+        self.button_stop = 14
+        self.button = 5
         self.switch_out = 8
         self.switch_in = 6
 
-        self.switch_x = 5
+        self.switch_x = 25
 
         self.motor_x_step = 22
         self.motor_x_dir = 27
@@ -34,15 +35,13 @@ class Pins():
         self.motor_p2_step = 23
         self.motor_p2_dir = 24
 
-        self.motor_p1p2_enable = 14
-
-        
-
+        self.motor_p1p2_enable = 7
 
         self.chip = gpiod.Chip("/dev/gpiochip4")
         self.req = self.chip.request_lines(consumer="rpi-acloud-gpio-basic",
             config = {
                 self.button: gpiod.LineSettings(direction = Direction.OUTPUT),
+                self.button_stop: gpiod.LineSettings(direction = Direction.OUTPUT),
                 
                 self.switch_out: gpiod.LineSettings(direction = Direction.OUTPUT),
                 self.switch_in: gpiod.LineSettings(direction = Direction.OUTPUT),
