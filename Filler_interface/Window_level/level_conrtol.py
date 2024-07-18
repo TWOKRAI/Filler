@@ -20,7 +20,7 @@ class level_control(QMainWindow):
         self.start_time = 5000
 
         pixmap = QPixmap(r'Filler_interface\1x\innotech_min.png')
-        scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.4), int(pixmap.height() * 0.4), Qt.KeepAspectRatio)
+        scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 
         pixmap = QPixmap(r'Filler_interface\Style_windows\icons_no_color\error.png')

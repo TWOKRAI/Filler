@@ -17,7 +17,7 @@ class View_control(QMainWindow):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
         pixmap = QPixmap(r'Filler_interface\1x\innotech_min.png')
-        scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.4), int(pixmap.height() * 0.4), Qt.KeepAspectRatio)
+        scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 
         self.timer = QTimer()
