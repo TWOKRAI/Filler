@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QSize
 from PyQt5.QtGui import QFont, QPixmap, QMovie
 
-
 from app import app
 
 
@@ -65,7 +64,9 @@ class level_control(QMainWindow):
 
 
     def close(self):
-        self.hide()
+        val = False
+        if val:
+            self.hide()
 
 
     def language(self, lang):
