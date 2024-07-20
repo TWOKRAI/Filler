@@ -1,9 +1,9 @@
 from tkinter import *
 import time
 
-import tkinter_var 
-from robot import robot
-from pumps import pump_station
+import Filler_robot.tkinter_var as tkinter_var 
+from Filler_robot.Robots.robot_module import robot
+from Filler_robot.PumpStation.pumps import pump_station
 
 
 def label_update():
