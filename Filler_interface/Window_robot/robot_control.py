@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QPushButton
 
-from filler import filler
+from Filler_interface.filler import filler
 
 
-from Window_settings1.settings_control_copy import Control
+from Filler_interface.Window_settings1.settings_control_copy import Control
 
 
 class Control(Control):

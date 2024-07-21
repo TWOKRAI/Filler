@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon, QFont
 
-from app import app
+from Filler_interface.app import app
 
 
 class Main_filler_control(QMainWindow):

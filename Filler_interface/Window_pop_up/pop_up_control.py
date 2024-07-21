@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 
-from app import app
+from Filler_interface.app import app
 
 
 class Pop_up_control(QMainWindow):

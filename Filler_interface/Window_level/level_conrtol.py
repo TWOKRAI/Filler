@@ -3,7 +3,8 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QSize
 from PyQt5.QtGui import QFont, QPixmap, QMovie
 
-from app import app
+from Filler_interface.app import app
+from Raspberry.input import input_request
 
 
 class level_control(QMainWindow):
@@ -13,6 +14,8 @@ class level_control(QMainWindow):
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
+
+        input_request.show_error.connect(self.show)
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
@@ -64,8 +67,7 @@ class level_control(QMainWindow):
 
 
     def close(self):
-        val = False
-        if val:
+        if not input_request.t1:
             self.hide()
 
 

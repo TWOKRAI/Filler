@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QPixmap
 
-from app import app
+from Filler_interface.app import app
 
 
 class View_control(QMainWindow):

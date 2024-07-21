@@ -1,9 +1,9 @@
-from app import app
+from Filler_interface.app import app
 
-from Window_settings1.settings_control_copy import Control
+from Filler_interface.Window_settings1.settings_control_copy import Control
 
 
-from filler import filler
+from Filler_interface.filler import filler
 
 
 class Control(Control):

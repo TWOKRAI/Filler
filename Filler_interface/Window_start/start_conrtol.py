@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QGraphicsOpacityEffect
-from Window_start.start import Ui_MainWindow 
+from Filler_interface.Window_start.start import Ui_MainWindow 
 from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QPixmap
 
-from app import app
+from Filler_interface.app import app
 
 
 class Start_control(QMainWindow, Ui_MainWindow):

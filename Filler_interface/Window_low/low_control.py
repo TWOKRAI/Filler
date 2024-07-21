@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QMainWindow, QPushButton
-from Window_low.main_low import Ui_low
+from Filler_interface.Window_low.main_low import Ui_low
 from PyQt5.QtCore import Qt
 
-from app import app 
+from Filler_interface.app import app 
 
 class low_control(QMainWindow, Ui_low):
     def __init__(self):

@@ -1,11 +1,10 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QGraphicsOpacityEffect
-from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QRect, QSize
-from PyQt5.QtGui import QFont, QPixmap, QPainter, QLinearGradient, QFont, QMovie
-
+from PyQt5.QtWidgets import QMainWindow, QPushButton
+from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QFont, QPixmap, QFont
 import datetime
 
-from app import app
+from Filler_interface.app import app
 
 
 class Control(QMainWindow):
