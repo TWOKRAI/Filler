@@ -20,7 +20,7 @@ class App(QApplication):
         self.on_fullscreen = False
         self.cursor_move_2 = False
 
-        self.lang_num = '0'
+        self.lang_num = 0
         self.color = 'green'
 
         self.lang = 0
@@ -89,7 +89,7 @@ class App(QApplication):
 
 
     def language(self):
-        lang_num = int(self.lang_num)
+        lang_num = self.lang_num
 
         self.window_main_filler.language(lang_num)
         self.window_list1.language(lang_num)
@@ -176,7 +176,7 @@ app.window_view = window_view
 from Filler_interface.Window_filler.filler_conrtol import filler_window
 app.window_filler = filler_window
 
-from Filler_interface.Window_level.level_conrtol import window_level
+from Filler_interface.Window_error.error_conrtol import window_level
 app.window_level = window_level
 
 from Filler_interface.Window_cip.cip_control import window_cip

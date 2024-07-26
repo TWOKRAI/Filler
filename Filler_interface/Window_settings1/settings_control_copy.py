@@ -4,8 +4,8 @@ from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon, QFont
 
 from Filler_interface.app import app
-
 from Filler_interface.filler import filler
+
 
 
 class Control(QMainWindow):
@@ -96,6 +96,7 @@ class Control(QMainWindow):
         self.value_id = 1
 
         self.get_parametrs()
+
         self.set_parametrs()
         self.update_text()
         self.enable_control()
@@ -139,8 +140,10 @@ class Control(QMainWindow):
 
     def reset(self):
         self.default_parametrs()
-        self.get_parametrs()
         self.set_parametrs()
+
+        self.get_parametrs()
+
         self.update_text()
         self.enable_control()
 
@@ -362,6 +365,15 @@ class Control(QMainWindow):
         self.name_params.setFont(self.font_text)
 
 
+
+    def value_mini_update(self):
+        self.value_mini.setText(f"{self.value_name_mini[self.param_num][self.lang]}")  
+        size = self.font_size[self.param_num]['value_mini']
+        self.font_text.setPointSize(size) 
+        self.value_mini.setFont(self.font_text)
+
+
+
     def enable_control(self):
         self.minus_enable()
         self.plus_enable()
@@ -422,7 +434,7 @@ class Control(QMainWindow):
     def minus(self):
         self.enable_control()
 
-        self.timer_minus_pressed .setInterval(int(200/self.step_button))
+        self.timer_minus_pressed.setInterval(int(200/self.step_button))
         self.step_button += 0.1
 
         value = self.param_list[self.param_num]
@@ -499,7 +511,7 @@ class Control(QMainWindow):
 
         if isinstance(value, bool) or isinstance(value, str):
             value_id = self.value_id[self.param_num]
-
+            
             if value_id < len(self.value_step[self.param_num]) - 1:
                 self.value_id[self.param_num] += 1 
                 value_id += 1
@@ -542,6 +554,8 @@ class Control(QMainWindow):
 
         if isinstance(value, bool) or isinstance(value, str):
             value_id = self.value_id[self.param_num]
+
+            print('sssssssssssssssss', self.value_step)
 
             if value_id >= len(self.value_step[self.param_num]) - 1:
                 self.button_plus.setEnabled(False)

@@ -41,6 +41,11 @@
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
+# from pins_table import pins
+
+# from Filler_robot.Monitor.motor_monitor import motor_monitor
+
+
 class Input_request(QThread):
     pin_values_updated = pyqtSignal(dict)
     show_error = pyqtSignal()
@@ -63,20 +68,19 @@ class Input_request(QThread):
     def request(self):
         i = 0
         while self.running:
-            try:
-                if self.run_request:
-                    i += 1
-                    print(i)
+            # try:
+            #     if self.run_request:
+            #         i += 1
+            #         print(i)
+                
+            #     # if pins.get_value(pins.button_stop):
+            #     #     self.show_error.emit()
+                
+            #     # if pins.get_value(pins.button):
+            #     #     motor_monitor.run()
 
-                    if i == 100:
-                        self.t1 = True
-                        self.show_error.emit()
-                    if i == 200:
-                        self.t1 = False
-                        i = 0
-
-            except Exception as e:
-                print(f"Error reading pin values: {e}")
+            # except Exception as e:
+            #     print(f"Error reading pin values: {e}")
 
             QThread.msleep(int(self.time_request * 1000))
 

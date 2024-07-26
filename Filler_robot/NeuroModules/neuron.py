@@ -1,12 +1,11 @@
 import cv2
 import numpy as np
 import time
-import shelve
 import math
 
 from Gadgets.VisionTech.camera import camera
 
-from Decorators.wrapper import _timing
+from Lib.Decorators.wrapper import _timing
 
 
 file = open("coco.txt","r")
@@ -39,10 +38,6 @@ class Timer:
 class Neuron:
 	def __init__(self):
 		self.timer = Timer()
-
-		self.net_v4 = cv2.dnn.readNetFromDarknet('yolov4-tiny.cfg','yolov4-tiny.weights')
-		self.net_v4.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-		self.net_v4.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA_FP16)
 
 		self.net_v5 = cv2.dnn.readNetFromONNX("yolov5s.onnx")
 		self.net_v5.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
@@ -85,28 +80,6 @@ class Neuron:
 		self.hands_data = []
 		self.hands_found = False
    
-
-	@_timing(True)
-	def memory_write(self, txt, key, data):
-		with shelve.open(txt) as db: 
-			db[f'{key}'] = f'{data}'
-			print('записал', key, data)
-
-
-	@_timing(True)
-	def memory_read(self, txt, key):
-		with shelve.open(txt) as db: 
-			try:
-				data = db[f'{key}']
-				print('считал', key, data)
-
-				return data
-			except KeyError:
-				print('Ключ не найден, записываю значение по умолчанию')
-				self.memory_write(key, 0)
-				
-				return 0
-
 
 	@_timing(True)
 	def run(self):
