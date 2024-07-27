@@ -6,6 +6,8 @@ from Filler_interface.app import app
 
 from Filler_interface.Window_settings1.settings_template import Control
 
+from Filler_interface.filler import filler
+
 
 class Control(Control):
     def __init__(self):
@@ -102,7 +104,7 @@ class Control(Control):
         self.button_reset.released.connect(self.button_reset_released)
 
         
-        self.memory = Memory(db_path=r'Filler_interface\Window_settings2\Data',  db_file='memory_db')
+        self.memory = Memory(db_path=r'Filler_interface\Window_settings1\Data',  db_file='memory_db')
         
         self.param_list = self.get_parametrs()
         self.param_list = self.memory_read(self.param_list)
@@ -147,16 +149,12 @@ class Control(Control):
 
     def get_parametrs(self): 
         self.param_list = {
-            1: app.lang_num,
-            2: app.styling.r_border,
-            3: app.styling.g_border,
-            4: app.styling.b_border,
-            5: app.styling.r_icons_text,
-            6: app.styling.g_icons_text,
-            7: app.styling.b_icons_text,
-            8: app.styling.r_text,
-            9: app.styling.g_text,
-            10: app.styling.b_text,
+            1: filler.param111,
+            2: filler.param222,
+            3: filler.param3,
+            4: filler.param4,
+            5: filler.param5,
+            6: filler.param6,
         }
     
         return self.param_list
@@ -169,16 +167,12 @@ class Control(Control):
 
 
     def put_parametrs(self):
-        app.lang_num = self.param_list[1]
-        app.styling.r_border = self.param_list[2]
-        app.styling.g_border = self.param_list[3]
-        app.styling.b_border = self.param_list[4]
-        app.styling.r_icons_text = self.param_list[5]
-        app.styling.g_icons_text = self.param_list[6]
-        app.styling.b_icons_text = self.param_list[7]
-        app.styling.r_text = self.param_list[8]
-        app.styling.g_text = self.param_list[9]
-        app.styling.b_text = self.param_list[10]
+        filler.param111 = self.param_list[1]
+        filler.param222 = self.param_list[2]
+        filler.param3 = self.param_list[3]
+        filler.param4 = self.param_list[4]
+        filler.param5 = self.param_list[5]
+        filler.param6 = self.param_list[6]
 
 
     def memory_write(self, data):
@@ -186,30 +180,22 @@ class Control(Control):
 
     
     def default_parametrs(self):
-        app.lang_num = 0
-        app.styling.r_border = 108
-        app.styling.g_border = 161
-        app.styling.b_border = 141
-        app.styling.r_icons_text = 108
-        app.styling.g_icons_text = 161
-        app.styling.b_icons_text = 141
-        app.styling.r_text = 108
-        app.styling.g_text = 161
-        app.styling.b_text = 141
+        filler.param111 = 0
+        filler.param222 = 1
+        filler.param3 = 500
+        filler.param4 = 600
+        filler.param5 = 59
+        filler.param6 = 60
 
         self.param_list = self.get_parametrs()
         self.memory_write(self.param_list)
         
-        app.language()
-        app.icons_recolor()
-        app.recolor()
-    
 
     def label_window_update(self):
         match self.param_num:
             case 1:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
+                    0: 'НАСТРОЙКА РОЗЛИВА', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
                     3: '系統設定',
@@ -218,7 +204,7 @@ class Control(Control):
                 size_text = 21
             case 2:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
+                    0: 'НАСТРОЙКА РОЗЛИВА', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
                     3: '系統設定',
@@ -227,7 +213,7 @@ class Control(Control):
                 size_text = 21
             case 3:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
+                    0: 'НАСТРОЙКА РОЗЛИВА', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
                     3: '系統設定',
@@ -236,7 +222,7 @@ class Control(Control):
                 size_text = 21
             case 4:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
+                    0: 'НАСТРОЙКА РОЗЛИВА', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
                     3: '系統設定',
@@ -245,7 +231,7 @@ class Control(Control):
                 size_text = 21
             case 5:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
+                    0: 'НАСТРОЙКА РОЗЛИВА', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
                     3: '系統設定',
@@ -254,7 +240,7 @@ class Control(Control):
                 size_text = 21
             case 6:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
+                    0: 'НАСТРОЙКА РОЗЛИВА', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
                     3: '系統設定',
@@ -263,7 +249,7 @@ class Control(Control):
                 size_text = 21
             case 7:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
+                    0: 'НАСТРОЙКА РОЗЛИВА', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
                     3: '系統設定',
@@ -272,7 +258,7 @@ class Control(Control):
                 size_text = 21
             case _:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
+                    0: 'НАСТРОЙКА РОЗЛИВА', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
                     3: '系統設定',
@@ -310,64 +296,45 @@ class Control(Control):
 
         match self.param_num:
             case 1:
-        
-                value_text = {0: 'Русский', 
-                              1: 'English', 
-                              2: 'Deutsch', 
-                              3: '中国人',
-                              }
+                value_text = [
+                    ['Нет', 'No'],
+                    ['Да', 'Yes'],
+                    ]
 
-                value = value_text[int(value)]
+                value = value_text[value]
+                value = value[self.lang]
 
-                size_text = 60
+                size_text = 90
             case 2:
+                value_text = [
+                    ['Нет', 'No'],
+                    ['Да', 'Yes'],
+                    ]
 
-                value = f"R:{value}"
-
-                size_text = 60
+                value = value_text[value]
+                value = value[self.lang]
+        
+                size_text = 90
             case 3:
-
-                value = f"G:{value}"
-
-                size_text = 60
+                size_text = 90
             case 4:
- 
-                value = f"B:{value}"
-
-                size_text = 60
+                size_text = 90
             case 5:
-
-                value = f"R:{value}"
-
-                size_text = 60
+                size_text = 90
             case 6:
-
-                value = f"G:{value}"
-
-                size_text = 60
+                size_text = 90
             case 7:
+                value =  {
+                    0: 'Готово',
+                    1: 'Ready',
+                    2: 'Sprache',
+                    3: '語言',
+                }
 
-                value = f"B:{value}"
-
-                size_text = 60
-            case 8:
-
-                value = f"R:{value}"
-
-                size_text = 60
-            case 9:
-
-                value = f"G:{value}"
-
-                size_text = 60
-            case 10:
-
-                value = f"B:{value}"
-
-                size_text = 60
+                value = value[self.lang]
+                size_text = 70
             case _:
                 value = None
-
                 size_text = 60
         
         self.value.setText(str(value))
@@ -402,37 +369,37 @@ class Control(Control):
                 size_text = 30
             case 3:
                 text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
+                    0: 'мл',
+                    1: 'ml',
+                    2: 'ml',
+                    3: '毫升',
                 }
 
                 size_text = 30
             case 4:
                 text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
+                    0: 'мл',
+                    1: 'ml',
+                    2: 'ml',
+                    3: '毫升',
                 }
 
                 size_text = 30
             case 5:
                 text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
+                    0: 'мл',
+                    1: 'ml',
+                    2: 'ml',
+                    3: '毫升',
                 }
 
                 size_text = 30
             case 6:
                 text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
+                    0: 'мл',
+                    1: 'ml',
+                    2: 'ml',
+                    3: '毫升',
                 }
 
                 size_text = 30
@@ -470,8 +437,8 @@ class Control(Control):
         match self.param_num:
             case 1:
                 text = {
-                    0: 'Язык',
-                    1: 'language',
+                    0: 'Тип напитка 1',
+                    1: 'Volume 1 /ml',
                     2: 'Sprache',
                     3: '語言',
                 }
@@ -479,8 +446,8 @@ class Control(Control):
                 size_text = 30
             case 2:
                 text = {
-                    0: 'Цвет 1 (Контур)',
-                    1: 'Цвет 12 (Контур)',
+                    0: 'Тип напитка 2',
+                    1: 'Volume2 /ml',
                     2: '',
                     3: '',
                 }
@@ -488,8 +455,8 @@ class Control(Control):
                 size_text = 30
             case 3:
                 text = {
-                    0: 'Цвет 1 (Контур)',
-                    1: 'Цвет 12 (Контур)',
+                    0: 'Объем 1 бутылки',
+                    1: 'Volume 1 /ml',
                     2: '',
                     3: '',
                 }
@@ -497,8 +464,8 @@ class Control(Control):
                 size_text = 30
             case 4:
                 text = {
-                    0: 'Цвет 1 (Контур)',
-                    1: 'Цвет 12 (Контур)',
+                    0: 'Объем 2 бутылки',
+                    1: 'Volume 2 /ml',
                     2: '',
                     3: '',
                 }
@@ -506,7 +473,7 @@ class Control(Control):
                 size_text = 30
             case 5:
                 text = {
-                    0: 'Цвет 2 (Иконка)',
+                    0: 'Дозировка напитка 1',
                     1: 'Цвет 21 (Иконка)',
                     2: '',
                     3: '',
@@ -515,7 +482,7 @@ class Control(Control):
                 size_text = 30
             case 6:
                 text = {
-                    0: 'Цвет 2 (Иконка)',
+                    0: 'Дозировка напитка 2',
                     1: 'Цвет 21 (Иконка)',
                     2: '',
                     3: '',
@@ -524,41 +491,14 @@ class Control(Control):
                 size_text = 30
             case 7:
                 text = {
-                    0: 'Цвет 2 (Иконка)',
-                    1: 'Цвет 21 (Иконка)',
+                    0: 'Нажмите далее',
+                    1: 'Нажмите далее 2',
                     2: '',
                     3: '',
                 }
 
                 size_text = 30
 
-            case 8:
-                text = {
-                    0: 'Цвет 3 (Текст)',
-                    1: 'Цвет 31 (Текст)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 9:
-                text = {
-                    0: 'Цвет 3 (Текст)',
-                    1: 'Цвет 31 (Текст)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 10:
-                text = {
-                    0: 'Цвет 3 (Текст)',
-                    1: 'Цвет 31 (Текст)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
             case _:
                 text = {
                     0: '',
@@ -589,63 +529,23 @@ class Control(Control):
             case 1:
                 if self.param_list[self.param_num] > 0:
                     self.param_list[self.param_num] -= 1
-                
-                self.put_parametrs()
-                app.language()
             case 2:
                 if self.param_list[self.param_num] > 0:
                     self.param_list[self.param_num] -= 1
-                
-                self.put_parametrs()
-                app.recolor()
             case 3:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-                
-                self.put_parametrs()
-                app.recolor()
+                if self.param_list[self.param_num] >= 50:
+                    self.param_list[self.param_num] -= 50
             case 4:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-                
-                self.put_parametrs()
-                app.recolor()
+                if self.param_list[self.param_num] >= 50:
+                    self.param_list[self.param_num] -= 50
             case 5:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
+                if self.param_list[self.param_num] >= 5:
+                    self.param_list[self.param_num] -= 5
             case 6:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
+                if self.param_list[self.param_num] >= 5:
+                    self.param_list[self.param_num] -= 5
             case 7:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
-            case 8:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
-            case 9:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
-            case 10:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
+                pass
 
         self.update()
         self.enable_control()
@@ -657,43 +557,25 @@ class Control(Control):
         match self.param_num:
             case 1:
                 pass
-
             case 2:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 3:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 4:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 5:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 6:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 7:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 8:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 9:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 10:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
+            
         self.update()
 
         self.memory_write(self.param_list)
@@ -714,13 +596,13 @@ class Control(Control):
                     self.button_minus.setEnabled(True)
 
             case 3:
-                if self.param_list[self.param_num] <= 0:
+                if self.param_list[self.param_num] <= 10:
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
 
             case 4:
-                if self.param_list[self.param_num] <= 0:
+                if self.param_list[self.param_num] <= 30:
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
@@ -738,28 +620,7 @@ class Control(Control):
                     self.button_minus.setEnabled(True)
 
             case 7:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 8:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 9:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 10:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
+                self.button_minus.setEnabled(False)
 
 
     def plus(self):
@@ -769,70 +630,48 @@ class Control(Control):
 
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] < 4:
+                if self.param_list[self.param_num] < 1:
                     self.param_list[self.param_num] += 1
                 
                 self.put_parametrs()
-                app.language()
             case 2:
-                if self.param_list[self.param_num] < 255:
+                if self.param_list[self.param_num] < 1:
                     self.param_list[self.param_num] += 1
                     
                 self.put_parametrs()
-                app.recolor()
+                
             case 3:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
+                if self.param_list[self.param_num] < 1000:
+                    self.param_list[self.param_num] += 50
 
                 self.put_parametrs()
-                app.recolor()
+                
             case 4:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
+                if self.param_list[self.param_num] < 1200:
+                    self.param_list[self.param_num] += 50
                 
                 self.put_parametrs()
-                app.recolor()
+                
             case 5:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
+                if self.param_list[self.param_num] < 100:
+                    self.param_list[self.param_num] += 5
                 
                 self.put_parametrs()
-                app.recolor()
+                
             case 6:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
+                if self.param_list[self.param_num] < 120:
+                    self.param_list[self.param_num] += 5
                 
                 self.put_parametrs()
-                app.recolor()
+                
             case 7:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
+                pass
+
                 self.put_parametrs()
-                app.recolor()
-            case 8:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
                 
-                self.put_parametrs()
-                app.recolor()
-            case 9:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-                app.recolor()
-            case 10:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-                app.recolor()
 
         self.update()
         self.enable_control()
-
-        print('click') 
     
 
     def plus_released(self):
@@ -841,42 +680,24 @@ class Control(Control):
         match self.param_num:
             case 1:
                 pass
-
             case 2:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 3:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 4:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 5:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 6:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 7:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 8:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 9:
-                app.icons_recolor()
-                app.recolor()
-
+                pass
             case 10:
-                app.icons_recolor()
-                app.recolor()
+                pass
 
         self.update()
 
@@ -887,64 +708,44 @@ class Control(Control):
     def plus_enable(self):
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] >= 3:
+                if self.param_list[self.param_num] >= 1:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
             case 2:
-                if self.param_list[self.param_num] >= 255:
+                if self.param_list[self.param_num] >= 1:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
             case 3:
-                if self.param_list[self.param_num] >= 255:
+                if self.param_list[self.param_num] >= 1000:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
             case 4:
-                if self.param_list[self.param_num] >= 255:
+                if self.param_list[self.param_num] >= 1200:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
             case 5:
-                if self.param_list[self.param_num] >= 255:
+                if self.param_list[self.param_num] >= 100:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
             case 6:
-                if self.param_list[self.param_num] >= 255:
+                if self.param_list[self.param_num] >= 120:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
             case 7:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
+                self.button_plus.setEnabled(False)
 
-            case 8:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 9:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 10:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
 
     
     def left(self):
@@ -983,4 +784,4 @@ class Control(Control):
             self.button_right.setEnabled(True)
 
 
-window_setting2 = Control()
+window_setting1 = Control()

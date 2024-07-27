@@ -161,8 +161,8 @@ app.window_list1 = window_list1
 from Filler_interface.Window_statistic.statistic_control import window_statistic
 app.window_statistic = window_statistic
 
-from Filler_interface.Window_settings1.settings_control import window_setting
-app.window_settings1 = window_setting
+from Filler_interface.Window_settings1.settings_control2 import window_setting1
+app.window_settings1 = window_setting1
 
 from Filler_interface.Window_settings2.settings2_control import window_setting2
 app.window_settings2 = window_setting2
@@ -185,6 +185,4 @@ app.window_cip = window_cip
 from Filler_interface.Window_robot.robot_control import window_robot
 app.window_robot = window_robot
 
-from Filler_interface.Window_robot.robot_control import window_robot
-app.window_robot = window_robot
 

@@ -8,10 +8,10 @@ print("Текущее время: ", now.strftime("%H:%M:%S"))
 class Filler:
     def __init__(self) -> None:
         self.param1 = True
-        self.param1_def = True
+        self.param111 = 1
 
         self.param2 = True
-        self.param2_def = True
+        self.param222 = 0
 
         self.param3 = 500
         self.param3_def = 500
