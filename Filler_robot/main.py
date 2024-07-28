@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QThread
 
-from Gadgets.VisionTech.camera import camera 
+from Gadgets.VisionTech.camera import camera
 from NeuroModules.neuron import neuron
 from NeuroModules.interface import interface
 from Robots.robot_module import robot

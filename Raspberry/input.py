@@ -41,9 +41,9 @@
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
-# from pins_table import pins
+from Raspberry.pins_table import pins
 
-# from Filler_robot.Monitor.motor_monitor import motor_monitor
+from Filler_robot.Monitor.motor_monitor import motor_monitor
 
 
 class Input_request(QThread):
@@ -73,11 +73,11 @@ class Input_request(QThread):
                     i += 1
                     print(i)
                 
-            #     # if pins.get_value(pins.button_stop):
-            #     #     self.show_error.emit()
+                if pins.button_stop.get_value():
+                    self.show_error.emit()
                 
-            #     # if pins.get_value(pins.button):
-            #     #     motor_monitor.run()
+                if pins.button.get_value():
+                    motor_monitor.run()
 
             except Exception as e:
                 print(f"Error reading pin values: {e}")

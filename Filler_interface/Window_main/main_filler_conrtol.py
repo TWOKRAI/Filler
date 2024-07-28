@@ -6,6 +6,8 @@ import os
 
 from Filler_interface.app import app
 
+from Raspberry.input import input_request
+
 
 class Main_filler_control(QMainWindow):
     def __init__(self):
@@ -110,9 +112,8 @@ class Main_filler_control(QMainWindow):
 
     def start(self):
         app.window_list1.show()
-
         self.hide()
-
+        
 
     def robot(self):
         app.window_robot.show()
@@ -120,7 +121,6 @@ class Main_filler_control(QMainWindow):
 
     def settings(self):
         app.window_settings2.show()
-
         self.hide()
        
     

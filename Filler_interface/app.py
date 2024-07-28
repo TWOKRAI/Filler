@@ -17,7 +17,7 @@ class App(QApplication):
 
         self.window_size = QSize(720, 480)
 
-        self.on_fullscreen = False
+        self.on_fullscreen = True
         self.cursor_move_2 = False
 
         self.lang_num = 0

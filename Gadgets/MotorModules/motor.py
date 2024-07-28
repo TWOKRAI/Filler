@@ -1,6 +1,6 @@
 import asyncio
 
-from graphic_speed import Plotter
+# from graphic_speed import Plotter
 from Lib.Decorators.wrapper import _timing, _log_input_output
 
 class Motor:
