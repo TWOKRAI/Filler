@@ -6,6 +6,7 @@ from PyQt5.QtGui import QCursor
 
 from Filler_interface.Style_windows.style import Style
 
+from Filler_robot.main import filler
 from Raspberry.input import input_request
 
 
@@ -17,7 +18,7 @@ class App(QApplication):
 
         self.window_size = QSize(720, 480)
 
-        self.on_fullscreen = True
+        self.on_fullscreen = False
         self.cursor_move_2 = False
 
         self.lang_num = 0

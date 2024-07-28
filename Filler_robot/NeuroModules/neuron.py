@@ -8,11 +8,11 @@ from Gadgets.VisionTech.camera import camera
 from Lib.Decorators.wrapper import _timing
 
 
-file = open("coco.txt","r")
+file = open("Filler_robot/NeuroModules/models/coco.txt","r")
 classes = file.read().split('\n')
 #print(classes)
 
-classes_file =  'coco.names'
+classes_file = 'Filler_robot/NeuroModules/models/coco.names'
 class_names = []
 
 with open(classes_file, 'rt') as f:
@@ -39,7 +39,7 @@ class Neuron:
 	def __init__(self):
 		self.timer = Timer()
 
-		self.net_v5 = cv2.dnn.readNetFromONNX("yolov5s.onnx")
+		self.net_v5 = cv2.dnn.readNetFromONNX("Filler_robot/NeuroModules/models/yolov5n.onnx")
 		self.net_v5.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 		self.net_v5.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 		

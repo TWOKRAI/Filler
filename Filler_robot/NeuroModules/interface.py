@@ -1,9 +1,9 @@
 import cv2
 
-from NeuroModules.neuron import neuron
+from Filler_robot.NeuroModules.neuron import neuron
 from Gadgets.VisionTech.camera import camera 
 
-from Decorators.wrapper import _timing
+from Lib.Decorators.wrapper import _timing
 
 
 def nothing(x):

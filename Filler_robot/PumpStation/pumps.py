@@ -3,6 +3,8 @@ import asyncio
 from Gadgets.MotorModules.motor import Motor
 from Filler_robot.NeuroModules.neuron import neuron
 
+from Raspberry.pins_table import pins
+
 
 class Pump:
     def __init__(self, name, motor):
@@ -73,10 +75,10 @@ class Pump:
 
 class Pump_station:
     def __init__(self): 
-        self.motor_1 = Motor('pumps_1', 27, 22, 24)
+        self.motor_1 = Motor('pumps_1', pins.motor_p1_step, pins.motor_p1_dir, pins.motor_p1p2_enable)
         self.pump_1 = Pump('pumps_1', self.motor_1)
 
-        self.motor_2 = Motor('pumps_2', 18, 23, 20)
+        self.motor_2 = Motor('pumps_2',  pins.motor_p2_step, pins.motor_p2_dir, pins.motor_p1p2_enable)
         self.pump_2 = Pump('pumps_2', self.motor_2)
         
         self.mode_game = False
@@ -84,8 +86,8 @@ class Pump_station:
         self.turn_min = 0
         self.turn_max = 1000
 
-        self.statistic_pump_1 = int(neuron.memory_read('memory.txt','pump_1'))
-        self.statistic_pump_2 = int(neuron.memory_read('memory.txt', 'pump_2'))
+        # self.statistic_pump_1 = int(neuron.memory_read('memory.txt','pump_1'))
+        # self.statistic_pump_2 = int(neuron.memory_read('memory.txt', 'pump_2'))
         
 
     def run(self):
@@ -97,17 +99,17 @@ class Pump_station:
         self.statistic_pump_1 += self.pump_1.step_to_ml()
         self.statistic_pump_2 += self.pump_2.step_to_ml()
 
-        neuron.memory_write('memory.txt', 'pump_1', self.statistic_pump_1)
-        neuron.memory_write('memory.txt', 'pump_2', self.statistic_pump_2)
+        # neuron.memory_write('memory.txt', 'pump_1', self.statistic_pump_1)
+        # neuron.memory_write('memory.txt', 'pump_2', self.statistic_pump_2)
 
 
     async def _all_pour_async(self):
         if self.mode_game == False:
             turn1 = self.pump_1.ml
             turn2 = self.pump_2.ml
-        else:
-            turn1 = game_ruletka.pour()
-            turn2 = game_ruletka.pour()
+        # else:
+        #     turn1 = game_ruletka.pour()
+        #     turn2 = game_ruletka.pour()
 
         tasks = []
 

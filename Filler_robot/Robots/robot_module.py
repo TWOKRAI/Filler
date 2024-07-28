@@ -3,11 +3,12 @@ import math
 
 from Gadgets.MotorModules.motor import Motor
 from Gadgets.VisionTech.camera import camera
-from NeuroModules.neuron import neuron
-from NeuroModules.interface import interface
-from PumpStation.pumps import pump_station
+from Filler_robot.NeuroModules.neuron import neuron
+from Filler_robot.NeuroModules.interface import interface
+from Filler_robot.PumpStation.pumps import pump_station
+from Raspberry.pins_table import pins
 
-from Decorators.wrapper import _timing
+from Lib.Decorators.wrapper import _timing
 
 
 class Axis:
@@ -108,9 +109,9 @@ class Robot:
 		self.error_y = False
 		self.error_z = False
 
-		self.motor_x = Motor('x', 4, 3, 26)
-		self.motor_y = Motor('y', 2, 17, 13)
-		self.motor_z = Motor('z', 14, 15, 19)
+		self.motor_x = Motor('x', pins.motor_x_step, pins.motor_x_dir, pins.motor_x_enable)
+		self.motor_y = Motor('y', pins.motor_y_step, pins.motor_y_dir, pins.motor_y_enable)
+		self.motor_z = Motor('z', pins.motor_z_step, pins.motor_z_dir, pins.motor_z_enable)
 
 		self.distance_x = 0
 		self.distance_y = 0

@@ -3,7 +3,7 @@ import numpy as np
 import math
 from picamera2 import Picamera2
 
-from wrapper import _timing
+from Lib.Decorators.wrapper import _timing
 from Gadgets.VisionTech.perspective import Perspective
 
 
@@ -15,7 +15,7 @@ class Camera:
         config = self.picam.create_still_configuration( main={"size": (2592, 1944)})
         self.picam.configure(config)
         
-        self.cv_file = cv2.FileStorage('calibration/camera_params.yml', cv2.FILE_STORAGE_READ)
+        self.cv_file = cv2.FileStorage('Gadgets/VisionTech/calibration/camera_params.yml', cv2.FILE_STORAGE_READ)
         self.camera_matrix = self.cv_file.getNode('K').mat()
         self.distortion_coeffs = self.cv_file.getNode('D').mat()
         self.cv_file.release()
