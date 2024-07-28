@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import Qt, QSize, QTimer, QPropertyAnimation
 from PyQt5.QtGui import QIcon, QFont
+import os
 
 from Filler_interface.app import app
 
@@ -9,7 +10,9 @@ from Filler_interface.app import app
 class Control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'Filler_interface\Window_list1\UI.ui', self)
+
+        file_path = os.path.join('Filler_interface', 'Window_list1', 'UI.ui')
+        uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -78,10 +81,17 @@ class Control(QMainWindow):
 
 
     def set_icons(self):
-        self.button_menu.setIcon(QIcon(r'Filler_interface\Style_windows/icons_black/icons8-menu-100.png'))
-        self.button_start.setIcon(QIcon(r'Filler_interface\Style_windows\icons_black\icons8-wine-bar-100.png'))
-        self.button_game.setIcon(QIcon(r'Filler_interface\Style_windows\icons_black\icons8-game-controller-100.png'))
-        self.button_statistics.setIcon(QIcon(r'Filler_interface\Style_windows\icons_black\icons8-pie-chart-100.png'))
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
+        self.button_menu.setIcon(QIcon(file_path))
+
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-wine-bar-100.png')
+        self.button_start.setIcon(QIcon(file_path))
+
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-game-controller-100.png')
+        self.button_game.setIcon(QIcon(file_path))
+
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-pie-chart-100.png')
+        self.button_statistics.setIcon(QIcon(file_path))
 
 
     def language(self, lang):

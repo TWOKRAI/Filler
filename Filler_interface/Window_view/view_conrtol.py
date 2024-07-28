@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QPixmap
+import os
 
 from Filler_interface.app import app
 
@@ -9,14 +10,17 @@ from Filler_interface.app import app
 class View_control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'Filler_interface\Window_view\UI_view.ui', self)
+
+        file_path = os.path.join('Filler_interface', 'Window_view', 'UI_view.ui')
+        uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
-        pixmap = QPixmap(r'Filler_interface\1x\innotech_min.png')
+        file_path = os.path.join('Filler_interface', '1x', 'innotech_min.png')
+        pixmap = QPixmap(file_path)
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 
@@ -72,13 +76,15 @@ class View_control(QMainWindow):
     def image_low(self):
         self.label = QLabel(self)
         self.label.setGeometry(0, 0, self.width(), self.height())
-        self.label.setPixmap(QPixmap(r'Filler_interface\Window_view\images.png'))
+        file_path = os.path.join('Filler_interface', 'Window_view', 'images.png')
+        self.label.setPixmap(QPixmap(file_path))
         self.label.setScaledContents(True)
         self.label.lower()
 
 
     def update_image(self):
-        pixmap = QPixmap(r'Filler_interface\Window_view\images.jpg')
+        file_path = os.path.join('Filler_interface', 'Window_view', 'images.jpg')
+        pixmap = QPixmap(file_path)
         #scaled_pixmap = pixmap.scaled(int(pixmap.width() * 2), int(pixmap.height() * 2), Qt.KeepAspectRatio)
         self.label.setPixmap(pixmap)
 

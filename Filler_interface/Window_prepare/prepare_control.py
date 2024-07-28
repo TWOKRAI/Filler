@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon, QFont
+import os
 
 from Filler_interface.app import app
 
@@ -9,7 +10,9 @@ from Filler_interface.app import app
 class Prepare_control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'Filler_interface\Window_prepare\UI_prepare.ui', self)
+
+        file_path = os.path.join('Filler_interface', 'Window_prepare', 'UI_prepare.ui')
+        uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -109,7 +112,8 @@ class Prepare_control(QMainWindow):
 
     
     def button_reset_update(self):
-        self.button_reset.setIcon(QIcon(r'Filler_interface\Style_windows/icons_black/icons8-replay-100.png'))
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-replay-100.png')
+        self.button_reset.setIcon(QIcon(file_path))
 
 
     def reset(self):
@@ -127,8 +131,9 @@ class Prepare_control(QMainWindow):
 
         button_size = QSize(130, 120)
         self.button_menu.setFixedSize(button_size)
-    
-        self.button_menu.setIcon(QIcon(r'Filler_interface\Style_windows/icons_black/icons8-menu-100.png'))
+
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
+        self.button_menu.setIcon(QIcon(file_path))
 
 
     def button_menu_clicked(self):

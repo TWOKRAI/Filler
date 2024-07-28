@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QLabel
 from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon, QFont
+import os
 
 from Filler_interface.app import app
 from Filler_interface.filler import filler
@@ -11,7 +12,9 @@ from Filler_interface.filler import filler
 class Control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'Filler_interface\Window_settings1\UI_settings.ui', self)
+
+        file_path = os.path.join('Filler_interface', 'Window_settings1', 'UI_settings.ui')
+        uic.loadUi(file_path, self)
        
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -108,6 +111,7 @@ class Control(QMainWindow):
 
     def show(self):
         if app.on_fullscreen: self.fullscreen()
+        
         self.param_num = 1
         self.update_text()
         self.enable_control()
@@ -155,12 +159,24 @@ class Control(QMainWindow):
 
     
     def set_icons(self):
-        self.button_menu.setIcon(QIcon(r'Filler_interface\Style_windows/icons_black/icons8-menu-100.png'))
-        self.button_reset.setIcon(QIcon(r'Filler_interface\Style_windows/icons_black/icons8-replay-100.png'))
-        self.button_left.setIcon(QIcon(r'Filler_interface\Style_windows/icons_black/icons8-back-100.png'))
-        self.button_right.setIcon(QIcon(r'Filler_interface\Style_windows/icons_black/icons8-forward-100.png'))
-        self.button_minus.setIcon(QIcon(r'Filler_interface\Style_windows\icons_black\icons8-subtract-100.png'))
-        self.button_plus.setIcon(QIcon(r'Filler_interface\Style_windows\icons_black\icons8-plus-math-100.png'))
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
+        self.button_menu.setIcon(QIcon(file_path))
+
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-replay-100.png')
+        self.button_reset.setIcon(QIcon(file_path))
+
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-back-100.png')
+        self.button_left.setIcon(QIcon(file_path))
+
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-forward-100.png')
+        self.button_right.setIcon(QIcon(file_path))
+
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-subtract-100.png')
+        self.button_minus.setIcon(QIcon(file_path))
+
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-plus-math-100.png')
+        self.button_plus.setIcon(QIcon(file_path))
+
 
 
     def put_parametrs(self):

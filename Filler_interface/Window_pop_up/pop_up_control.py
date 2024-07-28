@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
+import os
 
 from Filler_interface.app import app
 
@@ -9,7 +10,9 @@ from Filler_interface.app import app
 class Pop_up_control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'Filler_interface\Window_pop_up\UI_pop_up.ui', self)
+
+        file_path = os.path.join('Filler_interface', 'Window_pop_up', 'UI_pop_up.ui')
+        uic.loadUi(file_path, self)
        
         self.statusBar().setHidden(True)
 

@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QFont, QIcon
+import os
 
 from Filler_interface.app import app
 
@@ -10,7 +11,8 @@ class filler_control(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi(r'Filler_interface\Window_filler\UI_filler.ui', self)
+        file_path = os.path.join('Filler_interface', 'Window_filler', 'UI_filler.ui')
+        uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -94,8 +96,9 @@ class filler_control(QMainWindow):
 
         icon_size = QSize(60, 60)
         self.button_menu.setIconSize(icon_size)
-
-        self.button_menu.setIcon(QIcon(r'Filler_interface\Style_windows/icons_black/icons8-menu-100.png'))
+        
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
+        self.button_menu.setIcon(QIcon(file_path))
 
 
     def button_menu_clicked(self):
@@ -127,9 +130,11 @@ class filler_control(QMainWindow):
         print(self.play)
 
         if self.play == True:
-            self.button_pause.setIcon(QIcon(r'Filler_interface\Style_windows\icons_black\icons8-pause-button-100.png'))
+            file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-pause-button-100.png')
+            self.button_pause.setIcon(QIcon(file_path))
         else:
-            self.button_pause.setIcon(QIcon(r'Filler_interface\Style_windows\icons_black\icons8-circled-play-100.png'))
+            file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
+            self.button_pause.setIcon(QIcon(file_path))
 
 
     def button_pause_clicked(self):
@@ -147,7 +152,8 @@ class filler_control(QMainWindow):
         icon_size = QSize(60, 60)
         self.button_view.setIconSize(icon_size)
 
-        self.button_view.setIcon(QIcon(r'Filler_interface\Style_windows\icons_black\icons8-preview-pane-100.png'))
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
+        self.button_view.setIcon(QIcon(file_path))
 
 
     def button_view_clicked(self):

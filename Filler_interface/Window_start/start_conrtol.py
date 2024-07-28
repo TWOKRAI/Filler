@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton, QGraphicsOpacityEffect
 from Filler_interface.Window_start.start import Ui_MainWindow 
 from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QPixmap
+import os 
 
 from Filler_interface.app import app
 
@@ -15,7 +16,8 @@ class Start_control(QMainWindow, Ui_MainWindow):
 
         #self.setAttribute(Qt.WA_TranslucentBackground)
 
-        pixmap = QPixmap(r'Filler_interface\1x\innotech_max_2.png')
+        file_path = os.path.join('Filler_interface', '1x', 'innotech_max_2.png')
+        pixmap = QPixmap(file_path)
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.8), int(pixmap.height() * 0.8), Qt.KeepAspectRatio)
         self.innotech.setPixmap(scaled_pixmap)
 

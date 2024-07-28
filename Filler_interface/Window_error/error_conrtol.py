@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QSize
 from PyQt5.QtGui import QFont, QPixmap, QMovie
+import os 
 
 from Filler_interface.app import app
 from Raspberry.input import input_request
@@ -10,7 +11,9 @@ from Raspberry.input import input_request
 class level_control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'Filler_interface\Window_error\UI_error.ui', self)
+
+        file_path = os.path.join('Filler_interface', 'Window_error', 'UI_error.ui')
+        uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -21,11 +24,14 @@ class level_control(QMainWindow):
 
         self.start_time = 5000
 
-        pixmap = QPixmap(r'Filler_interface\1x\innotech_min.png')
+
+        file_path = os.path.join('Filler_interface', '1x', 'innotech_min.png')
+        pixmap = QPixmap(file_path)
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 
-        pixmap = QPixmap(r'Filler_interface\Style_windows\icons_no_color\error.png')
+        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_no_color', 'error.png')
+        pixmap = QPixmap(file_path)
         scaled_pixmap = pixmap.scaled(int(pixmap.width()* 0.8), int(pixmap.height()* 0.8), Qt.KeepAspectRatio)
         self.level_img.setPixmap(scaled_pixmap)
 
@@ -38,14 +44,6 @@ class level_control(QMainWindow):
         self.animation = QPropertyAnimation(self, b'windowOpacity')
 
         self.button.clicked.connect(self.close)
-        
-        movie = QMovie("path/to/your/gif/file.gif")
-        movie.setScaledSize(QSize(self.width(), self.height()))
-
-        self.label = QLabel(self.centralwidget)
-        self.label.setGeometry(QRect(0, 0, self.width(), self.height()))
-        self.label.setMovie(movie)
-        movie.start()
 
         self.lang = 0
         self.code = 0
