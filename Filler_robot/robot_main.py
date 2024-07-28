@@ -6,7 +6,7 @@ from Filler_robot.NeuroModules.interface import interface
 from Filler_robot.Robots.robot_module import robot
 
 
-class Filler(QThread):
+class Robot(QThread):
     def __init__(self) -> None:
         super().__init__()
 
@@ -14,7 +14,7 @@ class Filler(QThread):
 
         self.camera_on = True
         self.robot_on = False
-        self.inteface_on = False
+        self.inteface_on = True
         self.neuron_on = True
 
     def stop(self):
@@ -28,7 +28,5 @@ class Filler(QThread):
             if self.robot_on: robot.run()
 
 
-filler = Filler()
+robot = Robot()
 
-if __name__ == '__main__':    
-    filler.run()

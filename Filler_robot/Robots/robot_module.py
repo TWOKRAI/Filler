@@ -118,6 +118,7 @@ class Robot:
 		self.distance_z = 0
 
 		self.axis_x = Axis('motor_x', self.motor_x)
+		self.axis_x.motor.enable_on(False)
 		self.axis_x.motor.speed_def = 0.00005
 		self.axis_x.motor.direction = True
 		self.axis_x.step_angle = 0.062
@@ -125,8 +126,10 @@ class Robot:
 		self.axis_x.angle = self.axis_x.angle_0
 		self.axis_x.limit_min = -90
 		self.axis_x.limit_max = 90
+		
 
 		self.axis_y = Axis('motor_y', self.motor_y)
+		self.axis_y.motor.enable_on(False)
 		self.axis_y.motor.speed_def = 0.00005
 		self.axis_y.motor.direction = False
 		self.axis_y.step_angle = 0.13
@@ -137,8 +140,10 @@ class Robot:
 		self.axis_y.z0 = 20.5
 		self.axis_y.limit_min = 2
 		self.axis_y.limit_max = 122
+		
 
 		self.axis_z = Axis('motor_z', self.motor_z)
+		self.axis_z.motor.enable_on(False)
 		self.axis_z.motor.speed_def = 0.0002
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
@@ -149,7 +154,7 @@ class Robot:
 		self.axis_z.angle = self.axis_z.angle_0
 		self.axis_z.limit_min = 145
 		self.axis_z.limit_max = 95
-
+		
 
 	def run(self):
 		if self.calibration_ready:

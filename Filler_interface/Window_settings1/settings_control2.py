@@ -1,5 +1,6 @@
 from PyQt5.QtCore import QTimer, QSize
 from PyQt5.QtGui import QIcon, QFont
+import os
 
 from Lib.memory import Memory
 from Filler_interface.app import app
@@ -103,8 +104,8 @@ class Control(Control):
         self.button_reset.pressed.connect(self.button_reset_pressed)
         self.button_reset.released.connect(self.button_reset_released)
 
-        
-        self.memory = Memory(db_path=r'Filler_interface\Window_settings1\Data',  db_file='memory_db')
+        file_path = os.path.join('Filler_interface', 'Window_settings1', 'Data')
+        self.memory = Memory(db_path = file_path, db_file = 'memory_db')
         
         self.param_list = self.get_parametrs()
         self.param_list = self.memory_read(self.param_list)

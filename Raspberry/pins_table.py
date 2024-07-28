@@ -56,14 +56,24 @@ class Pins():
         return line
     
 
-    def get_value_log(self, pin, log = False):
+    def get_value_log(self, pin):
         if pin.get_value() == 1:
-            if log: print(f'pin: {pin} - ON')
-            return 1
+            print(f'{pin} - ON')
         elif pin.get_value() == 0:
-            if log: print(f'pin: {pin} - OFF')
-            return 0
+            print(f'{pin} - OFF')
+
 
 
 pins = Pins()
 
+
+if __name__ == '__main__':    
+    pins.motor_x_enable.set_value(0)
+    pins.motor_y_enable.set_value(0)
+    pins.motor_z_enable.set_value(0)
+    pins.motor_p1p2_enable.set_value(0)
+
+    pins.get_value_log(pins.motor_x_enable)
+    pins.get_value_log(pins.motor_y_enable)
+    pins.get_value_log(pins.motor_z_enable)
+    pins.get_value_log(pins.motor_p1p2_enable)

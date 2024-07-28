@@ -6,7 +6,6 @@ from PyQt5.QtGui import QCursor
 
 from Filler_interface.Style_windows.style import Style
 
-from Filler_robot.main import filler
 from Raspberry.input import input_request
 
 

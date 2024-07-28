@@ -76,9 +76,11 @@ class Pump:
 class Pump_station:
     def __init__(self): 
         self.motor_1 = Motor('pumps_1', pins.motor_p1_step, pins.motor_p1_dir, pins.motor_p1p2_enable)
+        self.motor_1.enable_on(False)
         self.pump_1 = Pump('pumps_1', self.motor_1)
 
         self.motor_2 = Motor('pumps_2',  pins.motor_p2_step, pins.motor_p2_dir, pins.motor_p1p2_enable)
+        self.motor_1.enable_on(False)
         self.pump_2 = Pump('pumps_2', self.motor_2)
         
         self.mode_game = False

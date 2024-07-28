@@ -191,7 +191,7 @@ class Control(QMainWindow):
 
 
     def minus(self):
-        self.timer_minus_pressed.setInterval(int(200/self.step_button))
+        self.timer_minus_pressed.setInterval(int(100/self.step_button))
         self.step_button += 0.1
 
 
@@ -209,7 +209,7 @@ class Control(QMainWindow):
 
 
     def plus(self):
-        self.timer_plus_pressed.setInterval(int(200/self.step_button))
+        self.timer_plus_pressed.setInterval(int(100/self.step_button))
         self.step_button += 0.1
 
 
