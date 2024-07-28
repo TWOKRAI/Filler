@@ -2,7 +2,9 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QPushButton
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont, QPixmap, QFont
+
 import datetime
+import os
 
 from Filler_interface.app import app
 
@@ -10,7 +12,10 @@ from Filler_interface.app import app
 class Control(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'Filler_interface\Window_datetime\UI_datetime.ui', self)
+
+        file_path = os.path.join('Filler_interface', 'Window_datetime', 'UI_datetime.ui')
+        uic.loadUi(file_path, self)
+        
 
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
@@ -19,7 +24,8 @@ class Control(QMainWindow):
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
-        pixmap = QPixmap(r'Filler_interface\1x\innotech_min.png')
+        file_path = os.path.join('Filler_interface', '1x', 'innotech_min.png')
+        pixmap = QPixmap(file_path)
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 
