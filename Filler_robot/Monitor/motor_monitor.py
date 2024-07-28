@@ -33,8 +33,8 @@ class Motor_monitor(QThread):
     def run(self):
         self.running = True 
         
-        switch_out = pins.get_value(pins.switch_out)
-        switch_in = pins.get_value(pins.switch_in)
+        switch_out = pins.switch_out.get_value()
+        switch_in = pins.switch_in.get_value()
 
         self.motor.enable_on(False)
         self.motor.null_value()
@@ -57,10 +57,10 @@ class Motor_monitor(QThread):
 
     async def _detect_sensor(self):
         while True:
-            dir = pins.get_value(pins.motor_dir)
-            switch_out = pins.get_value(pins.switch_out)
-            switch_in = pins.get_value(pins.switch_in)
-            button = pins.get_value(pins.button)
+            dir = pins.motor_dir.get_value()
+            switch_out = pins.switch_out.get_value()
+            switch_in = pins.switch_in.get_value()
+            button = pins.button.get_value()
 
             if not button:
                 self.not_button = True
@@ -78,7 +78,7 @@ class Motor_monitor(QThread):
                 self.state = not self.state
                 raise asyncio.CancelledError()
 
-            await asyncio.sleep(0.05)
+            await asyncio.sleep(0.01)
 
 
     async def _move_async(self, distance, detect = False):
@@ -87,7 +87,7 @@ class Motor_monitor(QThread):
         if detect:
             tasks.append(asyncio.create_task(self._detect_sensor()))
 
-        tasks.append(asyncio.create_task(self.motor.move(distance, async_mode=True)))
+        tasks.append(asyncio.create_task(self.motor._freq_async(2000, 5, distance)))
             
         try:
             await asyncio.gather(*tasks)
@@ -103,3 +103,7 @@ class Motor_monitor(QThread):
 
 motor_monitor = Motor_monitor()
 
+
+if __name__ == '__main__':
+    while True:
+        motor_monitor.run()

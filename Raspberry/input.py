@@ -68,10 +68,10 @@ class Input_request(QThread):
     def request(self):
         i = 0
         while self.running:
-            # try:
-            #     if self.run_request:
-            #         i += 1
-            #         print(i)
+            try:
+                if self.run_request:
+                    i += 1
+                    print(i)
                 
             #     # if pins.get_value(pins.button_stop):
             #     #     self.show_error.emit()
@@ -79,8 +79,8 @@ class Input_request(QThread):
             #     # if pins.get_value(pins.button):
             #     #     motor_monitor.run()
 
-            # except Exception as e:
-            #     print(f"Error reading pin values: {e}")
+            except Exception as e:
+                print(f"Error reading pin values: {e}")
 
             QThread.msleep(int(self.time_request * 1000))
 

@@ -280,7 +280,7 @@ class Control(Control):
     def coll_params_update(self):
         size_text = 21
         
-        text = f'{self.param_num} / {len(self.param_list)}'
+        text = f'{self.param_num} / {len(self.param_list) + 1}'
         self.coll_params.setText(str(text))
 
         font = QFont()
@@ -292,10 +292,10 @@ class Control(Control):
 
 
     def value_update(self):
-        value = self.param_list[self.param_num]
-
         match self.param_num:
             case 1:
+                value = self.param_list[self.param_num]
+
                 value_text = [
                     ['Нет', 'No'],
                     ['Да', 'Yes'],
@@ -306,6 +306,8 @@ class Control(Control):
 
                 size_text = 90
             case 2:
+                value = self.param_list[self.param_num]
+
                 value_text = [
                     ['Нет', 'No'],
                     ['Да', 'Yes'],
@@ -316,12 +318,16 @@ class Control(Control):
         
                 size_text = 90
             case 3:
+                value = self.param_list[self.param_num]
                 size_text = 90
             case 4:
+                value = self.param_list[self.param_num]
                 size_text = 90
             case 5:
+                value = self.param_list[self.param_num]
                 size_text = 90
             case 6:
+                value = self.param_list[self.param_num]
                 size_text = 90
             case 7:
                 value =  {
@@ -569,12 +575,7 @@ class Control(Control):
                 pass
             case 7:
                 pass
-            case 8:
-                pass
-            case 9:
-                pass
-            case 10:
-                pass
+ 
             
         self.update()
 
@@ -666,8 +667,6 @@ class Control(Control):
                 
             case 7:
                 pass
-
-                self.put_parametrs()
                 
 
         self.update()
@@ -692,12 +691,7 @@ class Control(Control):
                 pass
             case 7:
                 pass
-            case 8:
-                pass
-            case 9:
-                pass
-            case 10:
-                pass
+
 
         self.update()
 
@@ -768,8 +762,14 @@ class Control(Control):
     
 
     def right(self):
-        if self.param_num < len(self.param_list):
+        if self.param_num < len(self.param_list) + 2:
             self.param_num += 1
+        
+        match self.param_num:
+            case 8:
+                app.window_prepare.show()
+                self.hide()    
+
 
         self.enable_control()
         self.update()
@@ -778,10 +778,12 @@ class Control(Control):
 
 
     def right_enable(self):
-        if self.param_num >= len(self.param_list):
+        if self.param_num >= len(self.param_list) + 2:
             self.button_right.setEnabled(False)
         else:
             self.button_right.setEnabled(True)
+
+            
 
 
 window_setting1 = Control()
