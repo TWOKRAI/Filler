@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import time
 import math
+import os
 
 from Gadgets.VisionTech.camera import camera
 
@@ -39,7 +40,8 @@ class Neuron:
 	def __init__(self):
 		self.timer = Timer()
 
-		self.net_v5 = cv2.dnn.readNetFromONNX("Filler_robot/NeuroModules/models/yolov5s.onnx")
+		file_path = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov5n.onnx')
+		self.net_v5 = cv2.dnn.readNetFromONNX(file_path)
 		self.net_v5.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 		self.net_v5.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 		

@@ -5,6 +5,7 @@ from PyQt5.QtCore import QSize, QTimer, QEvent
 from PyQt5.QtGui import QCursor
 
 from Filler_interface.Style_windows.style import Style
+from Filler_robot.robot_main import robot
 
 from Raspberry.input import input_request
 
@@ -17,7 +18,7 @@ class App(QApplication):
 
         self.window_size = QSize(720, 480)
 
-        self.on_fullscreen = True
+        self.on_fullscreen = False
         self.cursor_move_2 = True
 
         self.lang_num = 0
@@ -35,6 +36,7 @@ class App(QApplication):
     
     def run(self):
         input_request.start()
+        robot.start()
 
         self.set_style()
         self.language()

@@ -36,7 +36,7 @@ class Camera:
 
         image = np.zeros((self.width_out, self.height_out, 3), dtype=np.uint8)
         
-        point_pixel = [(5, 564), (255, 333), (630, 550), (390, 334)]
+        point_pixel = [(30, 430), (221, 214), (610, 430), (419, 214)]
         point_real = [(-20, 11.2), (-20, 50.7), (20, 11.2), (20, 50.7)]
         
         self.perspective = Perspective(image, point_pixel, point_real)
@@ -67,15 +67,27 @@ class Camera:
         if self.calibration_on:
             self.img = self.calibraion(self.img)
         
-        #self.img = self.img[:, 224:2368,:3]
-        self.img = self.img[:, :,:3]
+        self.img_width, self.img_height = self.img.shape[1], self.img.shape[0]
+        
+        center = (self.img_width // 2, self.img_height // 2)
+
+        angle = 0.75
+        scale = 1.0
+        M = cv2.getRotationMatrix2D(center, angle, scale)
+
+        self.img = cv2.warpAffine(self.img, M, (self.img_width, self.img_height))
+        
+        #self.img = self.img[0:1900, 300:2200,:3]
+        self.img = self.img[0:1900, 380:2280,:3]
+        #self.img = self.img[:, :,:3]
 
         self.img = cv2.resize(camera.img, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
         
         self.img = cv2.cvtColor(self.img, cv2.COLOR_RGB2BGR)
+
         
         self.img_width, self.img_height = self.img.shape[1], self.img.shape[0]
-
+        
 
         if self.print_on:
             print('Camera read')

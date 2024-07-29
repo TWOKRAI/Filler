@@ -67,12 +67,14 @@ class Pins():
 pins = Pins()
 
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
+    pins.motor_enable.set_value(1)
     pins.motor_x_enable.set_value(0)
     pins.motor_y_enable.set_value(0)
     pins.motor_z_enable.set_value(0)
     pins.motor_p1p2_enable.set_value(0)
 
+    pins.get_value_log(pins.motor_enable)
     pins.get_value_log(pins.motor_x_enable)
     pins.get_value_log(pins.motor_y_enable)
     pins.get_value_log(pins.motor_z_enable)

@@ -14,7 +14,7 @@ class Robot(QThread):
 
         self.camera_on = True
         self.robot_on = False
-        self.inteface_on = True
+        self.inteface_on = False
         self.neuron_on = True
 
     def stop(self):
