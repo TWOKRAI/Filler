@@ -65,7 +65,7 @@ class level_control(QMainWindow):
 
 
     def close(self):
-        if not input_request.t1:
+        if not input_request.button_error:
             self.hide()
 
 

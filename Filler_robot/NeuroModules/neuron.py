@@ -39,7 +39,7 @@ class Neuron:
 	def __init__(self):
 		self.timer = Timer()
 
-		self.net_v5 = cv2.dnn.readNetFromONNX("Filler_robot/NeuroModules/models/yolov5n.onnx")
+		self.net_v5 = cv2.dnn.readNetFromONNX("Filler_robot/NeuroModules/models/yolov5s.onnx")
 		self.net_v5.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 		self.net_v5.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 		

@@ -57,7 +57,7 @@ class Input_request(QThread):
         self.run_request = True
         self.time_request = 0.05
 
-        self.t1 = False
+        self.button_error = False
 
     def run(self):
         self.request()
@@ -71,10 +71,14 @@ class Input_request(QThread):
             try:
                 if self.run_request:
                     i += 1
-                    print(i)
+                    # print(i)
                 
-                if pins.button_stop.get_value():
+                if pins.switch_x.get_value():
+                    self.button_error = True
                     self.show_error.emit()
+                else:
+                    self.button_error = False
+                
                 
                 if pins.button.get_value():
                     motor_monitor.run()

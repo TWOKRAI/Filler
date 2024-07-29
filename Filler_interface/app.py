@@ -17,8 +17,8 @@ class App(QApplication):
 
         self.window_size = QSize(720, 480)
 
-        self.on_fullscreen = False
-        self.cursor_move_2 = False
+        self.on_fullscreen = True
+        self.cursor_move_2 = True
 
         self.lang_num = 0
         self.color = 'green'
@@ -65,11 +65,14 @@ class App(QApplication):
 
 
     def eventFilter(self, obj, event):
-        if self.cursor_move_2: 
-            print(self.cursor_move_2)
-            print('СОБЫЬТЕ')
-            if event.type() == QEvent.MouseButtonRelease:  
-                QCursor.setPos(5, 5)
+        # if self.cursor_move_2: 
+        #     if event.type() == QEvent.MouseButtonRelease:
+        #         QCursor.setPos(5, 5)
+
+        #         # focus_widget = self.focusWidget()
+                
+        #         # if focus_widget:
+        #         #     focus_widget.clearFocus()
 
         
         if event.type() == QEvent.MouseButtonPress:
@@ -126,11 +129,6 @@ class App(QApplication):
         #style.recolor(self, (42, 122, 96, 255))
         style = self.styling.recolor_css(style)
         self.setStyleSheet(style)
-
-
-    def check_timer(self):
-        print('timer window_datetime: ', self.window_datetime.timer.isActive())
-        print('timer window_start: ', self.window_start.timer.isActive())
    
 
     def exit(self):

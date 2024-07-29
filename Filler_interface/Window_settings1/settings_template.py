@@ -17,6 +17,14 @@ class Control(QMainWindow):
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
 
+        self.pressed_minus = QTimer(self)
+        self.pressed_minus.setInterval(500)
+        self.pressed_minus.timeout.connect(self.minus_pressed_2)
+
+        self.pressed_plus = QTimer(self)
+        self.pressed_plus.setInterval(500)
+        self.pressed_plus.timeout.connect(self.plus_pressed_2)
+
     
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
@@ -191,15 +199,22 @@ class Control(QMainWindow):
 
 
     def minus(self):
-        self.timer_minus_pressed.setInterval(int(100/self.step_button))
-        self.step_button += 0.1
-
+        self.timer_minus_pressed.setInterval(int(500/(1 + self.step_button)))
+        self.step_button += 0.2
+    
 
     def minus_pressed(self):
+        self.pressed_minus.start()
+
+    
+    def minus_pressed_2(self):
         self.timer_minus_pressed.start()
+        print('preeeesed minus')
+        self.pressed_minus.stop()
 
 
     def minus_released(self):
+        self.pressed_minus.stop()
         self.timer_minus_pressed.stop()
         self.step_button = 1
 
@@ -209,15 +224,23 @@ class Control(QMainWindow):
 
 
     def plus(self):
-        self.timer_plus_pressed.setInterval(int(100/self.step_button))
-        self.step_button += 0.1
+        self.timer_plus_pressed.setInterval(int(500/(1 + self.step_button)))
+        self.step_button += 0.2
 
 
     def plus_pressed(self):
+        self.pressed_plus.start()
+
+
+    def plus_pressed_2(self):
+        self.pressed_plus.stop()
         self.timer_plus_pressed.start()
+        print('preeeesed minus')
+        
 
 
     def plus_released(self):
+        self.pressed_plus.stop()
         self.timer_plus_pressed.stop()
         self.step_button = 1
 

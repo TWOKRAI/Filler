@@ -113,7 +113,6 @@ class Pop_up_control(QMainWindow):
 
 
     def show(self, func):
-        if app.on_fullscreen: self.fullscreen()
         self.update_text()
         self.func = func
 
