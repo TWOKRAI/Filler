@@ -81,14 +81,15 @@ class Camera:
         self.img = self.img[0:1900, 380:2280,:3]
         #self.img = self.img[:, :,:3]
 
+        self.img_monitor = self.img.copy()
+
         self.img = cv2.resize(camera.img, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
         
         self.img = cv2.cvtColor(self.img, cv2.COLOR_RGB2BGR)
 
         
         self.img_width, self.img_height = self.img.shape[1], self.img.shape[0]
-        
-
+       
         if self.print_on:
             print('Camera read')
             

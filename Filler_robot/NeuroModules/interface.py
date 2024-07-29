@@ -1,4 +1,5 @@
 import cv2
+import os 
 
 from Filler_robot.NeuroModules.neuron import neuron
 from Gadgets.VisionTech.camera import camera 
@@ -16,8 +17,10 @@ class Interface:
 
 		self.x = 0
 		self.y = 0
+
+		self.img_monitor = None
 		
-		self.create_window()
+		# self.create_window()
 
 
 	def _visual_line(func):
@@ -32,6 +35,8 @@ class Interface:
 	
 	@_timing(True)	
 	def run(self):
+		self.create_window()
+
 		self.get_trackbar()
 		self.show_img()
 	
@@ -74,9 +79,19 @@ class Interface:
 	
 	def destroy_window(self):
 		cv2.destroyAllWindows()
+
+	
+	def save_image(self):
+		self.img_monitor = camera.img_monitor[100:1700, 380:2280,:3]
+
+		self.img_monitor = cv2.resize(self.img_monitor, (720, 480), interpolation = cv2.INTER_AREA)
+
+		self.draw_box_all(self.img_monitor)
+		self.draw_box(self.img_monitor)
+		self.perspective(self.img_monitor)
 		
 	
-	@_visual_line	
+	@_visual_line
 	def draw_sight(self, img):
 		size = 300
 	

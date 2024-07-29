@@ -25,6 +25,7 @@ class Robot(QThread):
             if self.camera_on: camera.run()
             if self.neuron_on: neuron.run() 
             if self.inteface_on: interface.run()
+            interface.save_image()
             if self.robot_on: robot.run()
 
 

@@ -2,7 +2,7 @@ import sys
 from typing import List
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QSize, QTimer, QEvent
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import QCursor, QFontDatabase
 
 from Filler_interface.Style_windows.style import Style
 from Filler_robot.robot_main import robot
@@ -18,8 +18,11 @@ class App(QApplication):
 
         self.window_size = QSize(720, 480)
 
-        self.on_fullscreen = False
+        self.on_fullscreen = True
         self.cursor_move_2 = True
+
+        font_id = QFontDatabase.addApplicationFont("/usr/share/fonts/truetype/siemens_ad_vn.ttf")
+        self.font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
 
         self.lang_num = 0
         self.color = 'green'

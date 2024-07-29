@@ -1,10 +1,11 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QImage, QPixmap
 import os
 
 from Filler_interface.app import app
+from Filler_robot.NeuroModules.interface import interface
 
 
 class View_control(QMainWindow):
@@ -35,18 +36,23 @@ class View_control(QMainWindow):
     def show(self):
         if app.on_fullscreen: self.fullscreen()
         self.image_low()
+        self.update_image()
         self.button_raise()
+
+        self.timer.start(500)
 
         super().show()
 
 
     def show_window(self):
         if app.on_fullscreen: self.fullscreen()
-        self.image_low()
+
+        # self.image_low()
+        self.update_image()
         self.button_raise()
 
         self.timer.stop()
-        self.timer.start(100)
+        self.timer.start(500)
         
         self.show()
         
@@ -83,10 +89,33 @@ class View_control(QMainWindow):
 
 
     def update_image(self):
-        file_path = os.path.join('Filler_interface', 'Window_view', 'images.jpg')
-        pixmap = QPixmap(file_path)
-        #scaled_pixmap = pixmap.scaled(int(pixmap.width() * 2), int(pixmap.height() * 2), Qt.KeepAspectRatio)
-        self.label.setPixmap(pixmap)
+        if interface.img_monitor is not None:
+            # h, w, ch = interface.img_monitor.shape
+            # print('h,w,ch', h, w, ch)
+            # input()
+            # bytes_per_line = ch * w
+            # convert_to_qt_format = QImage(interface.img_monitor, w, h, bytes_per_line, QImage.Format_RGB888)
+            # p = convert_to_qt_format.scaled(720, 480, Qt.KeepAspectRatio)
+            # self.label.setPixmap(QPixmap.fromImage(p))
+
+            
+            h, w, ch = interface.img_monitor.shape
+            q_image = QImage(interface.img_monitor.data.tobytes(), w, h, ch * w, QImage.Format_RGB888)
+
+            pixmap = QPixmap.fromImage(q_image)
+            self.label.setPixmap(pixmap)
+            
+            # self.label.setScaledContents(True)
+            # self.label.lower()
+        else:
+            print("No image available or image size is zero")
+
+            input()
+            
+
+        # pixmap = QPixmap(file_path)
+        # #scaled_pixmap = pixmap.scaled(int(pixmap.width() * 2), int(pixmap.height() * 2), Qt.KeepAspectRatio)
+        # self.label.setPixmap(pixmap)
 
     
 window_view = View_control()

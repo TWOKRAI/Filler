@@ -271,7 +271,7 @@ class Control(Control):
         self.label_window.setText(str(text))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)
@@ -285,7 +285,7 @@ class Control(Control):
         self.coll_params.setText(str(text))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)
@@ -347,7 +347,7 @@ class Control(Control):
         self.value.setText(str(value))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)
@@ -433,7 +433,7 @@ class Control(Control):
         self.value_mini.setText(str(text))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)
@@ -520,7 +520,7 @@ class Control(Control):
         self.name_params.setText(str(text))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)
