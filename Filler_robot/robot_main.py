@@ -1,11 +1,12 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 import numpy as np
-import time
 
 from Gadgets.VisionTech.camera import camera
 from Filler_robot.NeuroModules.neuron import neuron
 from Filler_robot.NeuroModules.interface import interface
 from Filler_robot.Robots.robot_module import robot
+
+from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 
 class Robot(QThread):
@@ -19,18 +20,22 @@ class Robot(QThread):
         self.camera_on = True
         self.robot_on = False
         self.inteface_on = False
-        self.neuron_on = True
+        self.neuron_on = False
+
+        clear_file('log_temp.txt')
+
 
     def stop(self):
         self.running = False
     
+
     def run(self) -> None:
         while self.running:
             if self.camera_on: camera.run()
             if self.neuron_on: neuron.run()
 
-            time.sleep(0.5)
-
+            temp = check_temperature()
+            write_to_file(temp, 'log_temp.txt')
 
             if self.inteface_on: 
                 interface.run()
@@ -39,8 +44,10 @@ class Robot(QThread):
 
                 if isinstance(image, np.ndarray):
                     self.frame_captured.emit(image)
-            
+
             if self.robot_on: robot.run()
+
+            QThread.msleep(1000)
 
 
 robot = Robot()

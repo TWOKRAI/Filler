@@ -40,7 +40,7 @@ class Neuron:
 	def __init__(self):
 		self.timer = Timer()
 
-		file_path = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov5n.onnx')
+		file_path = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov5m.onnx')
 		self.net_v5 = cv2.dnn.readNetFromONNX(file_path)
 		self.net_v5.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 		self.net_v5.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)

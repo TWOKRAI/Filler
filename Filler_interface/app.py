@@ -18,7 +18,7 @@ class App(QApplication):
 
         self.window_size = QSize(720, 480)
 
-        self.on_fullscreen = False
+        self.on_fullscreen = True
         self.cursor_move_2 = True
 
         font_id = QFontDatabase.addApplicationFont("/usr/share/fonts/truetype/siemens_ad_vn.ttf")
@@ -94,6 +94,7 @@ class App(QApplication):
     def datetime_reset(self):
         self.timer_datetime.stop()
         self.timer_datetime.start(self.time_datetime)
+        print('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss')
 
 
     def language(self):

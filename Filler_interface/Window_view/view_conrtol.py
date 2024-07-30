@@ -29,6 +29,11 @@ class View_control(QMainWindow):
         self.image_low()
         self.button_raise()
 
+        self.focus_window = False
+
+        self.frame_label = None
+        robot.frame_captured.connect(self.update_frame)
+
 
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
@@ -37,19 +42,20 @@ class View_control(QMainWindow):
     def show(self):
         if app.on_fullscreen: self.fullscreen()
 
-        robot.frame_captured.connect(self.update_frame)
+        self.update_label()
+
+        stylesheet = app.styleSheet()
+        new_stylesheet = stylesheet.replace(
+        'background-color: qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0, stop: 0 white, stop: 0.4 #DCDCDC, stop: 0.9 #878787);',
+        'background-color: None'
+        )
+        
+        app.setStyleSheet(new_stylesheet)
+
+        self.focus_window = True
 
         super().show()
 
-
-    def show_window(self):
-        if app.on_fullscreen: self.fullscreen()
-
-        # self.image_low()
-        self.button_raise()
-        
-        self.show()
-        
 
     def close(self):
         stylesheet = app.styleSheet()
@@ -59,6 +65,8 @@ class View_control(QMainWindow):
         )
         
         app.setStyleSheet(new_stylesheet)
+
+        self.focus_window = False
 
         robot.frame_captured.connect(self.update_pass)
         self.hide()
@@ -83,26 +91,23 @@ class View_control(QMainWindow):
 
 
     def update_frame(self, frame):
-        if frame is not None:
-            # h, w, ch = interface.img_monitor.shape
-            # print('h,w,ch', h, w, ch)
-            # input()
-            # bytes_per_line = ch * w
-            # convert_to_qt_format = QImage(interface.img_monitor, w, h, bytes_per_line, QImage.Format_RGB888)
-            # p = convert_to_qt_format.scaled(720, 480, Qt.KeepAspectRatio)
-            # self.label.setPixmap(QPixmap.fromImage(p))
+        self.frame_label = frame
 
-            
-            h, w, ch = frame.shape
-            q_image = QImage(frame.data.tobytes(), w, h, ch * w, QImage.Format_BGR888)
+        self.update_label()
+
+        if self.focus_window:
+            app.datetime_reset()
+
+
+    def update_label(self):
+        if self.frame_label is not None:
+            h, w, ch = self.frame_label.shape
+            q_image = QImage(self.frame_label.data.tobytes(), w, h, ch * w, QImage.Format_BGR888)
 
             pixmap = QPixmap.fromImage(q_image)
             self.label.setPixmap(pixmap)
-
-            print('ССССССССССССССССССССССССССССССССССССССС')
-            
-            # self.label.setScaledContents(True)
-            # self.label.lower()
+        else:
+            pass
 
 
         # pixmap = QPixmap(file_path)

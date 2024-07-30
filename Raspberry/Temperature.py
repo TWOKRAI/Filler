@@ -1,4 +1,5 @@
 import subprocess
+import datetime
 
 
 def get_cpu_temp():
@@ -14,11 +15,24 @@ def get_cpu_temp_sys():
 
 
 def check_temperature(threshold=80):
-    temp = get_cpu_temp()
+    temp = get_cpu_temp_sys()
     print(f"Temperature CPU: {temp} C")
     
     if temp > threshold:
         print(f"Error: Temperature CPU >= {threshold} C!")
 
+    return temp
 
-check_temperature(threshold=70)
+
+def write_to_file(value, filename='output.txt'):
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    line = f"{value} - {current_time}\n"
+   
+    with open(filename, 'a') as file:
+        file.write(line)
+
+
+def clear_file(filename):
+    with open(filename, 'w') as file:
+        file.truncate(0)

@@ -42,7 +42,6 @@
 from PyQt5.QtCore import QThread, pyqtSignal, QTimer
 
 from Raspberry.pins_table import pins
-from Raspberry.Temperature import check_temperature
 
 from Filler_robot.Monitor.motor_monitor import motor_monitor
 
@@ -59,10 +58,6 @@ class Input_request(QThread):
         self.time_request = 0.05
 
         self.button_error = False
-
-        self.timer_temperature = QTimer(self)
-        self.timer_temperature.setInterval(2000)
-        self.timer_temperature.timeout.connect(self.temperature)
 
 
     def run(self):
@@ -94,11 +89,6 @@ class Input_request(QThread):
                 print(f"Error reading pin values: {e}")
 
             QThread.msleep(int(self.time_request * 1000))
-
-
-    def temperature(self):
-        check_temperature(threshold=80)
-        self.timer_temperature.start()
 
 
 input_request = Input_request()
