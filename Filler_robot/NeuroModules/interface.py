@@ -82,13 +82,33 @@ class Interface:
 
 	
 	def save_image(self):
-		self.img_monitor = camera.img_monitor[100:1700, 380:2280,:3]
+		img_copy = camera.img.copy()
 
-		self.img_monitor = cv2.resize(self.img_monitor, (720, 480), interpolation = cv2.INTER_AREA)
+		#self.draw_sight(img_copy)
+		#self.draw_limit_line(img_copy)
+		#self.draw_box_all(img_copy)
+		
+		self.draw_box(img_copy)
+		self.perspective(img_copy)
 
-		self.draw_box_all(self.img_monitor)
-		self.draw_box(self.img_monitor)
-		self.perspective(self.img_monitor)
+		point = (self.x, self.y)
+		point = camera.perspective.transform_coord(point)
+
+		point = camera.perspective.scale(point)
+
+		camera.perspective.draw(img_copy)
+
+		img_monitor = img_copy[60:430,:]
+
+		# self.img_monitor = camera.img_monitor[100:1700, 380:2280,:3]
+
+		# self.img_monitor = cv2.resize(self.img_monitor, (720, 480), interpolation = cv2.INTER_AREA)
+
+		# self.draw_box_all(self.img_monitor)
+		# self.draw_box(self.img_monitor)
+		# self.perspective(self.img_monitor)
+
+		return img_monitor
 		
 	
 	@_visual_line

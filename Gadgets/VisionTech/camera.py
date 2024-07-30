@@ -12,8 +12,10 @@ class Camera:
         self.print_on = True
 
         self.picam = Picamera2()
-        config = self.picam.create_still_configuration( main={"size": (2592, 1944)})
+        config = self.picam.create_still_configuration( main={"size": (2592, 1944), "format": 'BGR888'})
         self.picam.configure(config)
+        self.picam.set_controls({"AwbMode": 0})
+
         
         self.cv_file = cv2.FileStorage('Gadgets/VisionTech/calibration/camera_params.yml', cv2.FILE_STORAGE_READ)
         self.camera_matrix = self.cv_file.getNode('K').mat()

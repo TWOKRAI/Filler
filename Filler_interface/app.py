@@ -18,7 +18,7 @@ class App(QApplication):
 
         self.window_size = QSize(720, 480)
 
-        self.on_fullscreen = True
+        self.on_fullscreen = False
         self.cursor_move_2 = True
 
         font_id = QFontDatabase.addApplicationFont("/usr/share/fonts/truetype/siemens_ad_vn.ttf")

@@ -3,9 +3,10 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QImage, QPixmap
 import os
+import time
 
 from Filler_interface.app import app
-from Filler_robot.NeuroModules.interface import interface
+from Filler_robot.robot_main import robot
 
 
 class View_control(QMainWindow):
@@ -25,8 +26,8 @@ class View_control(QMainWindow):
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_image)
+        self.image_low()
+        self.button_raise()
 
 
     def fullscreen(self):        
@@ -35,11 +36,8 @@ class View_control(QMainWindow):
 
     def show(self):
         if app.on_fullscreen: self.fullscreen()
-        self.image_low()
-        self.update_image()
-        self.button_raise()
 
-        self.timer.start(500)
+        robot.frame_captured.connect(self.update_frame)
 
         super().show()
 
@@ -48,11 +46,7 @@ class View_control(QMainWindow):
         if app.on_fullscreen: self.fullscreen()
 
         # self.image_low()
-        self.update_image()
         self.button_raise()
-
-        self.timer.stop()
-        self.timer.start(500)
         
         self.show()
         
@@ -65,8 +59,8 @@ class View_control(QMainWindow):
         )
         
         app.setStyleSheet(new_stylesheet)
-        
-        self.timer.stop()
+
+        robot.frame_captured.connect(self.update_pass)
         self.hide()
 
 
@@ -82,14 +76,14 @@ class View_control(QMainWindow):
     def image_low(self):
         self.label = QLabel(self)
         self.label.setGeometry(0, 0, self.width(), self.height())
-        file_path = os.path.join('Filler_interface', 'Window_view', 'images.png')
-        self.label.setPixmap(QPixmap(file_path))
+        # file_path = os.path.join('Filler_interface', 'Window_view', 'images.png')
+        # self.label.setPixmap(QPixmap(file_path))
         self.label.setScaledContents(True)
         self.label.lower()
 
 
-    def update_image(self):
-        if interface.img_monitor is not None:
+    def update_frame(self, frame):
+        if frame is not None:
             # h, w, ch = interface.img_monitor.shape
             # print('h,w,ch', h, w, ch)
             # input()
@@ -99,23 +93,25 @@ class View_control(QMainWindow):
             # self.label.setPixmap(QPixmap.fromImage(p))
 
             
-            h, w, ch = interface.img_monitor.shape
-            q_image = QImage(interface.img_monitor.data.tobytes(), w, h, ch * w, QImage.Format_RGB888)
+            h, w, ch = frame.shape
+            q_image = QImage(frame.data.tobytes(), w, h, ch * w, QImage.Format_BGR888)
 
             pixmap = QPixmap.fromImage(q_image)
             self.label.setPixmap(pixmap)
+
+            print('ССССССССССССССССССССССССССССССССССССССС')
             
             # self.label.setScaledContents(True)
             # self.label.lower()
-        else:
-            print("No image available or image size is zero")
 
-            input()
-            
 
         # pixmap = QPixmap(file_path)
         # #scaled_pixmap = pixmap.scaled(int(pixmap.width() * 2), int(pixmap.height() * 2), Qt.KeepAspectRatio)
         # self.label.setPixmap(pixmap)
+    
+
+    def update_pass(self):
+        pass
 
     
 window_view = View_control()
