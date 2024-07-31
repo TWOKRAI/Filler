@@ -17,6 +17,8 @@ class Control(QMainWindow):
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
 
+        self.window_name = 'list1'
+
         self.timer = QTimer()
         self.timer.timeout.connect(self.datetime)
         
@@ -78,6 +80,10 @@ class Control(QMainWindow):
 
         #self.language(app.lang)
         super().show()
+        
+        app.window_focus = self.window_name
+        print(app.window_focus)
+        app.close_windows()
 
 
     def set_icons(self):

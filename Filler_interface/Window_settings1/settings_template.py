@@ -38,6 +38,10 @@ class Control(QMainWindow):
         self.enable_control()
         super().show()
 
+        app.window_focus = self.window_name
+        print(app.window_focus)
+        app.close_windows()
+
 
     def button_menu_clicked(self):
         app.window_main_filler.show()

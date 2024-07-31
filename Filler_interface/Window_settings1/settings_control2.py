@@ -13,6 +13,8 @@ from Filler_interface.filler import filler
 class Control(Control):
     def __init__(self):
         super().__init__()
+        
+        self.window_name = 'settings1'
 
         icon_size = QSize(60, 60)
         button_size = QSize(130, 120)

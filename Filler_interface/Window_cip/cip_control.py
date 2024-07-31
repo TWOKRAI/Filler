@@ -10,6 +10,8 @@ class Control(Control):
     def __init__(self):
         super().__init__()
 
+        self.window_name = 'cip'
+
         self.font_text.setPointSize(21)
         self.label_window.setFont(self.font_text)
         self.label_window.setText('ПАРАМЕТРЫ ПРОМЫВКИ')

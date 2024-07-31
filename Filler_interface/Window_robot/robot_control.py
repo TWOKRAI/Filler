@@ -10,6 +10,8 @@ class Control(Control):
     def __init__(self):
         super().__init__()
 
+        self.window_name = 'robot'
+
 
     def get_parametrs(self): 
         self.param_list = {

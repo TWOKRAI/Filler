@@ -9,6 +9,8 @@ class Control(Control):
     def __init__(self):
         super().__init__()
 
+        self.window_name = 'statistic'
+
         self.button_minus.hide()
         self.button_plus.hide()
 

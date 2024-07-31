@@ -19,6 +19,8 @@ class View_control(QMainWindow):
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
 
+        self.window_name = 'view'
+
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
         file_path = os.path.join('Filler_interface', '1x', 'innotech_min.png')

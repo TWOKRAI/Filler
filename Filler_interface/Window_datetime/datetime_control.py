@@ -13,6 +13,8 @@ class Control(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.window_name = 'datetime'
+
         file_path = os.path.join('Filler_interface', 'Window_datetime', 'UI_datetime.ui')
         uic.loadUi(file_path, self)
         
@@ -69,6 +71,10 @@ class Control(QMainWindow):
         if app.on_fullscreen: self.fullscreen()
         self.button_raise()
         super().show()
+
+        app.window_focus = self.window_name
+        print(app.window_focus)
+        app.close_windows()
 
 
     def show_window(self):

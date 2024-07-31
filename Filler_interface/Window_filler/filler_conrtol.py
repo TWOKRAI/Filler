@@ -17,6 +17,8 @@ class filler_control(QMainWindow):
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
 
+        self.window_name = 'filler'
+
         icon_size = QSize(50, 50)
         button_size = QSize(190, 110)
 
@@ -66,7 +68,10 @@ class filler_control(QMainWindow):
         self.play = True
 
         self.update()
-        app.window_level.show()
+
+        app.window_focus = self.window_name
+        print(app.window_focus)
+        app.close_windows()
 
     
     def language(self, lang):

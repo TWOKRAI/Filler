@@ -18,6 +18,8 @@ class level_control(QMainWindow):
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
 
+        self.window_name = 'error'
+
         input_request.show_error.connect(self.show)
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -62,6 +64,10 @@ class level_control(QMainWindow):
         super().show()
 
         self.update()
+
+        app.window_focus = self.window_name
+        print(app.window_focus)
+        app.close_windows()
 
 
     def close(self):

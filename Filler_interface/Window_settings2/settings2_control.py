@@ -12,6 +12,8 @@ class Control(Control):
     def __init__(self):
         super().__init__()
 
+        self.window_name = 'setting2'
+
         icon_size = QSize(60, 60)
         button_size = QSize(130, 120)
 

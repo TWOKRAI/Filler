@@ -13,6 +13,8 @@ class Main_filler_control(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.window_name = 'main_filler'
+
         file_path = os.path.join('Filler_interface', 'Window_main', 'UI_main_filler.ui')
         uic.loadUi(file_path, self)
 
@@ -78,6 +80,10 @@ class Main_filler_control(QMainWindow):
     def show(self):
         if app.on_fullscreen: self.fullscreen()
         super().show()
+
+        app.window_focus = self.window_name
+        print(app.window_focus)
+        app.close_windows()
 
 
     def show_animation(self):

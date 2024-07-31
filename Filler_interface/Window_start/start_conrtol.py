@@ -14,6 +14,8 @@ class Start_control(QMainWindow, Ui_MainWindow):
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
 
+        self.window_name = 'start'
+
         #self.setAttribute(Qt.WA_TranslucentBackground)
 
         file_path = os.path.join('Filler_interface', '1x', 'innotech_max_2.png')
@@ -50,6 +52,10 @@ class Start_control(QMainWindow, Ui_MainWindow):
         if app.on_fullscreen: self.fullscreen()
         self.button_raise()
         super().show()
+
+        app.window_focus = self.window_name
+        print(app.window_focus)
+        app.close_windows()
 
 
     def show_animation(self):

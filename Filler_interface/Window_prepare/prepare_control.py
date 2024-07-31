@@ -17,6 +17,8 @@ class Prepare_control(QMainWindow):
         self.statusBar().setHidden(True)
         self.setFixedSize(app.window_size)
 
+        self.window_name = 'prepare'
+
         icon_size = QSize(60, 60)
         button_size_1 = QSize(130, 120)
         button_size_2 = QSize(200, 120)
@@ -77,6 +79,10 @@ class Prepare_control(QMainWindow):
 
         self.reset()
         self.update_text()
+
+        app.window_focus = self.window_name
+        print(app.window_focus)
+        app.close_windows()
 
 
     def fullscreen(self):        
