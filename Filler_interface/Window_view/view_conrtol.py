@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QThread
 from PyQt5.QtGui import QImage, QPixmap
 import os
 import time
@@ -40,6 +40,8 @@ class View_control(QMainWindow):
 
 
     def show(self):
+        robot.neuron_on = True
+
         if app.on_fullscreen: self.fullscreen()
 
         self.update_label()
@@ -58,6 +60,8 @@ class View_control(QMainWindow):
 
 
     def close(self):
+        robot.neuron_on = False
+
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(
         'background-color: None',

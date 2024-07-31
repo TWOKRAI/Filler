@@ -21,7 +21,7 @@ class filler_control(QMainWindow):
         button_size = QSize(190, 110)
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(18)
         font.setBold(False)
         font.setWeight(50)
@@ -191,7 +191,7 @@ class filler_control(QMainWindow):
                 }
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(25)
         font.setBold(False)
         font.setWeight(50)
@@ -210,7 +210,7 @@ class filler_control(QMainWindow):
         pre_value = pre_value[self.lang]
 
         self.progressBar_1.setFormat(f"%v {pre_value}")
-        self.progressBar_1.setFont(QFont("Siemens AD Sans", 25))
+        self.progressBar_1.setFont(QFont(app.font_family, 25))
         self.progressBar_1.setMinimum(0)
         self.progressBar_1.setMaximum(104)
         self.progressBar_1.setAlignment(Qt.AlignTop) 
@@ -227,7 +227,7 @@ class filler_control(QMainWindow):
         pre_value = pre_value[self.lang]
 
         self.progressBar_2.setFormat(f"%v {pre_value}")
-        self.progressBar_2.setFont(QFont("Siemens AD Sans", 25))
+        self.progressBar_2.setFont(QFont(app.font_family, 25))
         self.progressBar_2.setMinimum(0)
         self.progressBar_2.setMaximum(104)
         self.progressBar_2.setAlignment(Qt.AlignTop) 
@@ -255,7 +255,7 @@ class filler_control(QMainWindow):
 
     def value_1_update(self):
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(35)
         font.setBold(False)
         font.setWeight(50)
@@ -276,7 +276,7 @@ class filler_control(QMainWindow):
 
     def value_2_update(self):
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(35)
         font.setBold(False)
         font.setWeight(50)
@@ -297,7 +297,7 @@ class filler_control(QMainWindow):
     
     def label_drink_1_update(self):
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(24)
         font.setBold(False)
         font.setWeight(50)
@@ -316,7 +316,7 @@ class filler_control(QMainWindow):
 
     def label_drink_2_update(self):
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(24)
         font.setBold(False)
         font.setWeight(50)
@@ -335,7 +335,7 @@ class filler_control(QMainWindow):
     
     def label_value_1_update(self):
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(21)
         font.setBold(False)
         font.setWeight(50)
@@ -354,7 +354,7 @@ class filler_control(QMainWindow):
 
     def label_value_2_update(self):
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(21)
         font.setBold(False)
         font.setWeight(50)

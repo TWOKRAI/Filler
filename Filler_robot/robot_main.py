@@ -20,7 +20,7 @@ class Robot(QThread):
         self.camera_on = True
         self.robot_on = False
         self.inteface_on = False
-        self.neuron_on = True
+        self.neuron_on = False
 
         clear_file('log_temp.txt')
 
@@ -47,7 +47,7 @@ class Robot(QThread):
 
             if self.robot_on: robot.run()
 
-            QThread.msleep(1000)
+            QThread.msleep(2000)
 
 
 robot = Robot()

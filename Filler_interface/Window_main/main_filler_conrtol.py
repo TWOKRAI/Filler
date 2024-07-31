@@ -23,7 +23,7 @@ class Main_filler_control(QMainWindow):
         button_size = QSize(200, 120)
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(18)
         font.setBold(False)
         font.setWeight(50)

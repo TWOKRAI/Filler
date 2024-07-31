@@ -22,16 +22,16 @@ class Pop_up_control(QMainWindow):
         self.func = None
 
         self.font_text = QFont()
-        self.font_text.setFamily("Siemens AD Sans")
+        self.font_text.setFamily(app.font_family)
 
         font_1 = QFont()
-        font_1.setFamily("Siemens AD Sans")
+        font_1.setFamily(app.font_family)
         font_1.setPointSize(22)
         font_1.setBold(False)
         font_1.setWeight(50)
 
         font_2 = QFont()
-        font_2.setFamily("Siemens AD Sans")
+        font_2.setFamily(app.font_family)
         font_2.setPointSize(14)
         font_2.setBold(False)
         font_2.setWeight(50)

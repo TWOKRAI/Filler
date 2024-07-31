@@ -16,7 +16,7 @@ class Control(Control):
         button_size = QSize(130, 120)
 
         self.font_text = QFont()
-        self.font_text.setFamily("Siemens AD Sans")
+        self.font_text.setFamily(app.font_family)
         self.font_text.setBold(False)
         self.font_text.setWeight(50)
 
@@ -286,7 +286,7 @@ class Control(Control):
         self.label_window.setText(str(text))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)
@@ -300,7 +300,7 @@ class Control(Control):
         self.coll_params.setText(str(text))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)
@@ -375,7 +375,7 @@ class Control(Control):
         self.value.setText(str(value))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)
@@ -461,7 +461,7 @@ class Control(Control):
         self.value_mini.setText(str(text))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)
@@ -575,7 +575,7 @@ class Control(Control):
         self.name_params.setText(str(text))
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(size_text)
         font.setBold(False)
         font.setWeight(50)

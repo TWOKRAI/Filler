@@ -43,14 +43,14 @@ class Control(QMainWindow):
         # self.animation = QPropertyAnimation(self.opacity_effect, b"opacity")
 
         font_1 = QFont()
-        font_1.setFamily("Siemens AD Sans")
+        font_1.setFamily(app.font_family)
         font_1.setPointSize(125)
         font_1.setBold(False)
 
         self.time_text.setFont(font_1)
 
         font_2 = QFont()
-        font_2.setFamily("Siemens AD Sans")
+        font_2.setFamily(app.font_family)
         font_2.setPointSize(35)
         font_2.setBold(False)
 

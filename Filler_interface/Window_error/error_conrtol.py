@@ -93,7 +93,7 @@ class level_control(QMainWindow):
                 }
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(28)
         font.setBold(False)
         font.setWeight(50)

@@ -26,7 +26,7 @@ class Control(QMainWindow):
         button_size_2 = QSize(130, 120)
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(18)
         font.setBold(False)
         font.setWeight(50)

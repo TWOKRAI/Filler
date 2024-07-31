@@ -18,7 +18,7 @@ class Control(Control):
         button_size = QSize(130, 120)
 
         self.font_text = QFont()
-        self.font_text.setFamily("Siemens AD Sans")
+        self.font_text.setFamily(app.font_family)
         self.font_text.setBold(False)
         self.font_text.setWeight(50)
 

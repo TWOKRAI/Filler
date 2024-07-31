@@ -22,13 +22,13 @@ class Prepare_control(QMainWindow):
         button_size_2 = QSize(200, 120)
 
         font_1 = QFont()
-        font_1.setFamily("Siemens AD Sans")
+        font_1.setFamily(app.font_family)
         font_1.setPointSize(25)
         font_1.setBold(False)
         font_1.setWeight(50)
 
         font_2 = QFont()
-        font_2.setFamily("Siemens AD Sans")
+        font_2.setFamily(app.font_family)
         font_2.setPointSize(18)
         font_2.setBold(False)
         font_2.setWeight(50)
@@ -177,7 +177,7 @@ class Prepare_control(QMainWindow):
         self.button_calibr.setText(name_button[self.lang])
 
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(18)
         font.setBold(False)
         font.setWeight(50)
@@ -202,7 +202,7 @@ class Prepare_control(QMainWindow):
 
     def label_update(self):
         font = QFont()
-        font.setFamily("Siemens AD Sans")
+        font.setFamily(app.font_family)
         font.setPointSize(25)
         font.setBold(False)
         font.setWeight(50)
