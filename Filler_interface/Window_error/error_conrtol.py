@@ -8,7 +8,7 @@ from Filler_interface.app import app
 from Raspberry.input import input_request
 
 
-class level_control(QMainWindow):
+class Error_control(QMainWindow):
     def __init__(self):
         super().__init__()
 
@@ -65,10 +65,6 @@ class level_control(QMainWindow):
 
         self.update()
 
-        app.window_focus = self.window_name
-        print(app.window_focus)
-        app.close_windows()
-
 
     def close(self):
         if not input_request.button_error:
@@ -109,4 +105,4 @@ class level_control(QMainWindow):
         self.label_warning.setText(label_name[self.lang])
 
     
-window_level = level_control()
+window_error = Error_control()

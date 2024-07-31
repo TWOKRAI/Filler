@@ -66,7 +66,7 @@ class App(QApplication):
             self.window_prepare.fullscreen()
             self.window_view.fullscreen()
             self.window_filler.fullscreen()
-            self.window_level.fullscreen()
+            self.window_error.fullscreen()
             self.window_cip.fullscreen()
             self.window_robot.fullscreen()
 
@@ -112,7 +112,7 @@ class App(QApplication):
         self.window_cip.language(lang_num)
         self.window_robot.language(lang_num)
         self.window_pop_up.language(lang_num)
-        self.window_level.language(lang_num)
+        self.window_error.language(lang_num)
 
 
     def set_style(self):
@@ -180,9 +180,9 @@ class App(QApplication):
             self.window_filler.hide()
             print(f'close: {self.window_filler.window_name}')
 
-        if self.window_focus != self.window_level.window_name:
-            self.window_level.hide()
-            print(f'close: {self.window_level.window_name}')
+        if self.window_focus != self.window_error.window_name:
+            self.window_error.hide()
+            print(f'close: {self.window_error.window_name}')
 
         if self.window_focus != self.window_cip.window_name:
             self.window_cip.hide()
@@ -236,8 +236,8 @@ app.window_view = window_view
 from Filler_interface.Window_filler.filler_conrtol import filler_window
 app.window_filler = filler_window
 
-from Filler_interface.Window_error.error_conrtol import window_level
-app.window_level = window_level
+from Filler_interface.Window_error.error_conrtol import window_error
+app.window_error = window_error
 
 from Filler_interface.Window_cip.cip_control import window_cip
 app.window_cip = window_cip

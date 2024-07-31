@@ -47,7 +47,7 @@ class Neuron:
 		
 		self.mode = 0
 		
-		self.threshold = 0.5
+		self.threshold = 0.4
 		
 		self.nmsthreshold = 0.5
 
@@ -114,7 +114,7 @@ class Neuron:
 				confidences = []
 				boxes = []
 				rows = detections.shape[0]
-				
+
 				for i in range(rows):
 					row = detections[i]
 					confidence = row[4]
@@ -133,30 +133,33 @@ class Neuron:
 							boxes.append(box)
 							
 				indices = cv2.dnn.NMSBoxes(boxes,confidences,self.threshold, self.nmsthreshold)
+				
+				if type(indices) == np.ndarray:
+					for i in indices:
+						id_obj = 0
+						ready = False
+						
+						x1,y1,w,h = boxes[i]
+						label = classes[classes_ids[i]]
+						conf = confidences[i]
+						
+						yr_center = int(y1 + w*(y1+h)/self.leen)
+						xr_center = int(x1 + w/2)
 
-				for i in indices:
-					id_obj = 0
-					ready = False
-					
-					x1,y1,w,h = boxes[i]
-					label = classes[classes_ids[i]]
-					conf = confidences[i]
-					
-					yr_center = int(y1 + w*(y1+h)/self.leen)
-					xr_center = int(x1 + w/2)
+						self.perspective = (xr_center - camera.img_width/2) * 1/self.factor_x
 
-					self.perspective = (xr_center - camera.img_width/2) * 1/self.factor_x
-
-					yr_center_2 = int(y1 + h - w*(y1+h)/self.leen * 1.5)
-					xr_center_2 = int(x1 + w/2) - self.perspective		
-					
-					print('perspective', self.perspective)
-					
-					xr_center = int(xr_center + self.perspective)
-					
-					self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective, xr_center_2, yr_center_2])
-					print('self.objects', self.objects)
-					
+						yr_center_2 = int(y1 + h - w*(y1+h)/self.leen * 1.5)
+						xr_center_2 = int(x1 + w/2) - self.perspective		
+						
+						print('perspective', self.perspective)
+						
+						xr_center = int(xr_center + self.perspective)
+						
+						self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective, xr_center_2, yr_center_2])
+						print('self.objects', self.objects)
+				else:
+					self.objects_all = []
+						
 				print('1 objects', self.objects_all)
 
 		return self.objects_all
