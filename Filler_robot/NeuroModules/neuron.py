@@ -87,7 +87,6 @@ class Neuron:
 	def run(self):
 		if self.timer.is_time_passed(5):
 			self.find_objects()
-			self.find_objects()
 
 
 	def find_objects(self):

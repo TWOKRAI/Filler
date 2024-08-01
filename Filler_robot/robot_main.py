@@ -20,7 +20,7 @@ class Robot(QThread):
         self.camera_on = True
         self.robot_on = False
         self.inteface_on = False
-        self.neuron_on = False
+        self.neuron_on = True
 
         clear_file('log_temp.txt')
 
@@ -44,14 +44,15 @@ class Robot(QThread):
 
                 if isinstance(image, np.ndarray):
                     self.frame_captured.emit(image)
+                    QThread.msleep(200)
 
             if self.robot_on: 
                 robot.run()
             else:
-                robot.enable_motors2()
+                robot.enable_motors()
 
-            QThread.msleep(2000)
+            QThread.msleep(1000)
 
 
-robot = Robot()
+robot_filler = Robot()
 

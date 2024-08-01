@@ -7,13 +7,13 @@ import os
 from Filler_interface.app import app
 
 try:
-    from Filler_robot.robot_main import robot
+    from Filler_robot.robot_main import robot_filler
     raspberry = True
 except ImportError:
     raspberry = False
 
 
-class View_control(QMainWindow):
+class View_control(QMainWindow, QThread):
     def __init__(self):
         super().__init__()
 
@@ -40,7 +40,7 @@ class View_control(QMainWindow):
         self.frame_label = None
 
         if raspberry:
-            robot.frame_captured.connect(self.update_frame)
+            robot_filler.frame_captured.connect(self.update_frame)
 
 
     def fullscreen(self):        
@@ -48,8 +48,8 @@ class View_control(QMainWindow):
 
 
     def show(self):
-        if raspberry:
-            robot.neuron_on = True
+        # if raspberry:
+        #     robot_filler.neuron_on = True
 
         if app.on_fullscreen: self.fullscreen()
 
@@ -69,9 +69,6 @@ class View_control(QMainWindow):
 
 
     def close(self):
-        if raspberry:
-            robot.neuron_on = False
-
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(
         'background-color: None',
@@ -119,8 +116,6 @@ class View_control(QMainWindow):
 
             pixmap = QPixmap.fromImage(q_image)
             self.label.setPixmap(pixmap)
-        else:
-            pass
 
 
         # pixmap = QPixmap(file_path)
