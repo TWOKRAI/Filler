@@ -79,3 +79,5 @@ if __name__ == '__main__':
     pins.get_value_log(pins.motor_y_enable)
     pins.get_value_log(pins.motor_z_enable)
     pins.get_value_log(pins.motor_p1p2_enable)
+
+    pins.get_value_log(pins.switch_in)

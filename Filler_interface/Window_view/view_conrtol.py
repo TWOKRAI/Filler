@@ -1,13 +1,18 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
-from PyQt5.QtCore import Qt, QThread
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtGui import QPixmap
 import os
+import numpy as np
+from PIL import Image
+import io
+
 
 from Filler_interface.app import app
 
 try:
-    from Filler_robot.robot_main import robot
+    from Filler_robot.NeuroModules.interface import interface
+    from Filler_robot.robot_main import robot_filler
     raspberry = True
 except ImportError:
     raspberry = False
@@ -40,7 +45,7 @@ class View_control(QMainWindow):
         self.frame_label = None
 
         if raspberry:
-            robot.frame_captured.connect(self.update_frame)
+            interface.frame_captured.connect(self.update_frame)
 
 
     def fullscreen(self):        
@@ -49,11 +54,9 @@ class View_control(QMainWindow):
 
     def show(self):
         if raspberry:
-            robot.neuron_on = True
+            robot_filler.enable_neuron_on(True)
 
         if app.on_fullscreen: self.fullscreen()
-
-        self.update_label()
 
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(
@@ -70,7 +73,7 @@ class View_control(QMainWindow):
 
     def close(self):
         if raspberry:
-            robot.neuron_on = False
+            robot_filler.enable_neuron_on(False)
 
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(
@@ -103,29 +106,24 @@ class View_control(QMainWindow):
         self.label.lower()
 
 
+    @pyqtSlot(QPixmap)
     def update_frame(self, frame):
-        self.frame_label = frame
-
-        self.update_label()
+        
+        self.label.setPixmap(frame)
 
         if self.focus_window:
             app.datetime_reset()
 
 
-    def update_label(self):
-        if self.frame_label is not None:
-            h, w, ch = self.frame_label.shape
-            q_image = QImage(self.frame_label.data.tobytes(), w, h, ch * w, QImage.Format_BGR888)
+    @pyqtSlot(np.ndarray)
+    def update_image(self, array):
+        image = Image.fromarray(array)
+        buffer = io.BytesIO()
+        image.save(buffer, format="JPEG")
+        qimage = QPixmap()
+        qimage.loadFromData(buffer.getvalue())
+        self.label.setPixmap(qimage)
 
-            pixmap = QPixmap.fromImage(q_image)
-            self.label.setPixmap(pixmap)
-        else:
-            pass
 
-
-        # pixmap = QPixmap(file_path)
-        # #scaled_pixmap = pixmap.scaled(int(pixmap.width() * 2), int(pixmap.height() * 2), Qt.KeepAspectRatio)
-        # self.label.setPixmap(pixmap)
-    
-    
+      
 window_view = View_control()

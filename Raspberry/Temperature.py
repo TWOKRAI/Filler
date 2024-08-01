@@ -36,3 +36,7 @@ def write_to_file(value, filename='output.txt'):
 def clear_file(filename):
     with open(filename, 'w') as file:
         file.truncate(0)
+
+
+if __name__ == '__main__':
+    check_temperature(75)

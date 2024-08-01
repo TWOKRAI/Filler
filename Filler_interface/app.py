@@ -6,9 +6,10 @@ from PyQt5.QtGui import QCursor, QFontDatabase
 
 from Filler_interface.Style_windows.style import Style
 
+
 try:
     from Raspberry.input import input_request
-    from Filler_robot.robot_main import robot
+    from Filler_robot.robot_main import robot_filler 
 
     raspberry = True
 except ImportError:
@@ -50,7 +51,7 @@ class App(QApplication):
     def run(self):
         if raspberry:
             input_request.start()
-            robot.start()
+            robot_filler.start()
 
         self.set_style()
         self.language()

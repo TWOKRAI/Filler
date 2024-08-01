@@ -1,18 +1,26 @@
 import cv2
-import os 
+from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
+from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtCore import Qt
 
 from Filler_robot.NeuroModules.neuron import neuron
-from Gadgets.VisionTech.camera import camera 
+from Filler_robot.VisionTech.camera import camera 
 
 from Lib.Decorators.wrapper import _timing
+
+import numpy as np
 
 
 def nothing(x):
 	pass
 
 
-class Interface:
+class Interface(QThread):
+	frame_captured = pyqtSignal(QPixmap)
+
 	def __init__(self):
+		super().__init__()
+
 		self.visual = True
 
 		self.x = 0
@@ -33,8 +41,8 @@ class Interface:
 		return wrapper	
 	
 	
-	@_timing(True)	
-	def run(self):
+	# @_timing(True)	
+	def running(self):
 		self.create_window()
 
 		self.get_trackbar()
@@ -54,7 +62,7 @@ class Interface:
 		self.y = cv2.getTrackbarPos("y_point", "Detect")
 
 
-	@_timing(True)			
+	# @_timing(True)			
 	def show_img(self):
 		img_copy = camera.img.copy()
 		
@@ -83,6 +91,7 @@ class Interface:
 	
 	def save_image(self):
 		img_copy = camera.img.copy()
+		img_copy2 = camera.img.copy()
 
 		#self.draw_sight(img_copy)
 		#self.draw_limit_line(img_copy)
@@ -91,6 +100,8 @@ class Interface:
 		self.draw_box(img_copy)
 		self.perspective(img_copy)
 
+		img_copy2 = img_copy.copy()
+
 		point = (self.x, self.y)
 		point = camera.perspective.transform_coord(point)
 
@@ -98,7 +109,21 @@ class Interface:
 
 		camera.perspective.draw(img_copy)
 
-		img_monitor = img_copy[60:430,:]
+		img_monitor = img_copy2[60:430,:]
+
+		# img_monitor = cv2.cvtColor(img_monitor, cv2.COLOR_BGR2RGB)
+		# self.change_pixmap_signal.emit(img_monitor)
+
+		h, w, ch = img_monitor.shape
+		print('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', h, w, ch)
+		if h == 370 and w == 640:
+			q_image = QImage(img_monitor.data.tobytes(), w, h, ch * w, QImage.Format_RGB888)
+			q_image = q_image.scaled(720, 480, Qt.KeepAspectRatio)
+
+			pixmap = QPixmap.fromImage(q_image)
+
+			self.frame_captured.emit(pixmap)
+		
 
 		# self.img_monitor = camera.img_monitor[100:1700, 380:2280,:3]
 
@@ -108,7 +133,6 @@ class Interface:
 		# self.draw_box(self.img_monitor)
 		# self.perspective(self.img_monitor)
 
-		return img_monitor
 		
 	
 	@_visual_line

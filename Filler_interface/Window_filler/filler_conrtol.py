@@ -7,7 +7,7 @@ import os
 from Filler_interface.app import app
 
 try:
-    from Filler_robot.robot_main import robot
+    from Filler_robot.robot_main import robot_filler
     raspberry = True
 except ImportError:
     raspberry = False
@@ -80,7 +80,7 @@ class filler_control(QMainWindow):
         self.play = True
 
         if raspberry:
-            robot.robot_on = True
+            robot_filler.enable_robot_on(True)
 
     
     def language(self, lang):
@@ -148,13 +148,13 @@ class filler_control(QMainWindow):
             self.button_pause.setIcon(QIcon(file_path))
 
             if raspberry:
-                robot.robot_on = True
+                robot_filler.enable_robot_on(True)
         else:
             file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
             self.button_pause.setIcon(QIcon(file_path))
 
             if raspberry:
-                robot.robot_on = False
+                robot_filler.enable_robot_on(False)
 
 
     def button_pause_clicked(self):

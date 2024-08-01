@@ -1,14 +1,14 @@
 import asyncio
 import math
 
-from Gadgets.MotorModules.motor import Motor
-from Gadgets.VisionTech.camera import camera
+from Filler_robot.MotorModules.motor import Motor
+from Filler_robot.VisionTech.camera import camera
 from Filler_robot.NeuroModules.neuron import neuron
 from Filler_robot.NeuroModules.interface import interface
 from Filler_robot.PumpStation.pumps import pump_station
 from Raspberry.pins_table import pins
 
-from Lib.Decorators.wrapper import _timing
+#from Lib.Decorators.wrapper import _timing
 
 
 class Axis:
@@ -84,7 +84,7 @@ class Axis:
 	
 
 
-class Robot:
+class Robot_module:
 	def __init__(self):
 		self.print_on = True
 
@@ -156,21 +156,21 @@ class Robot:
 		self.axis_z.limit_max = 95
 		
 
-	def run(self):
+	def running(self):
 		if self.calibration_ready:
 			neuron.memory_objects = self.move_objects(neuron.list_coord, neuron.objects)
-
-
-	def null_value(self):
-		self.axis_x.motor.null_value()
-		self.axis_y.motor.null_value()
-		self.axis_z.motor.null_value()
 
 
 	def enable_motors(self, value = False):
 		self.axis_x.motor.enable_on(value)
 		self.axis_y.motor.enable_on(value)
 		self.axis_z.motor.enable_on(value)
+
+
+	def null_value(self):
+		self.axis_x.motor.null_value()
+		self.axis_y.motor.null_value()
+		self.axis_z.motor.null_value()
 
 
 	def angle_to_coord(self, angle_x, angle_y, angle_z):
@@ -243,7 +243,7 @@ class Robot:
 		return x, y, z, error_limit_x, error_limit_y, error_limit_z
 	
 
-	@_timing(True)
+	#@_timing(True)
 	def find_angle(self, x0, y0, z0):
 		angle_x = self.axis_x.angle_0
 		angle_y = self.axis_y.angle_0
@@ -590,7 +590,7 @@ class Robot:
 				break
 
 
-robot = Robot()
+robot = Robot_module()
 
 
 if __name__ == '__main__':

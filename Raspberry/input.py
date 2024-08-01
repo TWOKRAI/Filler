@@ -83,7 +83,7 @@ class Input_request(QThread):
                     self.button_error = False
                 
                 if pins.button.get_value():
-                    motor_monitor.run()
+                    motor_monitor.start()
 
             except Exception as e:
                 print(f"Error reading pin values: {e}")

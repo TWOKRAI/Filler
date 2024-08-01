@@ -1,6 +1,6 @@
 import asyncio
 
-from Gadgets.MotorModules.motor import Motor
+from Filler_robot.MotorModules.motor import Motor
 from Filler_robot.NeuroModules.neuron import neuron
 
 from Raspberry.pins_table import pins

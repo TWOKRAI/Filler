@@ -3,8 +3,8 @@ import numpy as np
 import math
 from picamera2 import Picamera2
 
-from Lib.Decorators.wrapper import _timing
-from Gadgets.VisionTech.perspective import Perspective
+#from Lib.Decorators.wrapper import _timing
+from Filler_robot.VisionTech.perspective import Perspective
 
 
 class Camera:
@@ -12,12 +12,10 @@ class Camera:
         self.print_on = True
 
         self.picam = Picamera2()
-        config = self.picam.create_still_configuration( main={"size": (2592, 1944), "format": 'BGR888'})
+        config = self.picam.create_still_configuration(main={"size": (2592, 1944)})
         self.picam.configure(config)
-        self.picam.set_controls({"AwbMode": 0})
 
-        
-        self.cv_file = cv2.FileStorage('Gadgets/VisionTech/calibration/camera_params.yml', cv2.FILE_STORAGE_READ)
+        self.cv_file = cv2.FileStorage('Filler_robot/VisionTech/calibration/camera_params.yml', cv2.FILE_STORAGE_READ)
         self.camera_matrix = self.cv_file.getNode('K').mat()
         self.distortion_coeffs = self.cv_file.getNode('D').mat()
         self.cv_file.release()
@@ -44,8 +42,8 @@ class Camera:
         self.perspective = Perspective(image, point_pixel, point_real)
 
 
-    @_timing(True)
-    def run(self):
+    #@_timing(True)
+    def running(self):
         self.read_cam()
     
     
@@ -62,7 +60,7 @@ class Camera:
         return image
     
 
-    @_timing(True)
+    #@_timing(True)
     def read_cam(self) -> np.ndarray:
         self.img = self.picam.capture_array()
         
@@ -85,7 +83,7 @@ class Camera:
 
         self.img_monitor = self.img.copy()
 
-        self.img = cv2.resize(camera.img, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
+        self.img = cv2.resize(self.img, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
         
         self.img = cv2.cvtColor(self.img, cv2.COLOR_RGB2BGR)
 
@@ -97,7 +95,7 @@ class Camera:
             
         print(type(self.img), self.img_width, self.img_height)
 
-        cv2.imwrite('test.png', self.img)
+        #cv2.imwrite('test.png', self.img)
         
         return self.img
     

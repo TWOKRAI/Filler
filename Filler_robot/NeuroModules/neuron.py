@@ -3,8 +3,9 @@ import numpy as np
 import time
 import math
 import os
+import time
 
-from Gadgets.VisionTech.camera import camera
+from Filler_robot.VisionTech.camera import camera
 
 from Lib.Decorators.wrapper import _timing
 
@@ -84,10 +85,9 @@ class Neuron:
    
 
 	@_timing(True)
-	def run(self):
-		if self.timer.is_time_passed(5):
-			self.find_objects()
-			self.find_objects()
+	def running(self):
+		#if self.timer.is_time_passed(5):
+		self.find_objects()
 
 
 	def find_objects(self):
@@ -103,64 +103,64 @@ class Neuron:
 		self.objects_all = []
 
 		if type(image) is np.ndarray:
-				x_scale = camera.img_width/640
-				y_scale = camera.img_height/640
-				
-				blob = cv2.dnn.blobFromImage(image, scalefactor= 1/255, size=(640, 640), mean=[0,0,0], swapRB= True, crop= False)
-				self.net_v5.setInput(blob)
-				detections = self.net_v5.forward()[0]
-				
-				classes_ids = []
-				confidences = []
-				boxes = []
-				rows = detections.shape[0]
+			x_scale = camera.img_width/640
+			y_scale = camera.img_height/640
+			
+			blob = cv2.dnn.blobFromImage(image, scalefactor= 1/255, size=(640, 640), mean=[0,0,0], swapRB= True, crop= False)
+			self.net_v5.setInput(blob)
+			detections = self.net_v5.forward()[0]
+			
+			classes_ids = []
+			confidences = []
+			boxes = []
+			rows = detections.shape[0]
 
-				for i in range(rows):
-					row = detections[i]
-					confidence = row[4]
-					if confidence > self.threshold:
-						classes_score = row[5:]
-						ind = np.argmax(classes_score)
-						if classes_score[ind] > 0.5:
-							classes_ids.append(ind)
-							confidences.append(confidence)
-							cx, cy, w, h = row[:4]
-							x1 = int((cx- w/2)*x_scale)
-							y1 = int((cy-h/2)*y_scale)
-							width = int(w * x_scale)
-							height = int(h * y_scale)
-							box = np.array([x1,y1,width,height])
-							boxes.append(box)
-							
-				indices = cv2.dnn.NMSBoxes(boxes,confidences,self.threshold, self.nmsthreshold)
-				
-				if type(indices) == np.ndarray:
-					for i in indices:
-						id_obj = 0
-						ready = False
+			for i in range(rows):
+				row = detections[i]
+				confidence = row[4]
+				if confidence > self.threshold:
+					classes_score = row[5:]
+					ind = np.argmax(classes_score)
+					if classes_score[ind] > 0.5:
+						classes_ids.append(ind)
+						confidences.append(confidence)
+						cx, cy, w, h = row[:4]
+						x1 = int((cx- w/2)*x_scale)
+						y1 = int((cy-h/2)*y_scale)
+						width = int(w * x_scale)
+						height = int(h * y_scale)
+						box = np.array([x1,y1,width,height])
+						boxes.append(box)
 						
-						x1,y1,w,h = boxes[i]
-						label = classes[classes_ids[i]]
-						conf = confidences[i]
-						
-						yr_center = int(y1 + w*(y1+h)/self.leen)
-						xr_center = int(x1 + w/2)
+			indices = cv2.dnn.NMSBoxes(boxes,confidences,self.threshold, self.nmsthreshold)
+			
+			if type(indices) == np.ndarray:
+				for i in indices:
+					id_obj = 0
+					ready = False
+					
+					x1,y1,w,h = boxes[i]
+					label = classes[classes_ids[i]]
+					conf = confidences[i]
+					
+					yr_center = int(y1 + w*(y1+h)/self.leen)
+					xr_center = int(x1 + w/2)
 
-						self.perspective = (xr_center - camera.img_width/2) * 1/self.factor_x
+					self.perspective = (xr_center - camera.img_width/2) * 1/self.factor_x
 
-						yr_center_2 = int(y1 + h - w*(y1+h)/self.leen * 1.5)
-						xr_center_2 = int(x1 + w/2) - self.perspective		
-						
-						print('perspective', self.perspective)
-						
-						xr_center = int(xr_center + self.perspective)
-						
-						self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective, xr_center_2, yr_center_2])
-						print('self.objects', self.objects)
-				else:
-					self.objects_all = []
-						
-				print('1 objects', self.objects_all)
+					yr_center_2 = int(y1 + h - w*(y1+h)/self.leen * 1.5)
+					xr_center_2 = int(x1 + w/2) - self.perspective		
+					
+					print('perspective', self.perspective)
+					
+					xr_center = int(xr_center + self.perspective)
+					
+					self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective, xr_center_2, yr_center_2])
+					print('self.objects', self.objects)
+			else:
+				self.objects_all = []
+					
+			print('1 objects', self.objects_all)
 
 		return self.objects_all
 	

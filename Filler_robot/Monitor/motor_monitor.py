@@ -1,20 +1,24 @@
 from PyQt5.QtCore import QThread
 import asyncio
 
-from Gadgets.MotorModules.motor import Motor
+from Filler_robot.MotorModules.motor import Motor
 from Raspberry.pins_table import pins
 
 
 class Motor_monitor(QThread):
     def __init__(self):
+        super().__init__()
+
         self.state = False
 
         self.motor = Motor('motor-monitor', pins.motor_step, pins.motor_dir, pins.motor_enable)
-        
+
+        self.motor.direction = False
+
         self.motor.acc_run = True
         self.motor.k = 10
-        self.acc_start = 30
-        self.acc_end = 30
+        self.acc_start = 20
+        self.acc_end = 20
         
         self.motor.speed_def = 0.00001
         
@@ -73,12 +77,12 @@ class Motor_monitor(QThread):
             if self.motor.ready:
                 raise asyncio.CancelledError()
 
-            if (switch_in and dir) or (switch_out and not dir):
+            if (switch_in and not dir) or (switch_out and dir):
                 print('SWITCH')
                 self.state = not self.state
                 raise asyncio.CancelledError()
 
-            await asyncio.sleep(0.01)
+            await asyncio.sleep(0.001)
 
 
     async def _move_async(self, distance, detect = False):
@@ -87,7 +91,7 @@ class Motor_monitor(QThread):
         if detect:
             tasks.append(asyncio.create_task(self._detect_sensor()))
 
-        tasks.append(asyncio.create_task(self.motor._freq_async(2000, 5, distance)))
+        tasks.append(asyncio.create_task(self.motor._freq_async(2000, 1, distance)))
             
         try:
             await asyncio.gather(*tasks)
