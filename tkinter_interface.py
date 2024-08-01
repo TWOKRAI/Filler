@@ -1,7 +1,7 @@
 from tkinter import *
 import time
 
-import Filler_robot.tkinter_var as tkinter_var 
+import tkinter_var as tkinter_var 
 from Filler_robot.Robots.robot_module import robot
 from Filler_robot.PumpStation.pumps import pump_station
 

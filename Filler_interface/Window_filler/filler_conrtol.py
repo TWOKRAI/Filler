@@ -6,6 +6,12 @@ import os
 
 from Filler_interface.app import app
 
+try:
+    from Filler_robot.robot_main import robot
+    raspberry = True
+except ImportError:
+    raspberry = False
+
 
 class filler_control(QMainWindow):
     def __init__(self):
@@ -65,13 +71,16 @@ class filler_control(QMainWindow):
         if app.on_fullscreen: self.fullscreen()
         super().show()
 
-        self.play = True
-
         self.update()
 
         app.window_focus = self.window_name
         print(app.window_focus)
         app.close_windows()
+
+        self.play = True
+
+        if raspberry:
+            robot.robot_on = True
 
     
     def language(self, lang):
@@ -137,9 +146,15 @@ class filler_control(QMainWindow):
         if self.play == True:
             file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-pause-button-100.png')
             self.button_pause.setIcon(QIcon(file_path))
+
+            if raspberry:
+                robot.robot_on = True
         else:
             file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
             self.button_pause.setIcon(QIcon(file_path))
+
+            if raspberry:
+                robot.robot_on = False
 
 
     def button_pause_clicked(self):

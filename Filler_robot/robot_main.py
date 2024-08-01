@@ -31,11 +31,11 @@ class Robot(QThread):
 
     def run(self) -> None:
         while self.running:
-            if self.camera_on: camera.run()
-            if self.neuron_on: neuron.run()
-
             temp = check_temperature()
             write_to_file(temp, 'log_temp.txt')
+        
+            if self.camera_on: camera.run()
+            if self.neuron_on: neuron.run()
 
             if self.inteface_on: 
                 interface.run()
@@ -45,7 +45,10 @@ class Robot(QThread):
                 if isinstance(image, np.ndarray):
                     self.frame_captured.emit(image)
 
-            if self.robot_on: robot.run()
+            if self.robot_on: 
+                robot.run()
+            else:
+                robot.enable_motors2()
 
             QThread.msleep(2000)
 

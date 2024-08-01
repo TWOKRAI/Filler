@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
 from PyQt5.QtCore import Qt, QThread
 from PyQt5.QtGui import QImage, QPixmap
 import os
-import time
 
 from Filler_interface.app import app
 
@@ -82,10 +81,7 @@ class View_control(QMainWindow):
         app.setStyleSheet(new_stylesheet)
 
         self.focus_window = False
-        
-        # if raspberry:
-        #     robot.frame_captured.connect(self.update_pass)
-        
+
         self.hide()
 
 
@@ -131,9 +127,5 @@ class View_control(QMainWindow):
         # #scaled_pixmap = pixmap.scaled(int(pixmap.width() * 2), int(pixmap.height() * 2), Qt.KeepAspectRatio)
         # self.label.setPixmap(pixmap)
     
-
-    def update_pass(self):
-        pass
-
     
 window_view = View_control()

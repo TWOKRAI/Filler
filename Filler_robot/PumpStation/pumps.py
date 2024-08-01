@@ -80,7 +80,7 @@ class Pump_station:
         self.pump_1 = Pump('pumps_1', self.motor_1)
 
         self.motor_2 = Motor('pumps_2',  pins.motor_p2_step, pins.motor_p2_dir, pins.motor_p1p2_enable)
-        self.motor_1.enable_on(False)
+        self.motor_2.enable_on(False)
         self.pump_2 = Pump('pumps_2', self.motor_2)
         
         self.mode_game = False
@@ -95,6 +95,11 @@ class Pump_station:
     def run(self):
         asyncio.run(self._all_pour_async())
         self.statistic_write()
+
+    
+    def enable_motors(self, value = False):
+        self.motor_1.enable_on(value)
+        self.motor_2.enable_on(value)
 
 
     def statistic_write(self):

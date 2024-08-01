@@ -118,7 +118,7 @@ class Robot:
 		self.distance_z = 0
 
 		self.axis_x = Axis('motor_x', self.motor_x)
-		self.axis_x.motor.enable_on(False)
+		
 		self.axis_x.motor.speed_def = 0.00005
 		self.axis_x.motor.direction = True
 		self.axis_x.step_angle = 0.062
@@ -165,6 +165,12 @@ class Robot:
 		self.axis_x.motor.null_value()
 		self.axis_y.motor.null_value()
 		self.axis_z.motor.null_value()
+
+
+	def enable_motors(self, value = False):
+		self.axis_x.motor.enable_on(value)
+		self.axis_y.motor.enable_on(value)
+		self.axis_z.motor.enable_on(value)
 
 
 	def angle_to_coord(self, angle_x, angle_y, angle_z):
@@ -350,12 +356,7 @@ class Robot:
 			if self.stopped:
 				break
 
-			if sensor_limit_x.read_input():
-				print('sensor_limit_x = True')
-
-				raise asyncio.CancelledError()
-			
-			await asyncio.sleep(0.0001)
+			await asyncio.sleep(0.01)
 
 	
 	async def _limit(self):
