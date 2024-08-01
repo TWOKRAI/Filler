@@ -5,7 +5,13 @@ from PyQt5.QtGui import QFont, QPixmap, QMovie
 import os 
 
 from Filler_interface.app import app
-from Raspberry.input import input_request
+
+try:
+    from Raspberry.input import input_request
+
+    raspberry = True
+except ImportError:
+    raspberry = False
 
 
 class Error_control(QMainWindow):
@@ -20,7 +26,8 @@ class Error_control(QMainWindow):
 
         self.window_name = 'error'
 
-        input_request.show_error.connect(self.show)
+        if raspberry:
+            input_request.show_error.connect(self.show)
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 

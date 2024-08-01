@@ -5,9 +5,14 @@ from PyQt5.QtCore import QSize, QTimer, QEvent
 from PyQt5.QtGui import QCursor, QFontDatabase
 
 from Filler_interface.Style_windows.style import Style
-from Filler_robot.robot_main import robot
 
-from Raspberry.input import input_request
+try:
+    from Raspberry.input import input_request
+    from Filler_robot.robot_main import robot
+
+    raspberry = True
+except ImportError:
+    raspberry = False
 
 
 class App(QApplication):
@@ -21,8 +26,11 @@ class App(QApplication):
         self.on_fullscreen = False
         self.cursor_move_2 = True
 
-        font_id = QFontDatabase.addApplicationFont("/usr/share/fonts/truetype/siemens_ad_vn.ttf")
-        self.font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        if raspberry:
+            font_id = QFontDatabase.addApplicationFont("/usr/share/fonts/truetype/siemens_ad_vn.ttf")
+            self.font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        else:
+            self.font_family = 'Siemens AD Sans'
 
         self.lang_num = 0
         self.color = 'green'
@@ -40,8 +48,9 @@ class App(QApplication):
 
     
     def run(self):
-        input_request.start()
-        robot.start()
+        if raspberry:
+            input_request.start()
+            robot.start()
 
         self.set_style()
         self.language()
@@ -50,7 +59,7 @@ class App(QApplication):
         self.window_low.show()
         self.window_start.show_animation()
 
-        sys.exit(app.exec_())
+        sys.exit(app.exec_()) 
     
 
     def fullscreen(self):
@@ -96,7 +105,6 @@ class App(QApplication):
     def datetime_reset(self):
         self.timer_datetime.stop()
         self.timer_datetime.start(self.time_datetime)
-        print('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss')
 
 
     def language(self):
@@ -239,7 +247,7 @@ app.window_filler = filler_window
 from Filler_interface.Window_error.error_conrtol import window_error
 app.window_error = window_error
 
-from Filler_interface.Window_cip.cip_control import window_cip
+from Filler_interface.Window_cip.cip_control2 import window_cip
 app.window_cip = window_cip
 
 from Filler_interface.Window_robot.robot_control import window_robot

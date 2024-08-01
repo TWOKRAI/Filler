@@ -28,13 +28,13 @@ class Filler:
         self.param11 = 2
         self.param11_def = 2
 
-        self.param21 = False
+        self.param21 = 0
         self.param21_def = False
 
         self.param31 = 1
         self.param31_def = 1
 
-        self.param41 = False
+        self.param41 = 0
         self.param41_def = False
 
         now = datetime.datetime.now()

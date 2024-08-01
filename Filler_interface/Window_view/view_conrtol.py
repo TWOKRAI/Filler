@@ -6,7 +6,12 @@ import os
 import time
 
 from Filler_interface.app import app
-from Filler_robot.robot_main import robot
+
+try:
+    from Filler_robot.robot_main import robot
+    raspberry = True
+except ImportError:
+    raspberry = False
 
 
 class View_control(QMainWindow):
@@ -34,7 +39,9 @@ class View_control(QMainWindow):
         self.focus_window = False
 
         self.frame_label = None
-        robot.frame_captured.connect(self.update_frame)
+
+        if raspberry:
+            robot.frame_captured.connect(self.update_frame)
 
 
     def fullscreen(self):        
@@ -42,7 +49,8 @@ class View_control(QMainWindow):
 
 
     def show(self):
-        robot.neuron_on = True
+        if raspberry:
+            robot.neuron_on = True
 
         if app.on_fullscreen: self.fullscreen()
 
@@ -62,7 +70,8 @@ class View_control(QMainWindow):
 
 
     def close(self):
-        robot.neuron_on = False
+        if raspberry:
+            robot.neuron_on = False
 
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(
@@ -73,8 +82,10 @@ class View_control(QMainWindow):
         app.setStyleSheet(new_stylesheet)
 
         self.focus_window = False
-
-        robot.frame_captured.connect(self.update_pass)
+        
+        # if raspberry:
+        #     robot.frame_captured.connect(self.update_pass)
+        
         self.hide()
 
 

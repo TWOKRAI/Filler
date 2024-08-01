@@ -6,8 +6,6 @@ import os
 
 from Filler_interface.app import app
 
-from Raspberry.input import input_request
-
 
 class Main_filler_control(QMainWindow):
     def __init__(self):
