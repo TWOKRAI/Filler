@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
 from PyQt5.QtGui import QPixmap
 import numpy as np
 
@@ -10,7 +10,7 @@ from Filler_robot.Robots.robot_module import robot
 from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 
-class Robot(QThread):
+class Robot_filler(QObject):
     def __init__(self) -> None:
         super().__init__()
 
@@ -19,7 +19,7 @@ class Robot(QThread):
         self.camera_on = True
         self.robot_on = False
         self.inteface_on = False
-        self.neuron_on = False
+        self.neuron_on = True
         
         clear_file('log_temp.txt')
 
@@ -30,15 +30,14 @@ class Robot(QThread):
 
     def run(self) -> None:
         while self.running:
-            temp = check_temperature()
-            write_to_file(temp, 'log_temp.txt')
+            # temp = check_temperature()
+            # write_to_file(temp, 'log_temp.txt')
         
             if self.camera_on: camera.running()
             if self.neuron_on: neuron.running()
-            #if self.neuron_on: self.whilet()
 
             if self.inteface_on: 
-                interface.run()
+                interface.running()
             else:
                 interface.save_image()
 
@@ -47,7 +46,7 @@ class Robot(QThread):
             else:
                 robot.enable_motors(False)
 
-            QThread.msleep(1000)
+            # QThread.msleep(1000)
 
 
     # @pyqtSlot(bool)
@@ -65,6 +64,4 @@ class Robot(QThread):
         else:
             self.robot_on = False
 
-
-robot_filler = Robot()
 

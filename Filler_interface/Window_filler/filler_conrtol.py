@@ -1,13 +1,17 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtCore import Qt, QSize, QTimer
+from PyQt5.QtCore import Qt, QSize, QTimer, QThread
 from PyQt5.QtGui import QFont, QIcon
 import os
 
 from Filler_interface.app import app
 
 try:
-    from Filler_robot.robot_main import robot_filler
+    from Filler_robot.NeuroModules.interface import interface
+    from Filler_robot.robot_main import Robot_filler
+
+    from Raspberry.input import Input_request
+
     raspberry = True
 except ImportError:
     raspberry = False
@@ -60,8 +64,60 @@ class filler_control(QMainWindow):
 
         self.play = False
 
+
+        self.thread_robot = QThread()
+        self.robot_filler = Robot_filler()
+
+        self.thread_input = QThread()
+        self.input = Input_request()
+
         self.update()
+
+        self.start_input_thread()
+
+
+    def start_robot_thread(self):
+        if not self.thread_robot.isRunning():
+            self.thread_robot = QThread()
+            self.robot_filler = Robot_filler()
+            self.robot_filler.moveToThread(self.thread_robot)
+            self.thread_robot.started.connect(self.robot_filler.run)
+            interface.frame_captured.connect(app.window_view.update_frame)
+            self.thread_robot.start()
     
+
+    def stop_robot_thread(self):
+        if self.thread_robot is not None and self.thread_robot.isRunning():
+            self.robot_filler.stop()
+            self.thread_robot.quit()
+            self.thread_robot.wait()
+            # self.thread_robot = None
+            # self.robot_filler = None
+
+
+    def start_input_thread(self):
+        if not self.thread_robot.isRunning():
+            self.thread_input = QThread()
+            self.input_request = Input_request()
+            self.input_request.moveToThread(self.thread_input)
+            self.thread_input.started.connect(self.input_request.run)
+
+            self.input_request.show_error.connect(app.window_error.show)
+
+            self.input_request.motor_monitor.on_signal.connect(app.window_start.close)
+            self.input_request.motor_monitor.off_signal.connect(app.window_start.show)
+
+            self.thread_input.start()
+    
+
+    def stop_input_thread(self):
+        if self.thread_robot is not None and self.thread_robot.isRunning():
+            self.input_request.stop()
+            self.thread_input.quit()
+            self.thread_input.wait()
+            # self.thread_robot = None
+            # self.robot_filler = None
+
 
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
@@ -80,7 +136,7 @@ class filler_control(QMainWindow):
         self.play = True
 
         if raspberry:
-            robot_filler.enable_robot_on(True)
+            self.robot_filler.enable_robot_on(True)
 
     
     def language(self, lang):
@@ -148,13 +204,13 @@ class filler_control(QMainWindow):
             self.button_pause.setIcon(QIcon(file_path))
 
             if raspberry:
-                robot_filler.enable_robot_on(True)
+                self.robot_filler.enable_robot_on(True)
         else:
             file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
             self.button_pause.setIcon(QIcon(file_path))
 
             if raspberry:
-                robot_filler.enable_robot_on(False)
+                self.robot_filler.enable_robot_on(False)
 
 
     def button_pause_clicked(self):

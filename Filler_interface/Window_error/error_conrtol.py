@@ -7,8 +7,6 @@ import os
 from Filler_interface.app import app
 
 try:
-    from Raspberry.input import input_request
-
     raspberry = True
 except ImportError:
     raspberry = False
@@ -26,8 +24,8 @@ class Error_control(QMainWindow):
 
         self.window_name = 'error'
 
-        if raspberry:
-            input_request.show_error.connect(self.show)
+        # if raspberry:
+        #     input_request.show_error.connect(self.show)
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
@@ -74,8 +72,8 @@ class Error_control(QMainWindow):
 
 
     def close(self):
-        if not input_request.button_error:
-            self.hide()
+        # if not input_request.button_error:
+        self.hide()
 
 
     def language(self, lang):

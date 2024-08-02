@@ -1,5 +1,5 @@
 import cv2
-from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import Qt
 
@@ -15,7 +15,7 @@ def nothing(x):
 	pass
 
 
-class Interface(QThread):
+class Interface(QObject):
 	frame_captured = pyqtSignal(QPixmap)
 
 	def __init__(self):
@@ -115,14 +115,14 @@ class Interface(QThread):
 		# self.change_pixmap_signal.emit(img_monitor)
 
 		h, w, ch = img_monitor.shape
-		print('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', h, w, ch)
-		if h == 370 and w == 640:
-			q_image = QImage(img_monitor.data.tobytes(), w, h, ch * w, QImage.Format_RGB888)
-			q_image = q_image.scaled(720, 480, Qt.KeepAspectRatio)
+		
+		
+		q_image = QImage(img_monitor.data.tobytes(), w, h, ch * w, QImage.Format_BGR888)
+		q_image = q_image.scaled(720, 480, Qt.KeepAspectRatio)
 
-			pixmap = QPixmap.fromImage(q_image)
+		pixmap = QPixmap.fromImage(q_image)
 
-			self.frame_captured.emit(pixmap)
+		self.frame_captured.emit(pixmap)
 		
 
 		# self.img_monitor = camera.img_monitor[100:1700, 380:2280,:3]

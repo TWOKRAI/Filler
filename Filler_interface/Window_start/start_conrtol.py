@@ -25,7 +25,7 @@ class Start_control(QMainWindow, Ui_MainWindow):
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.close_auto)
-        self.timer.start(5000)
+        self.timer.start(210000)
 
         #self.animation = QPropertyAnimation(self, b'windowOpacity')
 
@@ -94,8 +94,7 @@ class Start_control(QMainWindow, Ui_MainWindow):
         self.timer.stop()
         app.window_main_filler.show_animation()
         app.cursor_move = True
-
-        QTimer.singleShot(3000, self.hide)
+        self.hide()
     
 
 window_start = Start_control()

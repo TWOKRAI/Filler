@@ -1,11 +1,14 @@
-from PyQt5.QtCore import QThread
 import asyncio
+from PyQt5.QtCore import QObject, pyqtSignal
 
 from Filler_robot.MotorModules.motor import Motor
 from Raspberry.pins_table import pins
 
 
-class Motor_monitor(QThread):
+class Motor_monitor(QObject):
+    on_signal = pyqtSignal() 
+    off_signal = pyqtSignal() 
+
     def __init__(self):
         super().__init__()
 
@@ -48,6 +51,7 @@ class Motor_monitor(QThread):
 
         elif switch_out == True:
             distance = self.distance
+            self.off_signal.emit()
 
         elif switch_in == False and switch_out == False:
             if self.state_button:
@@ -79,6 +83,10 @@ class Motor_monitor(QThread):
 
             if (switch_in and not dir) or (switch_out and dir):
                 print('SWITCH')
+
+                if switch_out:
+                    self.on_signal.emit()
+
                 self.state = not self.state
                 raise asyncio.CancelledError()
 
@@ -105,9 +113,8 @@ class Motor_monitor(QThread):
         self.motor.ready = False
 
 
-motor_monitor = Motor_monitor()
-
-
 if __name__ == '__main__':
+    motor_monitor = Motor_monitor()
+
     while True:
         motor_monitor.run()

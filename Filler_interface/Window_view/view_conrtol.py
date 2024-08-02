@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, QThread
 from PyQt5.QtGui import QPixmap
 import os
 import numpy as np
@@ -12,7 +12,7 @@ from Filler_interface.app import app
 
 try:
     from Filler_robot.NeuroModules.interface import interface
-    from Filler_robot.robot_main import robot_filler
+    from Filler_robot.robot_main import Robot_filler
     raspberry = True
 except ImportError:
     raspberry = False
@@ -44,8 +44,27 @@ class View_control(QMainWindow):
 
         self.frame_label = None
 
-        if raspberry:
-            interface.frame_captured.connect(self.update_frame)
+    #     self.thread_robot = None
+    #     self.robot_filler = None
+
+
+    # def start_robot_thread(self):
+    #     if self.thread_robot is None or not self.thread_robot.isRunning():
+    #         self.thread_robot = QThread()
+    #         self.robot_filler = Robot_filler()
+    #         self.robot_filler.moveToThread(self.thread_robot)
+    #         self.thread_robot.started.connect(self.robot_filler.run)
+    #         interface.frame_captured.connect(self.update_frame)
+    #         self.thread_robot.start()
+    
+
+    # def stop_robot_thread(self):
+    #     if self.thread_robot is not None and self.thread_robot.isRunning():
+    #         self.robot_filler.stop()
+    #         self.thread_robot.quit()
+    #         self.thread_robot.wait()
+    #         self.thread_robot = None
+    #         self.robot_filler = None
 
 
     def fullscreen(self):        
@@ -53,8 +72,7 @@ class View_control(QMainWindow):
 
 
     def show(self):
-        if raspberry:
-            robot_filler.enable_neuron_on(True)
+        app.window_filler.start_robot_thread()
 
         if app.on_fullscreen: self.fullscreen()
 
@@ -72,8 +90,7 @@ class View_control(QMainWindow):
 
 
     def close(self):
-        if raspberry:
-            robot_filler.enable_neuron_on(False)
+        app.window_filler.stop_robot_thread()
 
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(
@@ -115,14 +132,14 @@ class View_control(QMainWindow):
             app.datetime_reset()
 
 
-    @pyqtSlot(np.ndarray)
-    def update_image(self, array):
-        image = Image.fromarray(array)
-        buffer = io.BytesIO()
-        image.save(buffer, format="JPEG")
-        qimage = QPixmap()
-        qimage.loadFromData(buffer.getvalue())
-        self.label.setPixmap(qimage)
+    # @pyqtSlot(np.ndarray)
+    # def update_image(self, array):
+    #     image = Image.fromarray(array)
+    #     buffer = io.BytesIO()
+    #     image.save(buffer, format="JPEG")
+    #     qimage = QPixmap()
+    #     qimage.loadFromData(buffer.getvalue())
+    #     self.label.setPixmap(qimage)
 
 
       

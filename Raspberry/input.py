@@ -39,14 +39,14 @@
 
 
 
-from PyQt5.QtCore import QThread, pyqtSignal, QTimer
+from PyQt5.QtCore import QThread, pyqtSignal, QTimer, QObject
 
 from Raspberry.pins_table import pins
 
-from Filler_robot.Monitor.motor_monitor import motor_monitor
+from Filler_robot.Monitor.motor_monitor import Motor_monitor
 
 
-class Input_request(QThread):
+class Input_request(QObject):
     pin_values_updated = pyqtSignal(dict)
     show_error = pyqtSignal()
 
@@ -59,6 +59,8 @@ class Input_request(QThread):
 
         self.button_error = False
 
+        self.motor_monitor = Motor_monitor()
+
 
     def run(self):
         self.request()
@@ -69,13 +71,10 @@ class Input_request(QThread):
 
 
     def request(self):
-        i = 0
+        self.running = True
+
         while self.running:
             try:
-                if self.run_request:
-                    i += 1
-                    # print(i)
-                
                 if pins.switch_x.get_value():
                     self.button_error = True
                     self.show_error.emit()
@@ -83,7 +82,7 @@ class Input_request(QThread):
                     self.button_error = False
                 
                 if pins.button.get_value():
-                    motor_monitor.start()
+                    self.motor_monitor.run()
 
             except Exception as e:
                 print(f"Error reading pin values: {e}")
@@ -91,4 +90,4 @@ class Input_request(QThread):
             QThread.msleep(int(self.time_request * 1000))
 
 
-input_request = Input_request()
+# input_request = Input_request()

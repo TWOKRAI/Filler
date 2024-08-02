@@ -8,9 +8,6 @@ from Filler_interface.Style_windows.style import Style
 
 
 try:
-    from Raspberry.input import input_request
-    from Filler_robot.robot_main import robot_filler 
-
     raspberry = True
 except ImportError:
     raspberry = False
@@ -49,10 +46,6 @@ class App(QApplication):
 
     
     def run(self):
-        if raspberry:
-            input_request.start()
-            robot_filler.start()
-
         self.set_style()
         self.language()
         self.fullscreen()
@@ -242,9 +235,6 @@ app.window_prepare = window_prepare
 from Filler_interface.Window_view.view_conrtol import window_view
 app.window_view = window_view
 
-from Filler_interface.Window_filler.filler_conrtol import filler_window
-app.window_filler = filler_window
-
 from Filler_interface.Window_error.error_conrtol import window_error
 app.window_error = window_error
 
@@ -254,4 +244,6 @@ app.window_cip = window_cip
 from Filler_interface.Window_robot.robot_control import window_robot
 app.window_robot = window_robot
 
+from Filler_interface.Window_filler.filler_conrtol import filler_window
+app.window_filler = filler_window
 
