@@ -192,7 +192,7 @@ class Motor:
 				if step < 1: 
 					step = 1
 
-				print(step)
+				# print(step)
 
 				stop_distance = abs(distance) / 1000 * 0.95
 
@@ -200,11 +200,11 @@ class Motor:
 					if self.stop == True:
 						break
 					
-					print(time_distance, stop_distance)
+					# print(time_distance, stop_distance)
 
 					self.pin_step.frequency = f
 					self.pin_step.value = 0.3
-					print(f)
+					# print(f)
 
 					time_distance += k
 					await asyncio.sleep(k)
@@ -216,7 +216,7 @@ class Motor:
 				acc = True
 
 			time_distance += k
-			print(time_distance)
+			# print(time_distance)
 			await asyncio.sleep(k)
 						
 			if time_distance >= stop_distance - sec:
@@ -228,7 +228,7 @@ class Motor:
 			self.pin_step.value = 0.3
 			
 			time_distance += k
-			print(time_distance)
+			# print(time_distance)
 			await asyncio.sleep(k)
 
 			if time_distance >= stop_distance:	

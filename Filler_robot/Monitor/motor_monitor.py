@@ -25,9 +25,9 @@ class Motor_monitor(QObject):
         
         self.motor.speed_def = 0.00001
         
-        self.motor.limit_min = -19100
-        self.motor.limit_max = 19100
-        self.distance = 19000
+        self.motor.limit_min = -15000
+        self.motor.limit_max = 15000
+        self.distance = 12000
 
         self.direction = True
 
@@ -99,7 +99,7 @@ class Motor_monitor(QObject):
         if detect:
             tasks.append(asyncio.create_task(self._detect_sensor()))
 
-        tasks.append(asyncio.create_task(self.motor._freq_async(2000, 1, distance)))
+        tasks.append(asyncio.create_task(self.motor._freq_async(3000, 1, distance)))
             
         try:
             await asyncio.gather(*tasks)

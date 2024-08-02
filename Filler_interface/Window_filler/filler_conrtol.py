@@ -106,6 +106,8 @@ class filler_control(QMainWindow):
 
             self.input_request.motor_monitor.on_signal.connect(app.window_start.close)
             self.input_request.motor_monitor.off_signal.connect(app.window_start.show)
+            self.input_request.motor_monitor.off_signal.connect(app.window_view.close)
+            self.input_request.motor_monitor.off_signal.connect(self.stop_input_thread)
 
             self.thread_input.start()
     
