@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import math
 from picamera2 import Picamera2
+import logging
 
 #from Lib.Decorators.wrapper import _timing
 from Filler_robot.VisionTech.perspective import Perspective
@@ -11,7 +12,14 @@ class Camera:
     def __init__(self):
         self.print_on = True
 
-        self.picam = Picamera2()
+        logging.debug("Initializing camera...")
+        try:
+            self.picam = Picamera2()
+            logging.debug("Camera initialized successfully.")
+        except RuntimeError as e:
+            logging.error(f"Failed to initialize camera: {e}")
+            raise
+
         config = self.picam.create_still_configuration(main={"size": (2592, 1944)})
         self.picam.configure(config)
 
@@ -100,7 +108,7 @@ class Camera:
         return self.img
     
 
-camera = Camera()
+# camera = Camera()
 
 # while True:
 #     camera.read_cam()

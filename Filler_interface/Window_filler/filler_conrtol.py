@@ -7,7 +7,7 @@ import os
 from Filler_interface.app import app
 
 try:
-    from Filler_robot.NeuroModules.interface import interface
+    # from Filler_robot.NeuroModules.interface import interface
     from Filler_robot.robot_main import Robot_filler
 
     from Raspberry.input import Input_request
@@ -66,10 +66,10 @@ class filler_control(QMainWindow):
 
 
         self.thread_robot = QThread()
-        self.robot_filler = Robot_filler()
+        self.robot_filler = None
 
         self.thread_input = QThread()
-        self.input = Input_request()
+        self.input = None
 
         self.update()
 
@@ -82,7 +82,7 @@ class filler_control(QMainWindow):
             self.robot_filler = Robot_filler()
             self.robot_filler.moveToThread(self.thread_robot)
             self.thread_robot.started.connect(self.robot_filler.run)
-            interface.frame_captured.connect(app.window_view.update_frame)
+            self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
             self.thread_robot.start()
     
 
@@ -137,8 +137,8 @@ class filler_control(QMainWindow):
 
         self.play = True
 
-        if raspberry:
-            self.robot_filler.enable_robot_on(True)
+        # if raspberry:
+        #     self.robot_filler.enable_robot_on(True)
 
     
     def language(self, lang):
@@ -205,14 +205,14 @@ class filler_control(QMainWindow):
             file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-pause-button-100.png')
             self.button_pause.setIcon(QIcon(file_path))
 
-            if raspberry:
-                self.robot_filler.enable_robot_on(True)
+            # if raspberry:
+            #     self.robot_filler.enable_robot_on(True)
         else:
             file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
             self.button_pause.setIcon(QIcon(file_path))
 
-            if raspberry:
-                self.robot_filler.enable_robot_on(False)
+            # if raspberry:
+            #     self.robot_filler.enable_robot_on(False)
 
 
     def button_pause_clicked(self):

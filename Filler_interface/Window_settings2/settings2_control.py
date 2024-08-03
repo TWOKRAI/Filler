@@ -192,11 +192,11 @@ class Control(Control):
     def default_parametrs(self):
         app.lang_num = 0
         app.styling.r_border = 108
-        app.styling.g_border = 161
-        app.styling.b_border = 141
+        app.styling.g_border = 170
+        app.styling.b_border = 210
         app.styling.r_icons_text = 108
-        app.styling.g_icons_text = 161
-        app.styling.b_icons_text = 141
+        app.styling.g_icons_text = 178
+        app.styling.b_icons_text = 149
         app.styling.r_text = 108
         app.styling.g_text = 161
         app.styling.b_text = 141

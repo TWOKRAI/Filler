@@ -2,10 +2,10 @@ from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
 from PyQt5.QtGui import QPixmap
 import numpy as np
 
-from Filler_robot.VisionTech.camera import camera
-from Filler_robot.NeuroModules.neuron import neuron
-from Filler_robot.NeuroModules.interface import interface
-from Filler_robot.Robots.robot_module import robot
+from Filler_robot.VisionTech.camera import Camera
+from Filler_robot.NeuroModules.neuron import Neuron
+from Filler_robot.NeuroModules.interface import Interface
+# from Filler_robot.Robots.robot_module import robot
 
 from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
@@ -15,6 +15,10 @@ class Robot_filler(QObject):
         super().__init__()
 
         self.running = True
+
+        self.camera = Camera()
+        self.neuron = Neuron()
+        self.interface = Interface()
 
         self.camera_on = True
         self.robot_on = False
@@ -29,24 +33,28 @@ class Robot_filler(QObject):
     
 
     def run(self) -> None:
+        self.image_cam = None
+
         while self.running:
             # temp = check_temperature()
             # write_to_file(temp, 'log_temp.txt')
-        
-            if self.camera_on: camera.running()
-            if self.neuron_on: neuron.running()
+            
+            self.image_cam = self.camera.read_cam()
 
-            if self.inteface_on: 
-                interface.running()
-            else:
-                interface.save_image()
+            if self.image_cam is not None and isinstance(self.image_cam, np.ndarray):
+                objects_list = self.neuron.find_objects(self.image_cam)
+                self.interface.save_image(self.image_cam, objects_list)
+                QThread.msleep(300)
+                self.image_cam = None
 
-            if self.robot_on: 
-                robot.running()
-            else:
-                robot.enable_motors(False)
+            # if self.robot_on: 
+            #     robot.running()
+            # else:
+            #     robot.enable_motors(False)
 
-            # QThread.msleep(1000)
+            #QThread.msleep(1000)
+
+        self.camera.stop()
 
 
     # @pyqtSlot(bool)

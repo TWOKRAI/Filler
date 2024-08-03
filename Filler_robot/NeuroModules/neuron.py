@@ -5,7 +5,7 @@ import math
 import os
 import time
 
-from Filler_robot.VisionTech.camera import camera
+from Filler_robot.VisionTech.camera import Camera
 
 from Lib.Decorators.wrapper import _timing
 
@@ -61,7 +61,7 @@ class Neuron:
 		self.next_position_list = []
 		
 		self.limit_xmin = 30
-		self.limit_xmax = camera.img_width - 50
+		self.limit_xmax = 640 - 50
 		self.limit_ymin = 0
 		self.limit_ymax = 300
 		
@@ -90,21 +90,26 @@ class Neuron:
 		self.find_objects()
 
 
-	def find_objects(self):
-		self.objects = self.detect_v5(camera.img)
+	def find_objects(self, image):
+		self.objects = self.detect_v5(image)
 			
 		self.objects = self.filter()
 		
-		self.list_coord = self.pixel_to_coord(self.objects)
+		self.list_coord = self.pixel_to_coord(image, self.objects)
+
+		return self.objects
 	
 
 	@_timing(True)
 	def detect_v5(self, image):
 		self.objects_all = []
 
+
 		if type(image) is np.ndarray:
-			x_scale = camera.img_width/640
-			y_scale = camera.img_height/640
+			img_width, img_height = image.shape[1], image.shape[0]
+
+			x_scale = img_width/640
+			y_scale = img_height/640
 			
 			blob = cv2.dnn.blobFromImage(image, scalefactor= 1/255, size=(640, 640), mean=[0,0,0], swapRB= True, crop= False)
 			self.net_v5.setInput(blob)
@@ -146,7 +151,7 @@ class Neuron:
 					yr_center = int(y1 + w*(y1+h)/self.leen)
 					xr_center = int(x1 + w/2)
 
-					self.perspective = (xr_center - camera.img_width/2) * 1/self.factor_x
+					self.perspective = (xr_center - img_width/2) * 1/self.factor_x
 
 					yr_center_2 = int(y1 + h - w*(y1+h)/self.leen * 1.5)
 					xr_center_2 = int(x1 + w/2) - self.perspective		
@@ -220,8 +225,10 @@ class Neuron:
 		return objects
 	
 
-	def pixel_to_coord(self, objects):
+	def pixel_to_coord(self, image, objects):
 		list_coord = []
+
+		img_width, img_height = image.shape[1], image.shape[0]
 		
 		for obj in objects:
 			x1 = obj[4]
@@ -253,20 +260,24 @@ class Neuron:
 
 			x = xr_center_2
 			
-			if abs(camera.img_width/2  - xr_center_2) < 9:
-				y = yr_center_2 - (camera.img_height - (y1 + h)) ** 2 * 0.00031 + math.sqrt(abs(camera.img_width/2  - xr_center_2)) * 0.01
+			if abs(img_width/2  - xr_center_2) < 9:
+				y = yr_center_2 - (img_height - (y1 + h)) ** 2 * 0.00031 + math.sqrt(abs(img_width/2  - xr_center_2)) * 0.01
 			else:
 				y = yr_center_2 + 1
 
 			
 			#ssinput()
-			z = h * 0.004 * math.sqrt(camera.img_height - (y1 + h)) + (camera.img_height - (y1 + h)) ** 2 * 0.00007 - abs(camera.img_width/2  - xr_center_2) * 0.004
+			z = h * 0.004 * math.sqrt(img_height - (y1 + h)) + (img_height - (y1 + h)) ** 2 * 0.00007 - abs(img_width/2  - xr_center_2) * 0.004
 
 
 			point = (x, y)
 			
-			point = camera.perspective.transform_coord(point)
-			point = camera.perspective.scale(point)
+			# point = Camera.perspective.transform_coord(point)
+			# point = Camera.perspective.scale(point)
+
+			point = [10, 1]
+
+
 
 			x = round(point[0], 1)
 			y = round(point[1], 1)
@@ -283,4 +294,4 @@ class Neuron:
 		return list_coord
 		
 
-neuron = Neuron()
+# neuron = Neuron()
