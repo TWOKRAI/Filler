@@ -88,13 +88,11 @@ class Interface(QObject):
 
 	
 	def save_image(self, image, objects_list):
-		img_copy = image
-
 		#self.draw_sight(img_copy)
 		#self.draw_limit_line(img_copy)
 		#self.draw_box_all(img_copy)
 		
-		# img = self.draw_box(img_copy, objects_list)
+		image_draw = self.draw_box(image, objects_list)
 		# self.perspective(img_copy)
 
 		# point = (self.x, self.y)
@@ -103,22 +101,22 @@ class Interface(QObject):
 		# point = camera.perspective.scale(point)
 
 		# camera.perspective.draw(img_copy)
+		if isinstance(image_draw, np.ndarray):
+			img_monitor = image_draw[60:430,:]
 
-		img_monitor = image[60:430,:]
+			# img_monitor = cv2.cvtColor(img_monitor, cv2.COLOR_BGR2RGB)
+			# self.change_pixmap_signal.emit(img_monitor)
 
-		# img_monitor = cv2.cvtColor(img_monitor, cv2.COLOR_BGR2RGB)
-		# self.change_pixmap_signal.emit(img_monitor)
+			h, w, ch = img_monitor.shape
+			
+			
+			q_image = QImage(img_monitor.data.tobytes(), w, h, ch * w, QImage.Format_BGR888)
+			q_image = q_image.scaled(720, 480, Qt.KeepAspectRatio)
 
-		h, w, ch = img_monitor.shape
-		
-		
-		q_image = QImage(img_monitor.data.tobytes(), w, h, ch * w, QImage.Format_BGR888)
-		q_image = q_image.scaled(720, 480, Qt.KeepAspectRatio)
+			pixmap = QPixmap.fromImage(q_image)
 
-		pixmap = QPixmap.fromImage(q_image)
-
-		self.frame_captured.emit(pixmap)
-		
+			self.frame_captured.emit(pixmap)
+			
 
 		# self.img_monitor = camera.img_monitor[100:1700, 380:2280,:3]
 
@@ -153,9 +151,7 @@ class Interface(QObject):
 	# 	cv2.line(img, (0, neuron.limit_ymax), (camera.img_width, neuron.limit_ymax), (255, 0, 0), 1)
 
 		
-	@_visual_line
-	def draw_box(self, img, objects):
-
+	def draw_box(self, image, objects):
 		i = 0
 		
 		for obj in objects:
@@ -181,26 +177,26 @@ class Interface(QObject):
 			#print('wfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww', camera.perspective_transformed([neuron.list_coord[i][0] * 10, neuron.list_coord[i][1] * 10]), neuron.list_coord[i][0] * 10, neuron.list_coord[i][1] * 10)
 
 			text = f'{id_obj}' + ':' + label + ' ' + f'{ready}'
-			cv2.rectangle(img,(x1, y1),(x1 + w, y1 + h), color_box, 2)
-			cv2.putText(img, text, (x1, y1 - 2), cv2.FONT_HERSHEY_COMPLEX, 0.7, color_box, 1)
+			cv2.rectangle(image,(x1, y1),(x1 + w, y1 + h), color_box, 2)
+			cv2.putText(image, text, (x1, y1 - 2), cv2.FONT_HERSHEY_COMPLEX, 0.7, color_box, 1)
 
-			cv2.rectangle(img, (int(xr_center - 4), yr_center - 4),(int(xr_center + 4), yr_center + 4), (255, 255, 0), -1)
-			# cv2.rectangle(img, (int(xr_center - neuron.region_x), yr_center - neuron.region_y),(int(xr_center + neuron.region_x), yr_center + neuron.region_y), (0, 255, 0), 1)
+			cv2.rectangle(image, (int(xr_center - 4), yr_center - 4),(int(xr_center + 4), yr_center + 4), (255, 255, 0), -1)
+			# cv2.rectangle(image, (int(xr_center - neuron.region_x), yr_center - neuron.region_y),(int(xr_center + neuron.region_x), yr_center + neuron.region_y), (0, 255, 0), 1)
 			
-			cv2.rectangle(img, (int(xr_center_2 - 4), yr_center_2 - 4),(int(xr_center_2 + 4), yr_center_2 + 4), (255, 255, 0), -1)
+			cv2.rectangle(image, (int(xr_center_2 - 4), yr_center_2 - 4),(int(xr_center_2 + 4), yr_center_2 + 4), (255, 255, 0), -1)
 
-			# cv2.putText(img, f'{neuron.list_coord[i]}', (x1 - 20, y1 - 20), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 0), 1)
+			# cv2.putText(image, f'{neuron.list_coord[i]}', (x1 - 20, y1 - 20), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 0), 1)
 
-			cv2.line(img, (x1, yr_center), (x1 + w, yr_center), (255, 255, 0), 1)
+			cv2.line(image, (x1, yr_center), (x1 + w, yr_center), (255, 255, 0), 1)
 			
-			#cv2.line(img, (int(xr_center), yr_center), (int(xr_center - perspective * 4), y1 + h), (255, 255, 0), 1)
+			#cv2.line(image, (int(xr_center), yr_center), (int(xr_center - perspective * 4), y1 + h), (255, 255, 0), 1)
 
-			cv2.line(img, (int(xr_center), yr_center), (int(xr_center_2), yr_center_2), (255, 255, 0), 1)
+			cv2.line(image, (int(xr_center), yr_center), (int(xr_center_2), yr_center_2), (255, 255, 0), 1)
 
 			i += 1
 		
 
-		return img
+		return image
 
 
 # 	def draw_box_all(self, img):

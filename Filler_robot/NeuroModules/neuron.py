@@ -84,23 +84,21 @@ class Neuron:
 		self.hands_found = False
    
 
-	@_timing(True)
 	def running(self):
 		#if self.timer.is_time_passed(5):
 		self.find_objects()
 
 
 	def find_objects(self, image):
-		self.objects = self.detect_v5(image)
+		objects_list = self.detect_v5(image)
 			
-		self.objects = self.filter()
+		objects_filter = self.filter(objects_list)
 		
-		self.list_coord = self.pixel_to_coord(image, self.objects)
+		self.list_coord = self.pixel_to_coord(image, objects_filter)
 
-		return self.objects
+		return objects_filter
 	
 
-	@_timing(True)
 	def detect_v5(self, image):
 		self.objects_all = []
 
@@ -156,25 +154,24 @@ class Neuron:
 					yr_center_2 = int(y1 + h - w*(y1+h)/self.leen * 1.5)
 					xr_center_2 = int(x1 + w/2) - self.perspective		
 					
-					print('perspective', self.perspective)
+					# print('perspective', self.perspective)
 					
 					xr_center = int(xr_center + self.perspective)
 					
 					self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective, xr_center_2, yr_center_2])
-					print('self.objects', self.objects)
+					# print('self.objects', self.objects)
 			else:
 				self.objects_all = []
 					
-			print('1 objects', self.objects_all)
+			# print('1 objects', self.objects_all)
 
 		return self.objects_all
 	
-		
-	@_timing(True)
-	def filter(self):
+
+	def filter(self, objects_list):
 		objects_new = []
 		
-		objects = sorted(self.objects, key = lambda sublist: sublist[4])
+		objects = sorted(objects_list, key = lambda sublist: sublist[4])
 			
 		find = False
 		
@@ -220,7 +217,7 @@ class Neuron:
 
 		objects = id_objects
 						
-		print('3 Filter  self.objects:', objects)
+		# print('3 Filter  self.objects:', objects)
 
 		return objects
 	

@@ -50,7 +50,6 @@ class Camera:
         self.perspective = Perspective(image, point_pixel, point_real)
 
 
-    #@_timing(True)
     def running(self):
         self.read_cam()
     
@@ -68,14 +67,12 @@ class Camera:
         return image
     
 
-    #@_timing(True)
     def read_cam(self) -> np.ndarray:
-        self.img = self.picam.capture_array()
+        img_read = self.picam.capture_array()
         
-        if self.calibration_on:
-            self.img = self.calibraion(self.img)
+        img_calibration = self.calibraion(img_read)
         
-        self.img_width, self.img_height = self.img.shape[1], self.img.shape[0]
+        self.img_width, self.img_height = img_calibration.shape[1], img_calibration.shape[0]
         
         center = (self.img_width // 2, self.img_height // 2)
 
@@ -83,32 +80,20 @@ class Camera:
         scale = 1.0
         M = cv2.getRotationMatrix2D(center, angle, scale)
 
-        self.img = cv2.warpAffine(self.img, M, (self.img_width, self.img_height))
-        
-        #self.img = self.img[0:1900, 300:2200,:3]
-        self.img = self.img[0:1900, 380:2280,:3]
-        #self.img = self.img[:, :,:3]
+        image_warp = cv2.warpAffine(img_calibration, M, (self.img_width, self.img_height)) 
 
-        self.img_monitor = self.img.copy()
+        image_cropp = image_warp[0:1900, 380:2280,:3]
 
-        self.img = cv2.resize(self.img, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
+        img_resize = cv2.resize(image_cropp, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
         
-        self.img = cv2.cvtColor(self.img, cv2.COLOR_RGB2BGR)
+        image_out = cv2.cvtColor(img_resize, cv2.COLOR_RGB2BGR)
 
-        
-        self.img_width, self.img_height = self.img.shape[1], self.img.shape[0]
-       
-        if self.print_on:
-            print('Camera read')
-            
-        print(type(self.img), self.img_width, self.img_height)
+        self.img_width, self.img_height = image_out.shape[1], image_out.shape[0]
 
-        #cv2.imwrite('test.png', self.img)
+        # print('Camera read')
+        # print(type(image_out), self.img_width, self.img_height)
+
+        # cv2.imwrite('test.png',image_out)
         
-        return self.img
+        return image_out
     
-
-# camera = Camera()
-
-# while True:
-#     camera.read_cam()

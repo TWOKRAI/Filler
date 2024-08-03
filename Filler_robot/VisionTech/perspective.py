@@ -184,7 +184,7 @@ class Perspective:
         cv2.putText(image, f"Angle: {self.angle_perspective} ", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
         cv2.putText(image, f"Angle2: {self.angle} ", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
-
+        return image
 
 # if __name__ == '__main__':
 #     def nothing(x):

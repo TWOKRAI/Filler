@@ -203,7 +203,7 @@ class Motor:
 					# print(time_distance, stop_distance)
 
 					self.pin_step.frequency = f
-					self.pin_step.value = 0.3
+					self.pin_step.value = 0.1
 					# print(f)
 
 					time_distance += k
@@ -225,7 +225,7 @@ class Motor:
 					
 		for f in range(frequency, -1, -int(step)):
 			self.pin_step.frequency = f
-			self.pin_step.value = 0.3
+			self.pin_step.value = 0.1
 			
 			time_distance += k
 			# print(time_distance)
