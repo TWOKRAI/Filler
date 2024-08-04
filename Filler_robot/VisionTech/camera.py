@@ -44,8 +44,8 @@ class Camera:
 
         image = np.zeros((self.width_out, self.height_out, 3), dtype=np.uint8)
         
-        point_pixel = [(30, 430), (221, 214), (610, 430), (419, 214)]
-        point_real = [(-20, 11.2), (-20, 50.7), (20, 11.2), (20, 50.7)]
+        point_pixel = [(95, 403), (209, 248), (547, 403), (437, 248)]
+        point_real = [(-15, 12.5), (-15, 33.5), (15, 12.5), (15, 33.5)]
         
         self.perspective = Perspective(image, point_pixel, point_real)
 
@@ -86,14 +86,14 @@ class Camera:
 
         img_resize = cv2.resize(image_cropp, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
         
-        image_out = cv2.cvtColor(img_resize, cv2.COLOR_RGB2BGR)
+        self.image_out = cv2.cvtColor(img_resize, cv2.COLOR_RGB2BGR)
 
-        self.img_width, self.img_height = image_out.shape[1], image_out.shape[0]
+        self.img_width, self.img_height = self.image_out.shape[1], self.image_out.shape[0]
 
         # print('Camera read')
         # print(type(image_out), self.img_width, self.img_height)
 
         # cv2.imwrite('test.png',image_out)
         
-        return image_out
+        return self.image_out
     

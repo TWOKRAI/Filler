@@ -32,10 +32,12 @@ class Pins():
         self.motor_z_dir = self.pin_init(20)
         self.motor_z_enable = self.pin_init(16)
 
-        self.motor_p1_step = self.pin_init(18)
+        # self.motor_p1_step = self.pin_init(18)
+        self.motor_p1_step = gz.PWMOutputDevice(18)
         self.motor_p1_dir = self.pin_init(15)
         
-        self.motor_p2_step = self.pin_init(24)
+        # self.motor_p2_step = self.pin_init(24)
+        self.motor_p2_step = gz.PWMOutputDevice(12)
         self.motor_p2_dir = self.pin_init(23)
 
         self.motor_p1p2_enable = self.pin_init(7)

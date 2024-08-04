@@ -38,8 +38,17 @@ class Timer:
 	
 
 class Neuron:
-	def __init__(self):
+	def __init__(self, camera):
+		self.camera = camera
+
 		self.timer = Timer()
+
+		file_path1 = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov4-tiny.cfg')
+		file_path2 = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov4-tiny.weights')
+		self.net_v4 = cv2.dnn.readNetFromDarknet(file_path1, file_path2)
+		# self.net_v4.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+		# self.net_v4.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+
 
 		file_path = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov5n.onnx')
 		self.net_v5 = cv2.dnn.readNetFromONNX(file_path)
@@ -48,9 +57,9 @@ class Neuron:
 		
 		self.mode = 0
 		
-		self.threshold = 0.4
+		self.threshold = 0.3
 		
-		self.nmsthreshold = 0.5
+		self.nmsthreshold = 0.4
 
 		self.list_find = {'cup': True, 'CUP': True, 'vase': True, 'wine glass': True, 'toilet': True, 'person': True}
 		
@@ -75,6 +84,8 @@ class Neuron:
 		self.objects = []
 			
 		self.list_coord = []
+
+		self.objects_filter = []
 		
 		self.region_x = 20
 		self.region_y = 20
@@ -85,34 +96,32 @@ class Neuron:
    
 
 	def running(self):
-		#if self.timer.is_time_passed(5):
-		self.find_objects()
+		if self.timer.is_time_passed(5):
+			self.find_objects()
+			self.find_objects()
+			self.find_objects()
 
 
-	def find_objects(self, image):
-		objects_list = self.detect_v5(image)
-			
-		objects_filter = self.filter(objects_list)
-		
-		self.list_coord = self.pixel_to_coord(image, objects_filter)
+	def find_objects(self):
+		objects_list = self.detect_v5(self.camera.image_out)
+		self.objects_filter = self.filter(objects_list)
 
-		return objects_filter
+		self.list_coord = self.pixel_to_coord(self.objects_filter)
+
 	
-
 	def detect_v5(self, image):
 		self.objects_all = []
 
-
-		if type(image) is np.ndarray:
+		if isinstance(image, np.ndarray):
 			img_width, img_height = image.shape[1], image.shape[0]
 
-			x_scale = img_width/640
-			y_scale = img_height/640
-			
-			blob = cv2.dnn.blobFromImage(image, scalefactor= 1/255, size=(640, 640), mean=[0,0,0], swapRB= True, crop= False)
+			x_scale = img_width / 640
+			y_scale = img_height / 640
+
+			blob = cv2.dnn.blobFromImage(image, scalefactor=1/255, size=(640, 640), mean=[0, 0, 0], swapRB=True, crop=False)
 			self.net_v5.setInput(blob)
 			detections = self.net_v5.forward()[0]
-			
+
 			classes_ids = []
 			confidences = []
 			boxes = []
@@ -128,45 +137,99 @@ class Neuron:
 						classes_ids.append(ind)
 						confidences.append(confidence)
 						cx, cy, w, h = row[:4]
-						x1 = int((cx- w/2)*x_scale)
-						y1 = int((cy-h/2)*y_scale)
+						x1 = int((cx - w / 2) * x_scale)
+						y1 = int((cy - h / 2) * y_scale)
 						width = int(w * x_scale)
 						height = int(h * y_scale)
-						box = np.array([x1,y1,width,height])
+						box = np.array([x1, y1, width, height])
 						boxes.append(box)
-						
-			indices = cv2.dnn.NMSBoxes(boxes,confidences,self.threshold, self.nmsthreshold)
-			
-			if type(indices) == np.ndarray:
+
+			indices = cv2.dnn.NMSBoxes(boxes, confidences, self.threshold, self.nmsthreshold)
+
+			if isinstance(indices, np.ndarray):
 				for i in indices:
 					id_obj = 0
 					ready = False
-					
-					x1,y1,w,h = boxes[i]
+
+					x1, y1, w, h = boxes[i]
 					label = classes[classes_ids[i]]
 					conf = confidences[i]
-					
-					yr_center = int(y1 + w*(y1+h)/self.leen)
-					xr_center = int(x1 + w/2)
 
-					self.perspective = (xr_center - img_width/2) * 1/self.factor_x
+					yr_center = int(y1 + w * (y1 + h) / self.leen)
+					xr_center = int(x1 + w / 2)
 
-					yr_center_2 = int(y1 + h - w*(y1+h)/self.leen * 1.5)
-					xr_center_2 = int(x1 + w/2) - self.perspective		
-					
-					# print('perspective', self.perspective)
-					
+					self.perspective = (xr_center - img_width / 2) * 1 / self.factor_x
+
+					yr_center_2 = int(y1 + h - w * (y1 + h) / self.leen * 1.5)
+					xr_center_2 = int(x1 + w / 2) - self.perspective
+
 					xr_center = int(xr_center + self.perspective)
-					
+
 					self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective, xr_center_2, yr_center_2])
-					# print('self.objects', self.objects)
 			else:
 				self.objects_all = []
-					
-			# print('1 objects', self.objects_all)
 
 		return self.objects_all
-	
+		
+
+	def detect_v4(self, image):
+		self.objects_all = []
+
+		# image = cv2.resize(image, (320, 320), interpolation = cv2.INTER_AREA)
+		
+		blob = cv2.dnn.blobFromImage(image, 1/255, (320, 320), [0,0,0], 1, crop = False)
+		self.net_v4.setInput(blob)
+		detections = self.net_v4.forward()[0]
+		
+		layers_names = self.net_v4.getLayerNames()
+		#print(net.getUnconnectedOutLayers())
+		output_names = [layers_names[i-1] for i in self.net_v4.getUnconnectedOutLayers()]
+		outputs = self.net_v4.forward(output_names)
+		
+		ht, wt, ct = image.shape
+		bbox = []
+		classIds = []
+		confs = []
+		
+		for output in outputs:
+			for det in output:
+				scores = det[5:]
+				classId = np.argmax(scores)
+				confidence = scores[classId]
+				if confidence > self.threshold:
+					w, h = int(det[2]*wt), int(det[3]*ht)
+					x, y = int((det[0]*wt) - w/2), int((det[1]*ht) - h/2)
+					bbox.append([x,y,w,h])
+					classIds.append(classId)
+					confs.append(float(confidence))
+		
+		indices = cv2.dnn.NMSBoxes(bbox, confs, self.threshold, self.nmsthreshold)
+		
+		for i in indices:
+			id_obj = 0
+			ready = False
+			label = class_names[classIds[i]].upper()
+			conf = int(confs[i]*100) 
+			box = bbox[i]
+			x1, y1, w, h = box[0], box[1], box[2], box[3]
+			
+			yr_center = int(y1 + w*(y1+h)/self.leen)
+			xr_center = int(x1 + w/2)
+					
+			self.perspective = (xr_center - wt/2) * 1/self.factor_x
+			
+			print('perspective', self.perspective)
+			
+			xr_center = int(xr_center + self.perspective)
+			
+			self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective])
+			print('objects', self.objects_all)
+			
+
+		print('1 self.all_objects', self.objects_all)
+
+		return self.objects_all
+
 
 	def filter(self, objects_list):
 		objects_new = []
@@ -222,11 +285,11 @@ class Neuron:
 		return objects
 	
 
-	def pixel_to_coord(self, image, objects):
+	def pixel_to_coord(self, objects):
 		list_coord = []
 
-		img_width, img_height = image.shape[1], image.shape[0]
-		
+		img_width, img_height = self.camera.img_width , self.camera.img_height
+
 		for obj in objects:
 			x1 = obj[4]
 			y1 = obj[5]
@@ -255,25 +318,26 @@ class Neuron:
 			# else:
 			# 	x = xr_center_2
 
+			# x = xr_center_2
+			
+			# if abs(img_width/2  - xr_center_2) < 9:
+			# 	y = yr_center_2 - (img_height - (y1 + h)) ** 2 * 0.00031 + math.sqrt(abs(img_width/2  - xr_center_2)) * 0.01
+			# else:
+			# 	y = yr_center_2 + 1
+
+			
+			# #ssinput()
+			# z = h * 0.004 * math.sqrt(img_height - (y1 + h)) + (img_height - (y1 + h)) ** 2 * 0.00007 - abs(img_width/2  - xr_center_2) * 0.004
+
 			x = xr_center_2
-			
-			if abs(img_width/2  - xr_center_2) < 9:
-				y = yr_center_2 - (img_height - (y1 + h)) ** 2 * 0.00031 + math.sqrt(abs(img_width/2  - xr_center_2)) * 0.01
-			else:
-				y = yr_center_2 + 1
-
-			
-			#ssinput()
-			z = h * 0.004 * math.sqrt(img_height - (y1 + h)) + (img_height - (y1 + h)) ** 2 * 0.00007 - abs(img_width/2  - xr_center_2) * 0.004
-
+			y = yr_center_2
 
 			point = (x, y)
 			
-			# point = Camera.perspective.transform_coord(point)
-			# point = Camera.perspective.scale(point)
+			point = self.camera.perspective.transform_coord(point)
+			point = self.camera.perspective.scale(point)
 
-			point = [10, 1]
-
+			# point = [10, 1]
 
 
 			x = round(point[0], 1)

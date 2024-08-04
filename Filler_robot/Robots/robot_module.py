@@ -2,10 +2,7 @@ import asyncio
 import math
 
 from Filler_robot.MotorModules.motor import Motor
-from Filler_robot.VisionTech.camera import camera
-from Filler_robot.NeuroModules.neuron import neuron
-from Filler_robot.NeuroModules.interface import interface
-from Filler_robot.PumpStation.pumps import pump_station
+from Filler_robot.PumpStation.pumps import Pump_station
 from Raspberry.pins_table import pins
 
 #from Lib.Decorators.wrapper import _timing
@@ -85,7 +82,13 @@ class Axis:
 
 
 class Robot_module:
-	def __init__(self):
+	def __init__(self, camera = None, neuron = None, interface = None):
+		self.camera = camera
+		self.neuron = neuron
+		self.interface = interface
+
+		self.pump_station = Pump_station()
+
 		self.print_on = True
 
 		self.first_go = False
@@ -158,7 +161,7 @@ class Robot_module:
 
 	def running(self):
 		if self.calibration_ready:
-			neuron.memory_objects = self.move_objects(neuron.list_coord, neuron.objects)
+			self.neuron.memory_objects = self.move_objects(self.neuron.objects)
 
 
 	def enable_motors(self, value = False):
@@ -489,7 +492,9 @@ class Robot_module:
 		return limit_check
 
 
-	def move_objects(self, list_coord, list_objects):
+	def move_objects(self, list_objects):
+		list_coord = self.neuron.list_coord(list_objects)
+
 		if self.print_on:
 			print('move_objects list_objects', list_objects)
 			print('move_objects list_coord', list_coord)
@@ -507,31 +512,31 @@ class Robot_module:
 				
 				self.go_to_point(x, y, z)
 
-				camera.read_cam()
+				self.camera.read_cam()
 
-				interface.show_img()
+				self.interface.show_img()
 
 				if y >= 10 * (1 + z/20):
-					neuron.find_objects()
+					self.neuron.find_objects()
 
 					try:
-						value = neuron.objects[i][4]
+						value = self.neuron.objects[i][4]
 					except:
 						value = 0
 					finally:
-						if abs(list_objects[i][4] - value) < neuron.region_x:
-							pump_station.run()
+						if abs(list_objects[i][4] - value) < self.neuron.region_x:
+							self.pump_station.run()
 
 							list_objects[i][0] = True
 				else:
-					pump_station.run()
+					self.pump_station.run()
 					list_objects[i][0] = True
 				
 				self.go_home()
 
 			i += 1
 
-			interface.show_img()
+			self.interface.show_img()
 
 		return list_objects
 	
@@ -553,47 +558,47 @@ class Robot_module:
 		print('go home')
 
 	
-	def correction(self, list_coord):
-		x = round(list_coord[0])
-		y = round(list_coord[1])
+	# def correction(self, list_coord):
+	# 	x = round(list_coord[0])
+	# 	y = round(list_coord[1])
 
-		list_correction_y = neuron.memory_read('correction.txt', y)
-		print(list_correction_y)
+	# 	list_correction_y = self.neuron.memory_read('correction.txt', y)
+	# 	print(list_correction_y)
 
-		try:
-			correction_x = list_correction_y[x]
-			correction_x = 0
-			print('такой ключ есть')
-			input() 
-		except KeyError:
-			correction_x = 1
+	# 	try:
+	# 		correction_x = list_correction_y[x]
+	# 		correction_x = 0
+	# 		print('такой ключ есть')
+	# 		input() 
+	# 	except KeyError:
+	# 		correction_x = 1
 
-		distance_x = 0
-		distance_y = 0
+	# 	distance_x = 0
+	# 	distance_y = 0
 
-		while list_correction_y != 0 and correction_x != 0:
-			axis = input()
+	# 	while list_correction_y != 0 and correction_x != 0:
+	# 		axis = input()
 
-			if axis == 'x':
-				distance_x = int(input(f'distance {axis}'))
-				self.motor_x.move(distance_x)
+	# 		if axis == 'x':
+	# 			distance_x = int(input(f'distance {axis}'))
+	# 			self.motor_x.move(distance_x)
 			
-			if axis == 'y':
-				distance_y = int(input(f'distance {axis}'))
-				self.motor_y.move(distance_y)
+	# 		if axis == 'y':
+	# 			distance_y = int(input(f'distance {axis}'))
+	# 			self.motor_y.move(distance_y)
 
-			if axis == 'p':
-				neuron.memory_write('correction.txt', y, list_correction_y)
-				print(f'Save {list_correction_y[x]}')
-				list_correction_y[x] = (distance_x, distance_y)
+	# 		if axis == 'p':
+	# 			self.neuron.memory_write('correction.txt', y, list_correction_y)
+	# 			print(f'Save {list_correction_y[x]}')
+	# 			list_correction_y[x] = (distance_x, distance_y)
 	
-				break
+	# 			break
 
-
-robot = Robot_module()
-
+#robot = Robot_module()
 
 if __name__ == '__main__':
+	robot = Robot_module()
+
 	# #self.axis_z.init_go_axis(115)
 	# self.axis_z.go_axis(1, 115)
 

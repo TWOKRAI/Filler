@@ -20,7 +20,7 @@ class Start_control(QMainWindow, Ui_MainWindow):
 
         file_path = os.path.join('Filler_interface', '1x', 'innotech_max_2.png')
         pixmap = QPixmap(file_path)
-        scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.8), int(pixmap.height() * 0.8), Qt.KeepAspectRatio)
+        scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.9), int(pixmap.height() * 0.9), Qt.KeepAspectRatio)
         self.innotech.setPixmap(scaled_pixmap)
 
         self.timer = QTimer()

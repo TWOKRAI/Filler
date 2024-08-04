@@ -39,7 +39,7 @@ class App(QApplication):
 
         self.timer_datetime = QTimer()
         self.timer_datetime.timeout.connect(self.datetime)
-        self.time_datetime = 210000
+        self.time_datetime = 21000
         self.timer_datetime.start(self.time_datetime)
 
         self.installEventFilter(self)

@@ -55,7 +55,7 @@ class Input_request(QObject):
         self.running = True
 
         self.run_request = True
-        self.time_request = 0.1
+        self.time_request = 0.05
 
         self.button_error = False
 

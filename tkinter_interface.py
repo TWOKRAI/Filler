@@ -2,8 +2,11 @@ from tkinter import *
 import time
 
 import tkinter_var as tkinter_var 
-from Filler_robot.Robots.robot_module import robot
-from Filler_robot.PumpStation.pumps import pump_station
+from Filler_robot.Robots.robot_module import Robot_module
+from Filler_robot.PumpStation.pumps import Pump_station
+
+robot = Robot_module()
+pump_station = Pump_station()
 
 
 def label_update():
@@ -67,7 +70,7 @@ def enable_all():
 	if tkinter_var.enable == False:
 		robot.axis_x.motor.enable_on(True)
 		robot.axis_y.motor.enable_on(True)
-		robot.axis_z.motor.enable_on(True)
+		# robot.axis_z.motor.enable_on(True)
 
 		pump_station.pump_1.motor.enable_on(True)
 		pump_station.pump_2.motor.enable_on(True)

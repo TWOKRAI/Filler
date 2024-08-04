@@ -1,29 +1,29 @@
 from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
-from PyQt5.QtGui import QPixmap
 import numpy as np
 
 from Filler_robot.VisionTech.camera import Camera
 from Filler_robot.NeuroModules.neuron import Neuron
 from Filler_robot.NeuroModules.interface import Interface
-# from Filler_robot.Robots.robot_module import robot
+from Filler_robot.Robots.robot_module import Robot_module
 
 from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 
 class Robot_filler(QObject):
-    def __init__(self) -> None:
+    def __init__(self, robot_on = False) -> None:
         super().__init__()
 
         self.running = True
 
         self.camera = Camera()
-        self.neuron = Neuron()
-        self.interface = Interface()
+        self.neuron = Neuron(self.camera)
+        self.interface = Interface(self.camera, self.neuron)
+        self.robot = Robot_module(self.camera, self.neuron, self.interface)
 
         self.camera_on = True
-        self.robot_on = False
-        self.inteface_on = False
-        self.neuron_on = True
+        self.neuron_on = False
+        self.inteface_on = True
+        self.robot_on = robot_on
         
         clear_file('log_temp.txt')
 
@@ -33,22 +33,26 @@ class Robot_filler(QObject):
     
 
     def run(self) -> None:
-        image_cam = None
-
         while self.running:
             # temp = check_temperature()
             # write_to_file(temp, 'log_temp.txt')
             
-            image_cam = self.camera.read_cam()
+            if self.camera_on: self.camera.running()
+            if self.neuron_on: self.neuron.find_objects()
+            if self.inteface_on: self.interface.running()
+            if self.robot_on: self.robot.running()
 
-            if image_cam is not None and isinstance(image_cam, np.ndarray):
-                objects_list = self.neuron.find_objects(image_cam)
-                image_cam = self.camera.perspective.draw(image_cam)
-                self.interface.save_image(image_cam, objects_list)
+            
+            #QThread.msleep(300)
+
+            # if image_cam is not None and isinstance(image_cam, np.ndarray):
+            #     self.neuron.find_objects(image_cam)
+
+            #     self.interface.save_image(image_cam)
                 
-                image_cam = None
-            else:
-                QThread.msleep(300)
+            #     image_cam = None
+            # else:
+            #     QThread.msleep(300)
 
             # if self.robot_on: 
             #     robot.running()

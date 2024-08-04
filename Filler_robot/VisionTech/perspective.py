@@ -133,7 +133,33 @@ class Perspective:
         x = sx * pixel_point[0] + tx
         y = sy * pixel_point[1] + ty
 
-        y = y / (1.6 + y/1000)
+        # y = y / (1.6 + y/1000)
+
+        # y = y * (1 - y * y / 1000
+
+        
+        x = x * 0.95
+
+        print(y)
+
+        if y > 21:
+            y = y - 3.2
+        elif 20 <= y < 21:
+            y = y - 3.1
+        elif 19 <= y < 20:
+            y = y - 2.2
+        elif 18 <= y < 19:
+            y = y - 1.9
+        elif 17 <= y < 18:
+            y = y - 1.6
+        elif 16 <= y < 17:
+            y = y - 1.5
+        elif 15 <= y < 16:
+            y = y - 1.4
+        elif 14 <= y < 15:
+            y = y - 1.4
+        else:
+            y = y
 
         x = round(x, 1)
         y = round(y, 1)
@@ -148,10 +174,10 @@ class Perspective:
         cv2.line(image, self.point1, self.point2, (0, 255, 0), 2)
         cv2.line(image, self.point3, self.point4, (0, 255, 0), 2)
 
-        cv2.circle(image, self.point1, 5, (120, 90, 255), -1)
-        cv2.circle(image, self.point2, 5, (120, 90, 255), -1)
-        cv2.circle(image, self.point3, 5, (120, 90, 255), -1)
-        cv2.circle(image, self.point4, 5, (120, 90, 255), -1)
+        cv2.circle(image, self.point1, 3, (120, 90, 255), -1)
+        cv2.circle(image, self.point2, 3, (120, 90, 255), -1)
+        cv2.circle(image, self.point3, 3, (120, 90, 255), -1)
+        cv2.circle(image, self.point4, 3, (120, 90, 255), -1)
 
         cv2.circle(image, self.intersection_point, 8, (255, 0, 255), -1)
         cv2.circle(image, self.intersection_point2, 8, (255, 0, 255), -1)
@@ -162,7 +188,7 @@ class Perspective:
         cv2.line(image, self.point1, self.point3, (70, 160, 160), 2)
         
 
-        cv2.circle(image, self.intersection_point5, 8, (255, 0, 255), -1)
+        cv2.circle(image, self.intersection_point5, 3, (255, 0, 255), -1)
 
         cv2.line(image, self.intersection_point, self.point, (70, 160, 160), 2)
 
