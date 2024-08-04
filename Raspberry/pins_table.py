@@ -68,6 +68,8 @@ pins = Pins()
 
 
 if __name__ == '__main__':
+    import time
+
     pins.motor_enable.set_value(1)
     pins.motor_x_enable.set_value(0)
     pins.motor_y_enable.set_value(0)
@@ -80,8 +82,7 @@ if __name__ == '__main__':
     pins.get_value_log(pins.motor_z_enable)
     pins.get_value_log(pins.motor_p1p2_enable)
 
-    import time
-        
+    
     while True:
         pins.get_value_log(pins.switch_x)
         pins.get_value_log(pins.button_stop)
