@@ -1,7 +1,7 @@
 import asyncio
 
 from Filler_robot.MotorModules.motor import Motor
-from Filler_robot.NeuroModules.neuron import neuron
+# from Filler_robot.NeuroModules.neuron import neuron
 
 from Raspberry.pins_table import pins
 
@@ -14,7 +14,7 @@ class Pump:
 
         self.motor = motor
 
-        self.motor.speed_def = 0.000005
+        self.motor.speed_def = 0.0001
         self.direction = True
         
         self.turn = 0
@@ -51,10 +51,12 @@ class Pump:
         if self.bottle_ml - ml >= ml:
             self.motor.null_value()
 
-            # Создаем асинхронную задачу для вызова функции move мотора
-            task = asyncio.create_task(self.motor.move(self.turn, async_mode=True))
-            # Ожидаем завершения задачи
-            await task
+            await self.motor.move(self.turn, async_mode=True)
+
+            # # Создаем асинхронную задачу для вызова функции move мотора
+            # task = asyncio.create_task(self.motor.move(self.turn, async_mode=True))
+            # # Ожидаем завершения задачи
+            # await task
 
         else:
             self.warnning = True
@@ -66,11 +68,14 @@ class Pump:
         self.ready = True
         
 
-    def pour(self, ml):
+    def pour(self, ml, async_mode: bool = False):
         self.motor.value = 0
         self.motor.error_limit = False
         
-        asyncio.run(self._pour_async(ml))
+        if async_mode:
+            return self._pour_async(ml)
+        else:
+            asyncio.run(self._pour_async(ml))
     
 
 class Pump_station:
@@ -94,7 +99,7 @@ class Pump_station:
 
     def run(self):
         asyncio.run(self._all_pour_async())
-        self.statistic_write()
+        # self.statistic_write()
 
     
     def enable_motors(self, value = False):
@@ -111,6 +116,8 @@ class Pump_station:
 
 
     async def _all_pour_async(self):
+        self.enable_motors(True)
+
         if self.mode_game == False:
             turn1 = self.pump_1.ml
             turn2 = self.pump_2.ml
@@ -128,6 +135,8 @@ class Pump_station:
 
         await asyncio.gather(*tasks)
 
+        self.enable_motors(False)
 
-pump_station = Pump_station()
-#pump_station.run()
+
+# pump_station = Pump_station()
+# pump_station.run()

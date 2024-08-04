@@ -1,7 +1,7 @@
 import asyncio
 
 # from graphic_speed import Plotter
-from Lib.Decorators.wrapper import _timing, _log_input_output
+# from Lib.Decorators.wrapper import _timing, _log_input_output
 
 class Motor:
 	def __init__(self, name: str, pin_step, pin_direction, pin_enable):
@@ -28,15 +28,15 @@ class Motor:
 		self.speed = 0
 		
 		self.acc_run = True
-		self.acc_start = 30
-		self.k = 20
+		self.acc_start = 10
+		self.k = 2
 		self.distance_start = 0
-		self.distance_start_def = 30
+		self.distance_start_def = 0
 		self.step_start = 0
 		
-		self.acc_end = 30
+		self.acc_end = 10
 		self.distance_end = 0
-		self.distance_end_def = 30
+		self.distance_end_def = 0
 		self.step_end = 0
 
 		self.limit_min = -2000
@@ -83,7 +83,7 @@ class Motor:
 			return self.speed_def
         
 
-	@_log_input_output(False)
+	# @_log_input_output(False)
 	def acceleration(self, speed: float, step: int) -> float:
 		if self.acc_run:
 			if step < self.distance_start:
@@ -168,7 +168,7 @@ class Motor:
 		self.stop_for = False
 	
 
-	@_timing(True)
+	# @_timing(True)
 	async def _freq_async(self, frequency, sec, distance):
 		self.ready = False
 
@@ -244,8 +244,8 @@ class Motor:
 		asyncio.run(self._freq_async(self, frequency, k))
 
 
-	@_log_input_output(False)
-	@_timing(True)
+	# @_log_input_output(False)
+	# @_timing(True)
 	def move(self, distance: int, async_mode: bool = False):
 		if async_mode:
 			return self._move_async(distance)

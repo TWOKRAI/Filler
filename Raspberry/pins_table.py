@@ -35,8 +35,8 @@ class Pins():
         self.motor_p1_step = self.pin_init(18)
         self.motor_p1_dir = self.pin_init(15)
         
-        self.motor_p2_step = self.pin_init(23)
-        self.motor_p2_dir = self.pin_init(24)
+        self.motor_p2_step = self.pin_init(24)
+        self.motor_p2_dir = self.pin_init(23)
 
         self.motor_p1p2_enable = self.pin_init(7)
 
@@ -80,4 +80,10 @@ if __name__ == '__main__':
     pins.get_value_log(pins.motor_z_enable)
     pins.get_value_log(pins.motor_p1p2_enable)
 
-    pins.get_value_log(pins.switch_in)
+    import time
+        
+    while True:
+        pins.get_value_log(pins.switch_x)
+        pins.get_value_log(pins.button_stop)
+        pins.get_value_log(pins.button)
+        time.sleep(0.1)

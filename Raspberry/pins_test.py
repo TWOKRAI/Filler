@@ -25,27 +25,28 @@ class ToggleButton:
         spacer.pack()
 
 
-        pins.motor_enable.set_value(0)
-        self.pin_enable = pins.motor_enable
+        
+        self.pin_enable = pins.motor_p1p2_enable
+        self.pin_enable.set_value(0)
         self.state = False
-        self.button1 = tk.Button(root, text=f"enable_d {self.pin_enable}", command=lambda: self.enable(self.pin_enable))
+        self.button1 = tk.Button(root, text=f"enable {self.pin_enable}", command=lambda: self.enable(self.pin_enable))
         self.button1.pack()
 
-
-        pins.motor_step.set_value(0)
-        self.pin_step = pins.motor_step
+        
+        self.pin_step = pins.motor_p1_step
+        self.pin_step.set_value(0)
         self.state2 = False
-        self.button2 = tk.Button(root, text=f"step_d {self.pin_step}", command=lambda: self.step(self.pin_step))
+        self.button2 = tk.Button(root, text=f"step {self.pin_step}", command=lambda: self.step(self.pin_step))
         self.button2.pack()
 
-        self.button4 = tk.Button(root, text=f"step_d_while {self.pin_step}", command=lambda: self.step_while(self.pin_step))
+        self.button4 = tk.Button(root, text=f"step_while {self.pin_step}", command=lambda: self.step_while(self.pin_step))
         self.button4.pack()
 
 
-        self.pin_dir = pins.motor_dir
-        pins.motor_dir.set_value(0)
+        self.pin_dir = pins.motor_p1_dir
+        self.pin_step.set_value(0)
         self.state3 = False
-        self.button3 = tk.Button(root, text=f"dir_d {self.pin_dir}", command=lambda: self.dir(self.pin_dir))
+        self.button3 = tk.Button(root, text=f"dir {self.pin_dir}", command=lambda: self.dir(self.pin_dir))
         self.button3.pack()
         
         spacer = tk.Frame(root, height=20)
@@ -190,11 +191,9 @@ class ToggleButton:
         self.state = not self.state
 
         if self.state:
-            pins.set_value(pin , True)
+            pin.set_value(1)
         else:
-            pins.set_value(pin , False)
-
-        pins.get_value(pin)
+            pin.set_value(0)
 
 
 
@@ -202,22 +201,20 @@ class ToggleButton:
         self.state2 = not self.state2
 
         if self.state2:
-            pins.set_value(pin, True)
+            pin.set_value(1)
         else:
-            pins.set_value(pin, False)
-
-        pins.get_value(self.pin_step)
+            pin.set_value(0)
 
 
     def dir(self, pin):
         self.state3 = not self.state3
         
         if self.state3:
-            pins.set_value(1)
+            pin.set_value(1)
         else:
-            pins.set_value(0)
+            pin.set_value(0)
 
-        pins.get_value(pin)
+        pin.get_value(pin)
 
     
     def step_while(self, pin):
@@ -227,18 +224,16 @@ class ToggleButton:
         i = 0
 
         while i < step_value and self.running:
-            pins.set_value(1)
-            pins.get_value_log()
+            pin.set_value(1)
+            # pins.get_value_log()
             time.sleep(speed)
 
-            pins.set_value(0)
-            pins.get_value_log(pin)
+            pin.set_value(0)
+            # pins.get_value_log(pin)
             time.sleep(speed)
 
             i += 1
             print(i)
-        
-        pins.set_value(pin, False)
 
         
     def stop(self):
