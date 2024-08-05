@@ -497,7 +497,7 @@ class Robot_module:
 			pass
 
 		
-		self.distance_x = self.axis_x.angle_to_step(angle_x)
+		self.distance_x = self.axis_x.angle_to_step(angle_x) +150 
 		self.distance_y = self.axis_y.angle_to_step(angle_y)
 		self.distance_z = self.steps_find(angle_y, angle_z)
 
@@ -584,6 +584,8 @@ class Robot_module:
 
 				if self.button_stop == False:
 					# if y >= 7 * (1 + z/20):
+
+					self.interface.save_image(interface = 0)
 					self.neuron.find_objects()
 
 					try:
@@ -595,7 +597,7 @@ class Robot_module:
 							self.pump_station.run()
 							list_objects[i][0] = True
 
-					self.interface.save_image()
+					self.interface.save_image(interface = 1)
 					self.go_home()
 
 			i += 1

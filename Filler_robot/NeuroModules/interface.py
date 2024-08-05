@@ -44,7 +44,7 @@ class Interface(QObject):
 	
 	# @_timing(True)	
 	def running(self):
-		self.save_image()
+		self.save_image(1)
 		# self.get_trackbar()
 
 	
@@ -88,40 +88,36 @@ class Interface(QObject):
 		cv2.destroyAllWindows()
 
 	
-	def save_image(self):
+	def save_image(self, interface = 0):
 		if isinstance(self.camera.image_out, np.ndarray):
-			image_draw = self.draw_box(self.camera.image_out, self.neuron.objects_filter)
 
-			self.draw_box_all(image_draw)
+			match interface:
+				case 0:
+					pixmap = self.camera.image_out
 
-			point = (self.x, self.y)
-			point = self.camera.perspective.transform_coord(point)
+				case 1: 
+					image_draw = self.draw_box(self.camera.image_out, self.neuron.objects_filter)
 
-			point = self.camera.perspective.scale(point)
+					# self.draw_box_all(image_draw)
 
-			# self.camera.perspective.draw(image_draw)
+					point = (self.x, self.y)
+					point = self.camera.perspective.transform_coord(point)
 
-			img_monitor = image_draw[60:430,:]
+					point = self.camera.perspective.scale(point)
 
-			h, w, ch = img_monitor.shape
-			
+					self.camera.perspective.draw(image_draw)
+
+					pixmap = image_draw
+
+			img_monitor = pixmap[60:430,:]
+			h, w, ch = img_monitor.shape		
+
 			q_image = QImage(img_monitor.data.tobytes(), w, h, ch * w, QImage.Format_BGR888)
 			q_image = q_image.scaled(720, 480, Qt.KeepAspectRatio)
 
 			pixmap = QPixmap.fromImage(q_image)
 
 			self.frame_captured.emit(pixmap)
-
-			print(self.camera.image_out.shape)
-			
-
-		# self.img_monitor = camera.img_monitor[100:1700, 380:2280,:3]
-
-		# self.img_monitor = cv2.resize(self.img_monitor, (720, 480), interpolation = cv2.INTER_AREA)
-
-		# self.draw_box_all(self.img_monitor)
-		# self.draw_box(self.img_monitor)
-		# self.perspective(self.img_monitor)
 
 		
 	

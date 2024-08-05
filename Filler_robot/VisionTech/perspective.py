@@ -138,8 +138,8 @@ class Perspective:
         # y = y * (1 - y * y / 1000
 
         
-        x = x * 1
-        y = y * 0.95
+        x = x * 0.91
+        y = y * 0.96
 
         print(y)
 
