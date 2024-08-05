@@ -1,10 +1,11 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtCore import Qt, QSize, QTimer
+from PyQt5.QtCore import Qt, QSize, QTimer, QThread
 from PyQt5.QtGui import QIcon, QFont
 import os
 
 from Filler_interface.app import app
+from Filler_robot.robot_main import Robot_filler
 
 
 class Prepare_control(QMainWindow):
@@ -70,6 +71,25 @@ class Prepare_control(QMainWindow):
         self.lang = 0
 
         self.update()
+
+
+    def start_robot_thread(self, robot_on = False):
+        if not self.thread_robot.isRunning():
+            self.thread_robot = QThread()
+            self.robot_filler = Robot_filler(robot_on = True)
+            self.robot_filler.moveToThread(self.thread_robot)
+            self.thread_robot.started.connect(self.robot_filler.run)
+            self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
+            self.thread_robot.start()
+    
+
+    def stop_robot_thread(self):
+        if self.thread_robot is not None and self.thread_robot.isRunning():
+            self.robot_filler.stop()
+            self.thread_robot.quit()
+            self.thread_robot.wait()
+            # self.thread_robot = None
+            # self.robot_filler = None
 
 
     def show(self):
@@ -173,6 +193,8 @@ class Prepare_control(QMainWindow):
                     0: 'Начать 2',
                     1: 'Start2',
                 }
+
+                app.window_filler
 
             case _:
                 name_button = {

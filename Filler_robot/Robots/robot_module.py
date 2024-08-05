@@ -1,5 +1,6 @@
 import asyncio
 import math
+from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
 
 from Filler_robot.MotorModules.motor import Motor
 from Filler_robot.PumpStation.pumps import Pump_station
@@ -52,8 +53,8 @@ class Axis:
 		else:
 			angle_real = self.angle_0 - self.motor.value * self.step_angle
 
-		print(f'angle_real {self.name_axis}: {angle_real}')
-		print(f'angle_real {self.name_axis} motor value: {self.motor.value}')
+		# print(f'angle_real {self.name_axis}: {angle_real}')
+		# print(f'angle_real {self.name_axis} motor value: {self.motor.value}')
 
 		return angle_real
 
@@ -67,15 +68,15 @@ class Axis:
 
 
 	def angle_to_step(self, angle):
-		if self.print_on: 
-			print('angle_to_step, input:', angle)
+	# 	if self.print_on: 
+	# 		print('angle_to_step, input:', angle)
 
 		delta_angle = self.distance_angle(angle)
 		distance = delta_angle / self.step_angle
 
-		if self.print_on: 
-			print('angle_to_step',self.name_axis, angle, 'distance_angle', delta_angle, 'distance', distance)
-			print()
+		# if self.print_on: 
+		# 	print('angle_to_step',self.name_axis, angle, 'distance_angle', delta_angle, 'distance', distance)
+		# 	print()
 
 		return distance
 	
@@ -103,7 +104,7 @@ class Robot_module:
 		self.step_position_value = 300
 		self.step_position = 0
 
-		self.radius_min = 14
+		self.radius_min = 15
 		self.radius_max = 26
 
 		self.home = False
@@ -111,6 +112,8 @@ class Robot_module:
 		self.error_x = False
 		self.error_y = False
 		self.error_z = False
+
+		self.button_stop = False
 
 		self.motor_x = Motor('x', pins.motor_x_step, pins.motor_x_dir, pins.motor_x_enable)
 		self.motor_y = Motor('y', pins.motor_y_step, pins.motor_y_dir, pins.motor_y_enable)
@@ -122,9 +125,9 @@ class Robot_module:
 
 		self.axis_x = Axis('motor_x', self.motor_x)
 		
-		self.axis_x.motor.speed_def = 0.00005
-		self.axis_x.motor.direction = True
-		self.axis_x.step_angle = 0.062
+		self.axis_x.motor.speed_def = 0.0001
+		self.axis_x.motor.direction = False
+		self.axis_x.step_angle = 0.05
 		self.axis_x.angle_0 = 0
 		self.axis_x.angle = self.axis_x.angle_0
 		self.axis_x.limit_min = -90
@@ -133,25 +136,25 @@ class Robot_module:
 
 		self.axis_y = Axis('motor_y', self.motor_y)
 		self.axis_y.motor.enable_on(False)
-		self.axis_y.motor.speed_def = 0.00005
+		self.axis_y.motor.speed_def = 0.0001
 		self.axis_y.motor.direction = False
 		self.axis_y.step_angle = 0.13
 		self.axis_y.arm_lenght = 12
-		self.axis_y.angle_0 = 122
+		self.axis_y.angle_0 = 120
 		self.axis_y.angle = self.axis_y.angle_0
 		self.axis_y.y0 = 0
-		self.axis_y.z0 = 20.5
-		self.axis_y.limit_min = 2
+		self.axis_y.z0 = 22.5
+		self.axis_y.limit_min = 0
 		self.axis_y.limit_max = 122
 		
 
 		self.axis_z = Axis('motor_z', self.motor_z)
 		self.axis_z.motor.enable_on(False)
-		self.axis_z.motor.speed_def = 0.0002
+		self.axis_z.motor.speed_def = 0.0001
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
 		self.axis_z.direction_distance = False
-		self.axis_z.step_angle = 0.116
+		self.axis_z.step_angle = 0.12
 		self.axis_z.arm_lenght = 12
 		self.axis_z.angle_0 = 145
 		self.axis_z.angle = self.axis_z.angle_0
@@ -160,14 +163,31 @@ class Robot_module:
 		
 
 	def running(self):
-		if self.calibration_ready:
-			self.neuron.memory_objects = self.move_objects(self.neuron.objects)
+		self.move_objects()
+		# if self.calibration_ready:
+		# 	self.move_objects()
 
 
 	def enable_motors(self, value = False):
 		self.axis_x.motor.enable_on(value)
 		self.axis_y.motor.enable_on(value)
 		self.axis_z.motor.enable_on(value)
+
+	
+	def stop_motors(self):
+		self.pump_station.enable_motors(False)
+		self.pump_station.motor_1.stop_for = True
+		self.pump_station.motor_2.stop_for = True
+		self.axis_x.motor.stop_for = True
+		self.axis_y.motor.stop_for = True
+		self.axis_z.motor.stop_for = True
+
+		self.axis_x.motor.enable_on(False)
+		self.axis_y.motor.enable_on(False)
+		self.axis_z.motor.enable_on(False)
+
+		self.button_stop = True
+		
 
 
 	def null_value(self):
@@ -230,6 +250,7 @@ class Robot_module:
 
 		y2 = y1 + self.axis_z.arm_lenght * math.cos(math.radians(angle_z1 - angle_y))
 		z2 = z1 - self.axis_z.arm_lenght * math.sin(math.radians(angle_z1 - angle_y))
+
 
 		#print(round(x, 5), round(y2, 5), round(z2, 5))
 
@@ -300,7 +321,7 @@ class Robot_module:
 			if abs(x) >= abs(x0) and y >= y0 and z <= z0:
 				break
 
-			if i > 10000:
+			if i > 100000:
 				error = True
 				print('Error position', abs(x) >= abs(x0), y >= y0, z <= z0)
 				break
@@ -309,13 +330,39 @@ class Robot_module:
 		angle_y = round(angle_y, 3)
 		angle_z = round(angle_z, 3)
 
-		print(f"angle_x: {angle_x} x: {x}")
-		print(f"angle_y: {angle_y} y: {y}")
-		print(f"angle_z: {angle_z} z: {z}")
-		print('x0, y0, z0', x0, y0, z0)
+		# print(f"angle_x: {angle_x} x: {x}")
+		# print(f"angle_y: {angle_y} y: {y}")
+		# print(f"angle_z: {angle_z} z: {z}")
+		# print('x0, y0, z0', x0, y0, z0)
 
 		return angle_x, angle_y, angle_z, error
 	
+	
+	# def find_angle(self, x0, y0, z0):
+	# 	angle_x = self.axis_x.angle_0
+	# 	angle_y = self.axis_y.angle_0
+	# 	angle_z = self.axis_z.angle_0
+
+
+	# 	while True:
+	# 		x, y, z, error_limit_x, error_limit_y, error_limit_z = self.angle_to_coord(angle_x, angle_y, angle_z)
+
+	# 		if y <= y0:
+	# 			angle_y -= 1
+	# 			angle_z += 1
+	# 		else:
+	# 			if x0 > 0:
+	# 				if x < x0:
+	# 					angle_x += 1
+	# 			elif x0 < 0:
+	# 				if x > x0:
+	# 					angle_x -= 1 
+
+	# 			if abs(x) >= abs(x0):
+	# 				if z <= z0:
+
+
+
 
 	def steps_find(self, angle_y, angle_z):
 		delta_y = self.axis_y.distance_angle(angle_y)
@@ -376,6 +423,7 @@ class Robot_module:
 
 
 	async def _move_async(self, distance_x, distance_y, distance_z, detect = False):
+		
 		self.stopped = False
 		tasks = []
 
@@ -391,6 +439,7 @@ class Robot_module:
 			tasks.append(asyncio.create_task(self.axis_y.motor.move(distance_y, async_mode=True)))
 
 		if distance_z != 0:
+			
 			tasks.append(asyncio.create_task(self.axis_z.motor.move(distance_z, async_mode=True)))
 			
 		try:
@@ -422,27 +471,27 @@ class Robot_module:
 		angle_z0 = self.axis_z.angle_real()
 
 		x0, y0, z0, _, _, _ = self.angle_to_coord(angle_x0, angle_y0, angle_z0)
-		if self.print_on:
-			print('go_to_point', 'x0, y0, z0', x0, y0, z0)
-			print('go_to_point', 'angle_x0, angle_y0, angle_z0', angle_x0, angle_y0, angle_z0)
-			print()
+		# if self.print_on:
+			# print('go_to_point', 'x0, y0, z0', x0, y0, z0)
+			# print('go_to_point', 'angle_x0, angle_y0, angle_z0', angle_x0, angle_y0, angle_z0)
+			# print()
 
 		angle_x, angle_y, angle_z, error = self.find_angle(x, y, z)
-		if self.print_on:
-			print('go_to_point, self.find_angle', 'angle_x, angle_y, angle_z,', angle_x, angle_y, angle_z)
+		# if self.print_on:
+		# 	print('go_to_point, self.find_angle', 'angle_x, angle_y, angle_z,', angle_x, angle_y, angle_z)
 
 		x1, y1, z1, _, _, _ = self.angle_to_coord(angle_x, angle_y, angle_z)
-		if self.print_on:
-			print('go_to_point','proverka' , 'x, y, z', x1, y1, z1)
-			print()
+		# if self.print_on:
+		# 	print('go_to_point','proverka' , 'x, y, z', x1, y1, z1)
+		# 	print()
 
 		error_x = abs(x1 - x)
 		error_y = abs(y1 - y)
 		error_z = abs(z1 - z)
 
-		if self.print_on:
-			print('go_to_point','error', 'error_x, error_y, error_z', error_x, error_y, error_z)
-			print()
+		# if self.print_on:
+		# 	print('go_to_point','error', 'error_x, error_y, error_z', error_x, error_y, error_z)
+		# 	print()
 		
 		if error_x > 1 or error_y > 1 or error_z > 1:
 			pass
@@ -450,20 +499,31 @@ class Robot_module:
 		
 		self.distance_x = self.axis_x.angle_to_step(angle_x)
 		self.distance_y = self.axis_y.angle_to_step(angle_y)
+		self.distance_z = self.steps_find(angle_y, angle_z)
 
-		if self.home == False:
-			self.distance_z = self.steps_find(angle_y, angle_z)
-		else:
-			self.distance_z = self.axis_z.angle_to_step(angle_z)
+		# if self.home == False:
+		# 	self.distance_z = self.steps_find(angle_y, angle_z)
+		# else:
+		# 	self.distance_z = self.axis_z.angle_to_step(angle_z)
 
-		self.home = False
+		# self.home = False
 
 		if self.print_on:
 			print('go_to_point', 'distance_x, distance_y, distance_z', self.distance_x, self.distance_y, self.distance_z)
 			print()
 
-		#input('GO???')
+		# input('GO???')
+
+
+		self.distance_x_end = self.distance_x
+		self.distance_y_end = self.distance_y
+		self.distance_z_end = self.distance_z
+
+		
+
 		self.move(self.distance_x, self.distance_y, self.distance_z)
+		# self.move(0, 0, 90)
+		
 		
 		print('go_to_point Приехал в координаты:', 
 			'x:', x1, 'angle x:', self.axis_x.angle_real(),
@@ -471,7 +531,7 @@ class Robot_module:
 			'z:', z1, 'angle z:', self.axis_z.angle_real())
 		
 
-		#input('&&&&&')
+		# input('&&&&&')
 		#time.sleep(1)
 
 
@@ -486,18 +546,23 @@ class Robot_module:
 		else:
 			limit_check = False
 
-		if self.print_on:
-			print('check_limit radius', radius, limit_check)
+		# if self.print_on:
+		# 	print('check_limit radius', radius, limit_check)
 
 		return limit_check
 
 
-	def move_objects(self, list_objects):
-		list_coord = self.neuron.list_coord(list_objects)
+	def move_objects(self):
+		
+		list_objects = self.neuron.objects_filter
+		list_coord = self.neuron.list_coord
 
-		if self.print_on:
-			print('move_objects list_objects', list_objects)
-			print('move_objects list_coord', list_coord)
+		# if self.print_on:
+		print('move_objects list_objects', list_objects)
+		
+		
+		print('move_objects list_coord', list_coord)
+
 
 		i = 0
 		limit = False
@@ -507,53 +572,92 @@ class Robot_module:
 
 			limit = self.check_limit(x, y, z)
 
-			if list_objects[i][0] == False and limit == True:
-				z = z + 2
+			if list_objects[i][0] == False and limit == True: 
+				# z = z + 2
 				
 				self.go_to_point(x, y, z)
 
 				self.camera.read_cam()
 
-				self.interface.show_img()
+				# self.neuron.find_objects()
 
-				if y >= 10 * (1 + z/20):
+
+				if self.button_stop == False:
+					# if y >= 7 * (1 + z/20):
 					self.neuron.find_objects()
 
 					try:
-						value = self.neuron.objects[i][4]
+						value = self.neuron.objects_filter[i][4]
 					except:
 						value = 0
 					finally:
 						if abs(list_objects[i][4] - value) < self.neuron.region_x:
 							self.pump_station.run()
-
 							list_objects[i][0] = True
-				else:
-					self.pump_station.run()
-					list_objects[i][0] = True
-				
-				self.go_home()
+
+					self.interface.save_image()
+					self.go_home()
 
 			i += 1
 
-			self.interface.show_img()
+			# self.interface.save_image()
+		
+		# print('move_objects list_coord', list_objects)
+		# input()
 
-		return list_objects
-	
+		self.neuron.memory_objects = list_objects
+
+
+	async def _detect_switch(self):
+		while True:
+			switch_x = pins.switch_x.get_value()
+
+			if switch_x:
+				raise asyncio.CancelledError()
+
+			await asyncio.sleep(0.001)
+
+
+	async def _calibration_async(self):
+		tasks = []
+
+		distance_x = -3000
+		
+		tasks.append(asyncio.create_task(self._detect_switch()))
+		tasks.append(asyncio.create_task(self.axis_x.motor.move(distance_x, async_mode=True)))
+			
+
+		try:
+			await asyncio.gather(*tasks)
+		except asyncio.CancelledError:
+			for task in tasks:
+				if not task.done():
+					task.cancel()
+
 
 	def calibration(self):
-		self.move(3000, 0, 0, detect = True)
-		self.move(self.calib_distance, 0, 0)
+		self.enable_motors(True)
+
+		asyncio.run(self._calibration_async())
+		self.move(970, 0, 0)
 
 		self.calibration_ready = True
 
 
 	def go_home(self):
-		self.home = True 
-		self.go_to_point(0, 9, 27)
-		self.motor_y.move(-20)
-		self.null_value()
+		# if self.distance_x_end >= 0:
+		# 	self.distance_x_end = -self.distance_x_end
+		# else:
+		# 	self.distance_x_end = self.distance_x_end
 
+		
+		print(self.distance_x_end, -self.distance_y_end, -self.distance_z_end)
+
+		# self.move(0, 0, -90)
+		self.move(-self.distance_x_end, -self.distance_y_end, -self.distance_z_end)
+		self.home = True
+
+		self.null_value()
 
 		print('go home')
 

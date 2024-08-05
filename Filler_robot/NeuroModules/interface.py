@@ -29,7 +29,7 @@ class Interface(QObject):
 
 		self.img_monitor = None
 		
-		self.create_window()
+		# self.create_window()
 
 
 	def _visual_line(func):
@@ -45,7 +45,7 @@ class Interface(QObject):
 	# @_timing(True)	
 	def running(self):
 		self.save_image()
-		self.get_trackbar()
+		# self.get_trackbar()
 
 	
 	def create_window(self):
@@ -99,7 +99,7 @@ class Interface(QObject):
 
 			point = self.camera.perspective.scale(point)
 
-			self.camera.perspective.draw(image_draw)
+			# self.camera.perspective.draw(image_draw)
 
 			img_monitor = image_draw[60:430,:]
 
@@ -179,7 +179,7 @@ class Interface(QObject):
 				cv2.putText(image, text, (x1, y1 - 2), cv2.FONT_HERSHEY_COMPLEX, 0.7, color_box, 1)
 
 				cv2.rectangle(image, (int(xr_center - 4), yr_center - 4),(int(xr_center + 4), yr_center + 4), (255, 255, 0), -1)
-				# cv2.rectangle(image, (int(xr_center - neuron.region_x), yr_center - neuron.region_y),(int(xr_center + neuron.region_x), yr_center + neuron.region_y), (0, 255, 0), 1)
+				cv2.rectangle(image, (int(xr_center - self.neuron.region_x), yr_center - self.neuron.region_y),(int(xr_center + self.neuron.region_x), yr_center + self.neuron.region_y), (0, 255, 0), 1)
 				
 				cv2.rectangle(image, (int(xr_center_2 - 4), yr_center_2 - 4),(int(xr_center_2 + 4), yr_center_2 + 4), (255, 255, 0), -1)
 
@@ -187,7 +187,7 @@ class Interface(QObject):
 
 				cv2.line(image, (x1, yr_center), (x1 + w, yr_center), (255, 255, 0), 1)
 				
-				#cv2.line(image, (int(xr_center), yr_center), (int(xr_center - perspective * 4), y1 + h), (255, 255, 0), 1)
+				# cv2.line(image, (int(xr_center), yr_center), (int(xr_center - perspective * 4), y1 + h), (255, 255, 0), 1)
 
 				cv2.line(image, (int(xr_center), yr_center), (int(xr_center_2), yr_center_2), (255, 255, 0), 1)
 

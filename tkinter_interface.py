@@ -70,7 +70,7 @@ def enable_all():
 	if tkinter_var.enable == False:
 		robot.axis_x.motor.enable_on(True)
 		robot.axis_y.motor.enable_on(True)
-		# robot.axis_z.motor.enable_on(True)
+		robot.axis_z.motor.enable_on(True)
 
 		pump_station.pump_1.motor.enable_on(True)
 		pump_station.pump_2.motor.enable_on(True)

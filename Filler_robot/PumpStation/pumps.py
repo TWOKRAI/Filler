@@ -17,7 +17,7 @@ class Pump:
         self.turn = 0
         self.ml = 50
         self.amount = 1
-        self.step_amount = 3500
+        self.step_amount = 0.01
 
         self.bottle_ml = 100
         self.bottle_min = 50
@@ -27,7 +27,7 @@ class Pump:
     
 
     def ml_to_steps(self, ml):
-        steps = int(ml / self.amount * self.step_amount)
+        steps = int(ml / self.step_amount)
 
         if self.print_on:
             print(f'pump {self.name}, ml_to_steps // output: steps = {steps}')
@@ -42,26 +42,30 @@ class Pump:
     async def _pour_async(self, ml):
         self.turn = self.ml_to_steps(ml)
 
-        self.motor.limit_min = -1 * (self.turn + 1000)
-        self.motor.limit_max = self.turn + 1000
+        await self.motor._freq_async(800, 1, self.turn)
+
+        # self.turn = self.ml_to_steps(ml)
+
+        # self.motor.limit_min = -1 * (self.turn + 1000)
+        # self.motor.limit_max = self.turn + 1000
         
-        if self.bottle_ml - ml >= ml:
-            self.motor.null_value()
+        # if self.bottle_ml - ml >= ml:
+        #     self.motor.null_value()
 
-            # await self.motor.move(self.turn, async_mode=True)
-            await self.motor._freq_async(100, 1, self.turn)
+        #     # await self.motor.move(self.turn, async_mode=True)
+        #     await self.motor._freq_async(1000, 1, self.turn)
 
-            # # Создаем асинхронную задачу для вызова функции move мотора
-            # task = asyncio.create_task(self.motor.move(self.turn, async_mode=True))
-            # # Ожидаем завершения задачи
-            # await task
+        #     # # Создаем асинхронную задачу для вызова функции move мотора
+        #     # task = asyncio.create_task(self.motor.move(self.turn, async_mode=True))
+        #     # # Ожидаем завершения задачи
+        #     # await task
 
-        else:
-            self.warnning = True
-            print(f'Pour {self.name}: WARNING')
+        # else:
+        #     self.warnning = True
+        #     print(f'Pour {self.name}: WARNING')
 
-        if self.print_on:
-            print(f'Pour {self.name} : {self.turn}')
+        # if self.print_on:
+        #     print(f'Pour {self.name} : {self.turn}')
 
         self.ready = True
         

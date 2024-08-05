@@ -21,7 +21,7 @@ class Robot_filler(QObject):
         self.robot = Robot_module(self.camera, self.neuron, self.interface)
 
         self.camera_on = True
-        self.neuron_on = False
+        self.neuron_on = True
         self.inteface_on = True
         self.robot_on = robot_on
         
@@ -33,6 +33,8 @@ class Robot_filler(QObject):
     
 
     def run(self) -> None:
+        self.robot.enable_motors(True)
+
         while self.running:
             # temp = check_temperature()
             # write_to_file(temp, 'log_temp.txt')
@@ -42,24 +44,7 @@ class Robot_filler(QObject):
             if self.inteface_on: self.interface.running()
             if self.robot_on: self.robot.running()
 
-            
-            #QThread.msleep(300)
-
-            # if image_cam is not None and isinstance(image_cam, np.ndarray):
-            #     self.neuron.find_objects(image_cam)
-
-            #     self.interface.save_image(image_cam)
-                
-            #     image_cam = None
-            # else:
-            #     QThread.msleep(300)
-
-            # if self.robot_on: 
-            #     robot.running()
-            # else:
-            #     robot.enable_motors(False)
-
-            #QThread.msleep(1000)
+            QThread.msleep(2000)
 
         self.camera.stop()
 

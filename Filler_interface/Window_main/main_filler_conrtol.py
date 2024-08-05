@@ -115,7 +115,7 @@ class Main_filler_control(QMainWindow):
 
 
     def start(self):
-        app.window_list1.show()
+        app.window_settings1.show()
         self.hide()
         
 

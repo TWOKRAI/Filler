@@ -49,6 +49,8 @@ from Filler_robot.Monitor.motor_monitor import Motor_monitor
 class Input_request(QObject):
     pin_values_updated = pyqtSignal(dict)
     show_error = pyqtSignal()
+    error = pyqtSignal()
+
 
     def __init__(self) -> None:
         super().__init__()
@@ -75,9 +77,10 @@ class Input_request(QObject):
 
         while self.running:
             try:
-                if pins.switch_x.get_value():
+                if pins.button_stop.get_value():
                     self.button_error = True
                     self.show_error.emit()
+                    self.error.emit()
                 else:
                     self.button_error = False
                 

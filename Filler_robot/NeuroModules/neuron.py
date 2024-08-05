@@ -89,7 +89,7 @@ class Neuron:
 		
 		self.region_x = 20
 		self.region_y = 20
-		self.leen = 1800
+		self.leen = 2000
 		
 		self.hands_data = []
 		self.hands_found = False
@@ -160,8 +160,15 @@ class Neuron:
 
 					self.perspective = (xr_center - img_width / 2) * 1 / self.factor_x
 
-					yr_center_2 = int(y1 + h - w * (y1 + h) / self.leen * 1.5)
-					xr_center_2 = int(x1 + w / 2) - self.perspective
+					yr_center_2 = int((y1 + h )* 0.96 - w * (y1) / self.leen * 1.6)
+					
+					xr_center_2 = int(x1 + w / 1.8) - self.perspective * 1.2
+
+					# if x1 <= self.camera.img_width/2 and  y1 >= 300:
+					# 	xr_center_2 = int(x1 + w / 2) - self.perspective * 1.7
+
+					# yr_center_2 =  y1 + h
+					# xr_center_2 = (int(xr_center - self.perspective * 4), y1 + h)
 
 					xr_center = int(xr_center + self.perspective)
 
@@ -213,7 +220,7 @@ class Neuron:
 			box = bbox[i]
 			x1, y1, w, h = box[0], box[1], box[2], box[3]
 			
-			yr_center = int(y1 + w*(y1+h)/self.leen)
+			yr_center = int(y1 + w*(y1 + h * 1.2)/self.leen)
 			xr_center = int(x1 + w/2)
 					
 			self.perspective = (xr_center - wt/2) * 1/self.factor_x
@@ -221,6 +228,9 @@ class Neuron:
 			print('perspective', self.perspective)
 			
 			xr_center = int(xr_center + self.perspective)
+
+			# if y1 >= 300:
+
 			
 			self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective])
 			print('objects', self.objects_all)
@@ -331,6 +341,7 @@ class Neuron:
 
 			x = xr_center_2
 			y = yr_center_2
+			z = h * 0.061
 
 			point = (x, y)
 			
@@ -338,6 +349,8 @@ class Neuron:
 			point = self.camera.perspective.scale(point)
 
 			# point = [10, 1]
+
+			y = y * (1 - abs(x)/20)
 
 
 			x = round(point[0], 1)

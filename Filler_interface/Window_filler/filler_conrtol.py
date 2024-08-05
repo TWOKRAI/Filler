@@ -79,10 +79,12 @@ class filler_control(QMainWindow):
     def start_robot_thread(self):
         if not self.thread_robot.isRunning():
             self.thread_robot = QThread()
-            self.robot_filler = Robot_filler()
+            self.robot_filler = Robot_filler(robot_on = True)
             self.robot_filler.moveToThread(self.thread_robot)
             self.thread_robot.started.connect(self.robot_filler.run)
             self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
+            self.input_request.error.connect(self.robot_filler.robot.stop_motors)
+            self.input_request.error.connect(app.window_view.close)
             self.thread_robot.start()
     
 
@@ -103,6 +105,7 @@ class filler_control(QMainWindow):
             self.thread_input.started.connect(self.input_request.run)
 
             self.input_request.show_error.connect(app.window_error.show)
+            
 
             self.input_request.motor_monitor.on_signal.connect(app.window_start.close)
             self.input_request.motor_monitor.off_signal.connect(app.window_start.show)
