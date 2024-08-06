@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 
 from Filler_interface.app import app 
 
+
 class low_control(QMainWindow, Ui_low):
     def __init__(self):
         super().__init__()

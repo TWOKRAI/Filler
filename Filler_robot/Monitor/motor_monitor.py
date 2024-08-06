@@ -113,8 +113,8 @@ class Motor_monitor(QObject):
         self.motor.ready = False
 
 
-if __name__ == '__main__':
-    motor_monitor = Motor_monitor()
+# if __name__ == '__main__':
+#     motor_monitor = Motor_monitor()
 
-    while True:
-        motor_monitor.run()
+#     while True:
+#         motor_monitor.run()

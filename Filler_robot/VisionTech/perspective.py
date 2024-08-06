@@ -138,8 +138,8 @@ class Perspective:
         # y = y * (1 - y * y / 1000
 
         
-        x = x * 0.91
-        y = y * 0.96
+        x = x * 0.96
+        y = y * 0.925
 
         print(y)
 
@@ -147,24 +147,24 @@ class Perspective:
 
         print(y)
 
-        if y > 21:
-            y = y - 6
-        elif 20 <= y < 21:
-            y = y - 5.6
-        elif 19 <= y < 20:
-            y = y - 5.3
-        elif 18 <= y < 19:
-            y = y - 5.1
-        elif 17 <= y < 18:
-            y = y - 4.8
-        elif 16 <= y < 17:
-            y = y - 4.1
-        elif 15 <= y < 16:
-            y = y - 4
-        elif 14 <= y < 15:
-            y = y - 4
-        else:
-            y = y
+        # if y > 21:
+        #     y = y - 1.2
+        # elif 20 <= y < 21:
+        #     y = y - 1.1
+        # elif 19 <= y < 20:
+        #     y = y - 1.2
+        # if 18 <= y < 19:
+        #     y = y - 1
+        # if 17 <= y < 18:
+        #     y = y - 1.1
+        # if 16 <= y < 17:
+        #     y = y - 1
+        # elif 15 <= y < 16:
+        #     y = y - 1.4
+        # elif 14 <= y < 15:
+        #     y = y - 1.4
+        # else:
+        #     y = y
 
 
         x = round(x, 1)

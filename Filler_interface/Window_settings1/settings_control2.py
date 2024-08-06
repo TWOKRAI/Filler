@@ -152,12 +152,10 @@ class Control(Control):
 
     def get_parametrs(self): 
         self.param_list = {
-            1: filler.param111,
-            2: filler.param222,
-            3: filler.param3,
-            4: filler.param4,
-            5: filler.param5,
-            6: filler.param6,
+            1: filler.param3,
+            2: filler.param4,
+            3: filler.param5,
+            4: filler.param6,
         }
     
         return self.param_list
@@ -170,12 +168,10 @@ class Control(Control):
 
 
     def put_parametrs(self):
-        filler.param111 = self.param_list[1]
-        filler.param222 = self.param_list[2]
-        filler.param3 = self.param_list[3]
-        filler.param4 = self.param_list[4]
-        filler.param5 = self.param_list[5]
-        filler.param6 = self.param_list[6]
+        filler.param3 = self.param_list[1]
+        filler.param4 = self.param_list[2]
+        filler.param5 = self.param_list[3]
+        filler.param6 = self.param_list[4]
 
 
     def memory_write(self, data):
@@ -183,8 +179,6 @@ class Control(Control):
 
     
     def default_parametrs(self):
-        filler.param111 = 0
-        filler.param222 = 1
         filler.param3 = 500
         filler.param4 = 600
         filler.param5 = 59
@@ -241,24 +235,6 @@ class Control(Control):
                 }
 
                 size_text = 21
-            case 6:
-                text = {
-                    0: 'НАСТРОЙКА РОЗЛИВА', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
-            case 7:
-                text = {
-                    0: 'НАСТРОЙКА РОЗЛИВА', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
             case _:
                 text = {
                     0: 'НАСТРОЙКА РОЗЛИВА', 
@@ -298,27 +274,9 @@ class Control(Control):
         match self.param_num:
             case 1:
                 value = self.param_list[self.param_num]
-
-                value_text = [
-                    ['Нет', 'No'],
-                    ['Да', 'Yes'],
-                    ]
-
-                value = value_text[value]
-                value = value[self.lang]
-
                 size_text = 90
             case 2:
                 value = self.param_list[self.param_num]
-
-                value_text = [
-                    ['Нет', 'No'],
-                    ['Да', 'Yes'],
-                    ]
-
-                value = value_text[value]
-                value = value[self.lang]
-        
                 size_text = 90
             case 3:
                 value = self.param_list[self.param_num]
@@ -327,12 +285,6 @@ class Control(Control):
                 value = self.param_list[self.param_num]
                 size_text = 90
             case 5:
-                value = self.param_list[self.param_num]
-                size_text = 90
-            case 6:
-                value = self.param_list[self.param_num]
-                size_text = 90
-            case 7:
                 value =  {
                     0: 'Готово',
                     1: 'Ready',
@@ -360,19 +312,19 @@ class Control(Control):
         match self.param_num:
             case 1:
                 text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
+                    0: 'мл',
+                    1: 'ml',
+                    2: 'ml',
+                    3: '毫升',
                 }
 
                 size_text = 30
             case 2:
                 text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
+                    0: 'мл',
+                    1: 'ml',
+                    2: 'ml',
+                    3: '毫升',
                 }
 
                 size_text = 30
@@ -395,24 +347,6 @@ class Control(Control):
 
                 size_text = 30
             case 5:
-                text = {
-                    0: 'мл',
-                    1: 'ml',
-                    2: 'ml',
-                    3: '毫升',
-                }
-
-                size_text = 30
-            case 6:
-                text = {
-                    0: 'мл',
-                    1: 'ml',
-                    2: 'ml',
-                    3: '毫升',
-                }
-
-                size_text = 30
-            case 7:
                 text = {
                     0: '',
                     1: '',
@@ -446,24 +380,6 @@ class Control(Control):
         match self.param_num:
             case 1:
                 text = {
-                    0: 'Тип напитка 1',
-                    1: 'Volume 1 /ml',
-                    2: 'Sprache',
-                    3: '語言',
-                }
-
-                size_text = 30
-            case 2:
-                text = {
-                    0: 'Тип напитка 2',
-                    1: 'Volume2 /ml',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 3:
-                text = {
                     0: 'Объем 1 бутылки',
                     1: 'Volume 1 /ml',
                     2: '',
@@ -471,7 +387,7 @@ class Control(Control):
                 }
 
                 size_text = 30
-            case 4:
+            case 2:
                 text = {
                     0: 'Объем 2 бутылки',
                     1: 'Volume 2 /ml',
@@ -480,7 +396,7 @@ class Control(Control):
                 }
 
                 size_text = 30
-            case 5:
+            case 3:
                 text = {
                     0: 'Дозировка напитка 1',
                     1: 'Цвет 21 (Иконка)',
@@ -489,7 +405,7 @@ class Control(Control):
                 }
 
                 size_text = 30
-            case 6:
+            case 4:
                 text = {
                     0: 'Дозировка напитка 2',
                     1: 'Цвет 21 (Иконка)',
@@ -498,7 +414,7 @@ class Control(Control):
                 }
 
                 size_text = 30
-            case 7:
+            case 5:
                 text = {
                     0: 'Нажмите далее',
                     1: 'Нажмите далее 2',
@@ -536,24 +452,18 @@ class Control(Control):
 
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
+                if self.param_list[self.param_num] >= 50:
+                    self.param_list[self.param_num] -= 50
             case 2:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
+                if self.param_list[self.param_num] >= 50:
+                    self.param_list[self.param_num] -= 50
             case 3:
-                if self.param_list[self.param_num] >= 50:
-                    self.param_list[self.param_num] -= 50
+                if self.param_list[self.param_num] >= 5:
+                    self.param_list[self.param_num] -= 5
             case 4:
-                if self.param_list[self.param_num] >= 50:
-                    self.param_list[self.param_num] -= 50
+                if self.param_list[self.param_num] >= 5:
+                    self.param_list[self.param_num] -= 5
             case 5:
-                if self.param_list[self.param_num] >= 5:
-                    self.param_list[self.param_num] -= 5
-            case 6:
-                if self.param_list[self.param_num] >= 5:
-                    self.param_list[self.param_num] -= 5
-            case 7:
                 pass
 
         self.update()
@@ -574,10 +484,6 @@ class Control(Control):
                 pass
             case 5:
                 pass
-            case 6:
-                pass
-            case 7:
-                pass
  
             
         self.update()
@@ -588,42 +494,30 @@ class Control(Control):
     def minus_enable(self):
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 2:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 3:
                 if self.param_list[self.param_num] <= 10:
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
 
-            case 4:
+            case 2:
                 if self.param_list[self.param_num] <= 30:
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
 
+            case 3:
+                if self.param_list[self.param_num] <= 0:
+                    self.button_minus.setEnabled(False)
+                else:
+                    self.button_minus.setEnabled(True)
+
+            case 4:
+                if self.param_list[self.param_num] <= 0:
+                    self.button_minus.setEnabled(False)
+                else:
+                    self.button_minus.setEnabled(True)
+
             case 5:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 6:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 7:
                 self.button_minus.setEnabled(False)
 
 
@@ -634,41 +528,30 @@ class Control(Control):
 
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] < 1:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-            case 2:
-                if self.param_list[self.param_num] < 1:
-                    self.param_list[self.param_num] += 1
-                    
-                self.put_parametrs()
-                
-            case 3:
                 if self.param_list[self.param_num] < 1000:
                     self.param_list[self.param_num] += 50
 
                 self.put_parametrs()
                 
-            case 4:
+            case 2:
                 if self.param_list[self.param_num] < 1200:
                     self.param_list[self.param_num] += 50
                 
                 self.put_parametrs()
                 
-            case 5:
+            case 3:
                 if self.param_list[self.param_num] < 100:
                     self.param_list[self.param_num] += 5
                 
                 self.put_parametrs()
                 
-            case 6:
+            case 4:
                 if self.param_list[self.param_num] < 120:
                     self.param_list[self.param_num] += 5
                 
                 self.put_parametrs()
                 
-            case 7:
+            case 5:
                 pass
                 
 
@@ -690,11 +573,6 @@ class Control(Control):
                 pass
             case 5:
                 pass
-            case 6:
-                pass
-            case 7:
-                pass
-
 
         self.update()
 
@@ -705,42 +583,30 @@ class Control(Control):
     def plus_enable(self):
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] >= 1:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 2:
-                if self.param_list[self.param_num] >= 1:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 3:
                 if self.param_list[self.param_num] >= 1000:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
-            case 4:
+            case 2:
                 if self.param_list[self.param_num] >= 1200:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
-            case 5:
+            case 3:
                 if self.param_list[self.param_num] >= 100:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
-            case 6:
+            case 4:
                 if self.param_list[self.param_num] >= 120:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
-            case 7:
+            case 5:
                 self.button_plus.setEnabled(False)
 
 
@@ -769,7 +635,7 @@ class Control(Control):
             self.param_num += 1
         
         match self.param_num:
-            case 8:
+            case 6:
                 app.window_prepare.show()
                 self.hide()    
 

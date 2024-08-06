@@ -44,6 +44,8 @@ class App(QApplication):
 
         self.installEventFilter(self)
 
+        self.ready = False
+
     
     def run(self):
         self.set_style()
@@ -247,3 +249,8 @@ app.window_robot = window_robot
 from Filler_interface.Window_filler.filler_conrtol import filler_window
 app.window_filler = filler_window
 
+
+from Filler_interface.threads import thread
+thread.start_input_thread()
+
+app.ready = True

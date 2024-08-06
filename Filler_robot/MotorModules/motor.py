@@ -169,7 +169,7 @@ class Motor:
 	
 
 	# @_timing(True)
-	async def _freq_async(self, frequency, sec, distance):
+	async def _freq_async(self, frequency, sec, distance, accuration = True):
 		self.ready = False
 
 		if distance >= 0:
@@ -177,7 +177,10 @@ class Motor:
 		else:
 			self.pin_direction.set_value(not self.direction)
 
-		acc = False
+		if accuration == True:
+			acc = False
+		else:
+			acc = True
 
 		time_distance = 0
 		k = 0.01
@@ -214,6 +217,7 @@ class Motor:
 
 				
 				acc = True
+				
 
 			time_distance += k
 			# print(time_distance)
@@ -221,8 +225,12 @@ class Motor:
 						
 			if time_distance >= stop_distance - sec:
 				break
-			
-					
+		
+		
+		self.pin_step.frequency = frequency
+		self.pin_step.value = 0.5
+
+
 		for f in range(frequency, -1, -int(step)):
 			self.pin_step.frequency = f
 			self.pin_step.value = 0.5

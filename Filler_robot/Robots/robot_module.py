@@ -104,8 +104,8 @@ class Robot_module:
 		self.step_position_value = 300
 		self.step_position = 0
 
-		self.radius_min = 15
-		self.radius_max = 26
+		self.radius_min = 16
+		self.radius_max = 27
 
 		self.home = False
 
@@ -127,7 +127,7 @@ class Robot_module:
 		
 		self.axis_x.motor.speed_def = 0.0001
 		self.axis_x.motor.direction = False
-		self.axis_x.step_angle = 0.05
+		self.axis_x.step_angle = 0.045
 		self.axis_x.angle_0 = 0
 		self.axis_x.angle = self.axis_x.angle_0
 		self.axis_x.limit_min = -90
@@ -154,12 +154,14 @@ class Robot_module:
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
 		self.axis_z.direction_distance = False
-		self.axis_z.step_angle = 0.12
+		self.axis_z.step_angle = 0.09
 		self.axis_z.arm_lenght = 12
 		self.axis_z.angle_0 = 145
 		self.axis_z.angle = self.axis_z.angle_0
 		self.axis_z.limit_min = 145
 		self.axis_z.limit_max = 95
+
+		self.calibration()
 		
 
 	def running(self):
@@ -497,7 +499,7 @@ class Robot_module:
 			pass
 
 		
-		self.distance_x = self.axis_x.angle_to_step(angle_x) +150 
+		self.distance_x = self.axis_x.angle_to_step(angle_x) #+150 
 		self.distance_y = self.axis_y.angle_to_step(angle_y)
 		self.distance_z = self.steps_find(angle_y, angle_z)
 
@@ -541,7 +543,7 @@ class Robot_module:
 
 		radius = math.sqrt((x**2) + (y**2))
 
-		if self.radius_min <= radius <= self.radius_max:
+		if self.radius_min <= radius <= self.radius_max and -15 <= x <= 15:
 			limit_check = True
 		else:
 			limit_check = False
@@ -553,6 +555,7 @@ class Robot_module:
 
 
 	def move_objects(self):
+		self.enable_motors(True)
 		
 		list_objects = self.neuron.objects_filter
 		list_coord = self.neuron.list_coord
@@ -577,35 +580,42 @@ class Robot_module:
 				
 				self.go_to_point(x, y, z)
 
-				self.camera.read_cam()
+				
 
 				# self.neuron.find_objects()
 
 
 				if self.button_stop == False:
-					# if y >= 7 * (1 + z/20):
+					if y <= 18:
+						for _ in range(6):
+							self.camera.read_cam()
+							self.neuron.find_objects()
+							self.interface.save_image(interface = 1)
 
-					self.interface.save_image(interface = 0)
-					self.neuron.find_objects()
-
-					try:
-						value = self.neuron.objects_filter[i][4]
-					except:
-						value = 0
-					finally:
-						if abs(list_objects[i][4] - value) < self.neuron.region_x:
-							self.pump_station.run()
-							list_objects[i][0] = True
+							try:
+								value_x = self.neuron.objects_filter[i][4]
+								value_y = self.neuron.objects_filter[i][5]
+							except:
+								value_x = 0
+								value_y = 0
+							finally:
+								if abs(list_objects[i][4] - value_x) < self.neuron.region_x or abs(list_objects[i][5] - value_y < self.neuron.region_y):
+									self.pump_station.run()
+									list_objects[i][0] = True
+								
+								if value_x != 0 and value_y != 0:
+									break
+					else:
+						self.pump_station.run()
+						list_objects[i][0] = True
 
 					self.interface.save_image(interface = 1)
 					self.go_home()
 
 			i += 1
-
-			# self.interface.save_image()
 		
 		# print('move_objects list_coord', list_objects)
-		# input()
+	
 
 		self.neuron.memory_objects = list_objects
 
@@ -657,9 +667,16 @@ class Robot_module:
 
 		# self.move(0, 0, -90)
 		self.move(-self.distance_x_end, -self.distance_y_end, -self.distance_z_end)
+
+		# self.axis_y.motor.speed_def = self.axis_y.motor.speed_def * 20
+		# self.move(0, -10, 0)
+		# self.axis_y.motor.speed_def = self.axis_y.motor.speed_def / 20
+
 		self.home = True
 
 		self.null_value()
+
+		self.enable_motors(False)
 
 		print('go home')
 

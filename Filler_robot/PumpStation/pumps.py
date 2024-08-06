@@ -15,9 +15,10 @@ class Pump:
         self.motor = motor
         
         self.turn = 0
-        self.ml = 50
+        self.ml = 30 + 2
         self.amount = 1
-        self.step_amount = 0.01
+        self.step_amount = 0.003
+        self.speed = 1000
 
         self.bottle_ml = 100
         self.bottle_min = 50
@@ -42,7 +43,7 @@ class Pump:
     async def _pour_async(self, ml):
         self.turn = self.ml_to_steps(ml)
 
-        await self.motor._freq_async(800, 1, self.turn)
+        await self.motor._freq_async(self.speed, 1, self.turn)
 
         # self.turn = self.ml_to_steps(ml)
 
@@ -78,6 +79,7 @@ class Pump:
             return self._pour_async(ml)
         else:
             asyncio.run(self._pour_async(ml))
+        
     
 
 class Pump_station:
@@ -102,8 +104,10 @@ class Pump_station:
         
 
     def run(self):
-        asyncio.run(self._all_pour_async())
-        # self.statistic_write()
+        asyncio.run(self._all_pour_async(self.pump_1.ml, self.pump_2.ml))
+        asyncio.run(self._all_pour_async(-0.3, -0.3))
+
+        self.enable_motors(False)
 
     
     def enable_motors(self, value = False):
@@ -119,12 +123,12 @@ class Pump_station:
         # neuron.memory_write('memory.txt', 'pump_2', self.statistic_pump_2)
 
 
-    async def _all_pour_async(self):
+    async def _all_pour_async(self, turn1, turn2):
         self.enable_motors(True)
 
-        if self.mode_game == False:
-            turn1 = self.pump_1.ml
-            turn2 = self.pump_2.ml
+        # if self.mode_game == False:
+        #     turn1 = self.pump_1.ml
+        #     turn2 = self.pump_2.ml
         # else:
         #     turn1 = game_ruletka.pour()
         #     turn2 = game_ruletka.pour()
@@ -135,10 +139,9 @@ class Pump_station:
             tasks.append(asyncio.create_task(self.pump_1._pour_async(turn1)))
 
         if turn2 != 0:
-            tasks.append(asyncio.create_task(self.pump_2._pour_async(turn2)))
-
-
+            tasks.append(asyncio.create_task(self.pump_2._pour_async(-turn2)))
+        
         await asyncio.gather(*tasks)
 
-        self.enable_motors(False)
+        
 

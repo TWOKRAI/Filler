@@ -49,6 +49,7 @@ from Filler_robot.Monitor.motor_monitor import Motor_monitor
 class Input_request(QObject):
     pin_values_updated = pyqtSignal(dict)
     show_error = pyqtSignal()
+    close_error = pyqtSignal()
     error = pyqtSignal()
 
 
@@ -82,10 +83,14 @@ class Input_request(QObject):
                     self.show_error.emit()
                     self.error.emit()
                 else:
+                    if self.button_error == True:
+                        self.close_error.emit()
+
                     self.button_error = False
                 
                 if pins.button.get_value():
                     self.motor_monitor.run()
+                    
 
             except Exception as e:
                 print(f"Error reading pin values: {e}")

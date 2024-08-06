@@ -10,7 +10,7 @@ from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 
 class Robot_filler(QObject):
-    def __init__(self, robot_on = False) -> None:
+    def __init__(self, camera_on = True, neuron_on = True, interface_on = True, robot_on = False) -> None:
         super().__init__()
 
         self.running = True
@@ -20,9 +20,9 @@ class Robot_filler(QObject):
         self.interface = Interface(self.camera, self.neuron)
         self.robot = Robot_module(self.camera, self.neuron, self.interface)
 
-        self.camera_on = True
-        self.neuron_on = True
-        self.inteface_on = True
+        self.camera_on = camera_on
+        self.neuron_on = neuron_on 
+        self.inteface_on = interface_on
         self.robot_on = robot_on
         
         clear_file('log_temp.txt')
@@ -44,7 +44,7 @@ class Robot_filler(QObject):
             if self.inteface_on: self.interface.running()
             if self.robot_on: self.robot.running()
 
-            QThread.msleep(2000)
+            if self.robot_on: QThread.msleep(2000)
 
         self.camera.stop()
 

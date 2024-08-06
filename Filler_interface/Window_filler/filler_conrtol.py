@@ -6,6 +6,8 @@ import os
 
 from Filler_interface.app import app
 
+from Filler_interface.threads import thread
+
 try:
     # from Filler_robot.NeuroModules.interface import interface
     from Filler_robot.robot_main import Robot_filler
@@ -73,7 +75,7 @@ class filler_control(QMainWindow):
 
         self.update()
 
-        self.start_input_thread()
+        # self.start_input_thread()
 
 
     def start_robot_thread(self):
