@@ -6,6 +6,8 @@ print("Текущее время: ", now.strftime("%H:%M:%S"))
 
 
 class Filler:
+
+
     def __init__(self) -> None:
         self.param1 = True
         self.param111 = 1

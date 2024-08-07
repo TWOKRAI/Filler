@@ -109,7 +109,7 @@ class Robot_module(QObject):
 		self.step_position = 0
 
 		self.radius_min = 16
-		self.radius_max = 27
+		self.radius_max = 25
 
 		self.pumping_find = False
 		self.find = False
@@ -487,18 +487,19 @@ class Robot_module(QObject):
 		# 	print('go_to_point, self.find_angle', 'angle_x, angle_y, angle_z,', angle_x, angle_y, angle_z)
 
 		x1, y1, z1, _, _, _ = self.angle_to_coord(angle_x, angle_y, angle_z)
-		# if self.print_on:
-		# 	print('go_to_point','proverka' , 'x, y, z', x1, y1, z1)
-		# 	print()
+		if self.print_on:
+			print('go_to_point','proverka' , 'x, y, z', x1, y1, z1)
+			print()
 
 		error_x = abs(x1 - x)
 		error_y = abs(y1 - y)
 		error_z = abs(z1 - z)
 
-		# if self.print_on:
-		# 	print('go_to_point','error', 'error_x, error_y, error_z', error_x, error_y, error_z)
-		# 	print()
-		
+		if self.print_on:
+			print('go_to_point','error', 'error_x, error_y, error_z', error_x, error_y, error_z)
+			print()
+	
+
 		if error_x > 1 or error_y > 1 or error_z > 1:
 			pass
 
@@ -582,13 +583,18 @@ class Robot_module(QObject):
 			if list_objects[i][0] == False and limit == True: 
 				# z = z + 2
 				
+				self.enable_motors(True)
 				self.go_to_point(x, y, z)
 
 				# self.neuron.find_objects()
 
+				if self.pumping_find:
+					self.find = True
+					self.prepare.emit(1)
+					break
 
 				if self.button_stop == False:
-					if y >= 19.5:
+					if y >= 16.5:
 						for _ in range(10):
 							self.camera.read_cam()
 							self.neuron.find_objects()
@@ -601,30 +607,24 @@ class Robot_module(QObject):
 								value_x = 0
 								value_y = 0
 							finally:
-								if abs(list_objects[i][4] - value_x) < self.neuron.region_x or abs(list_objects[i][5] - value_y < self.neuron.region_y):
-									if not self.pumping_find:
-										self.pump_station.run()
-										list_objects[i][0] = True
-										self.interface.save_image(interface = 1)
-									else:
-										self.find = True
+								if abs(list_objects[i][4] - value_x) < self.neuron.region_x:
+									self.pump_station.run()
+									list_objects[i][0] = True
+									self.neuron.memory_objects = list_objects
+									self.interface.save_image(interface = 1)
+
 								
 								if value_x != 0 and value_y != 0:
 									break
-					else:
-						if not self.pumping_find:
-							self.pump_station.run()
-							list_objects[i][0] = True
-						else:
-							self.find = True
+					# else:
+					# 	self.pump_station.run()
+					# 	# self.neuron.memory_objects = list_objects
+					# 	list_objects[i][0] = True
+
 
 					if not self.pumping_find:
 						self.interface.save_image(interface = 1)
 						self.go_home()
-
-
-					if self.find == True:
-						self.prepare.emit(1)
 
 			i += 1
 		
@@ -666,11 +666,12 @@ class Robot_module(QObject):
 
 		QThread.msleep(1000)
 
-		if not self.calibration_ready:
-			asyncio.run(self._calibration_async())
-			self.move(970, 0, 0)
+		asyncio.run(self._calibration_async())
+		self.move(970, 0, 0)
 
 		self.calibration_ready = True
+
+		self.null_value()
 
 		self.prepare.emit(0)
 
@@ -695,11 +696,15 @@ class Robot_module(QObject):
 
 		self.null_value()
 
-		# self.enable_motors(False)
+		self.enable_motors(False)
 
 		print('go home')
 
-	
+
+	def ready_calibration(self):
+		self.prepare.emit(2)
+		
+		
 	# def correction(self, list_coord):
 	# 	x = round(list_coord[0])
 	# 	y = round(list_coord[1])

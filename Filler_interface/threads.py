@@ -7,6 +7,7 @@ from Raspberry.input import Input_request
 
 
 from Filler_interface.app import app
+from Filler_interface.filler import filler
 
 
 class Thread():
@@ -21,43 +22,92 @@ class Thread():
         self.pumps = None
 
 
-
-    def robot_thread(self):
+    def start_view_thread(self, camera_on = False, neuron_on = False, interface_on = False, robot_on = False):
         if not self.thread_robot.isRunning():
             self.thread_robot = QThread()
-            self.robot_filler = Robot_filler()
+            self.robot_filler = Robot_filler(camera_on = camera_on, neuron_on = neuron_on, interface_on = interface_on, robot_on = robot_on)
             self.robot_filler.moveToThread(self.thread_robot)
 
-    def startt_robot_view(self):
-        self.robot_filler.camera_on = True
-        self.robot_filler.neuron_on = True
-        self.robot_filler.interface_on = True
+            if app.ready == True:
+                self.robot_filler.robot.calibration_ready = True
+                self.robot_filler.robot.pumping_find = False
+
+                self.thread_robot.started.connect(self.robot_filler.run)
+
+                self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
+                # self.input_request.error.connect(self.robot_filler.robot.stop_motors)
+
+                # app.window_prepare.calibration.connect(self.robot_filler.calibration)
+                # app.window_prepare.reset_calibration.connect(self.robot_filler.reset_calibration)
+                # app.window_prepare.find_cup.connect(self.robot_filler.find_cup)
+                # app.window_prepare.pumping.connect(self.robot_filler.pumping)
+                # app.window_prepare.stop_pumping.connect(self.robot_filler.robot.pump_station.stop_pumps2)
+
+                # self.robot_filler.robot.prepare.connect(app.window_prepare.update_prepare)
+
+            self.thread_robot.start()
 
 
-        self.thread_robot.started.connect(self.robot_filler.run)
+    def start_filler_thread(self, camera_on = False, neuron_on = False, interface_on = False, robot_on = False):
+        if not self.thread_robot.isRunning():
+            self.thread_robot = QThread()
+            self.robot_filler = Robot_filler(camera_on = camera_on, neuron_on = neuron_on, interface_on = interface_on, robot_on = robot_on)
+            self.robot_filler.moveToThread(self.thread_robot)
 
+            if app.ready == True:
+                self.robot_filler.robot.calibration_ready = True
+                self.robot_filler.robot.pumping_find = False
+                
+                self.robot_filler.robot.pump_station.pump_1.bottle_ml = filler.param3
+                self.robot_filler.robot.pump_station.pump_2.bottle_ml = filler.param4
+                self.robot_filler.robot.pump_station.pump_1.ml = filler.param5
+                self.robot_filler.robot.pump_station.pump_2.ml = filler.param6
 
+                self.thread_robot.started.connect(self.robot_filler.run)
+
+                self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
+                # self.input_request.error.connect(self.robot_filler.robot.stop_motors)
+
+                # app.window_prepare.calibration.connect(self.robot_filler.calibration)
+                # app.window_prepare.reset_calibration.connect(self.robot_filler.reset_calibration)
+                # app.window_prepare.find_cup.connect(self.robot_filler.find_cup)
+                # app.window_prepare.pumping.connect(self.robot_filler.pumping)
+                # app.window_prepare.stop_pumping.connect(self.robot_filler.robot.pump_station.stop_pumps2)
+                # # app.window_prepare.start_filler.connect(self.robot_filler.run2)
+                
+                # self.robot_filler.robot.prepare.connect(app.window_prepare.update_prepare)
+
+            self.thread_robot.start()
+        
+
+    # def put_pumps(self):
+    #     print('filler.paramm5', filler.paramm5, 'filler.paramm6', filler.paramm6)
+    #     self.robot_filler.robot.pump_station.pump_1.ml = filler.paramm5
+    #     self.robot_filler.robot.pump_station.pump_2.ml = filler.paramm6
 
 
     def start_robot_thread(self, camera_on = False, neuron_on = False, interface_on = False, robot_on = False):
-        # if not self.thread_robot.isRunning():
-        #     self.thread_robot = QThread()
-        #     self.robot_filler = Robot_filler(camera_on = camera_on, neuron_on = neuron_on, interface_on = interface_on, robot_on = robot_on)
-        #     self.robot_filler.moveToThread(self.thread_robot)
+        if not self.thread_robot.isRunning():
+            self.thread_robot = QThread()
+            self.robot_filler = Robot_filler(camera_on = camera_on, neuron_on = neuron_on, interface_on = interface_on, robot_on = robot_on)
+            self.robot_filler.moveToThread(self.thread_robot)
 
             if app.ready == True:
-                # self.robot_filler.robot.calibration_ready = True
-                # self.robot_filler.robot.pumping_find = False
+                self.robot_filler.robot.calibration_ready = False
+                self.robot_filler.robot.pumping_find = False
 
-                #self.thread_robot.started.connect(self.robot_filler.run)
-
+                # self.thread_robot.started.connect(self.robot_filler.run)
 
                 self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
                 self.input_request.error.connect(self.robot_filler.robot.stop_motors)
 
-                app.window_prepare.calibration.connect(self.start_calibration)
+                app.window_prepare.calibration.connect(self.robot_filler.calibration)
                 app.window_prepare.reset_calibration.connect(self.robot_filler.reset_calibration)
-                app.window_prepare.find_cup.connect(self.find_cup)
+                app.window_prepare.find_cup.connect(self.robot_filler.find_cup)
+                app.window_prepare.pumping.connect(self.robot_filler.pumping)
+                app.window_prepare.stop_pumping.connect(self.robot_filler.robot.pump_station.stop_pumps2)
+                # app.window_prepare.start_filler.connect(self.robot_filler.run2)
+                
                 self.robot_filler.robot.prepare.connect(app.window_prepare.update_prepare)
 
             self.thread_robot.start()
@@ -88,6 +138,10 @@ class Thread():
     
         self.thread_robot.started.connect(self.robot_filler.find_cup)
         self.thread_robot.start()
+
+
+    def pumping(self):
+        self.start_pumps_thread(self, True, True, 900, 900)
 
 
     def start_input_thread(self):

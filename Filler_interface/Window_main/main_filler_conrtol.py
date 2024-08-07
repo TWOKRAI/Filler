@@ -13,7 +13,8 @@ class Main_filler_control(QMainWindow):
 
         self.window_name = 'main_filler'
 
-        file_path = os.path.join('Filler_interface', 'Window_main', 'UI_main_filler.ui')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_main', 'UI_main_filler.ui')
+        # file_path = os.path.join('Filler_interface', 'Window_main', 'UI_main_filler.ui')
         uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
@@ -98,19 +99,19 @@ class Main_filler_control(QMainWindow):
     
     
     def set_icons(self):
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-wine-bar-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-wine-bar-100.png')
         self.button_start.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-robotic-arm-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-robotic-arm-100.png')
         self.button_robot.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-automation-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-automation-100.png')
         self.button_settings.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
         self.button_view.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-водяной-шланг-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-водяной-шланг-100.png')
         self.button_cip.setIcon(QIcon(file_path))
 
 

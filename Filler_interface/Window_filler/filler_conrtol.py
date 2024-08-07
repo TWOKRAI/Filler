@@ -23,7 +23,8 @@ class filler_control(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        file_path = os.path.join('Filler_interface', 'Window_filler', 'UI_filler.ui')
+        # file_path = os.path.join('Filler_interface', 'Window_filler', 'UI_filler.ui')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_filler', 'UI_filler.ui')
         uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
@@ -67,63 +68,63 @@ class filler_control(QMainWindow):
         self.play = False
 
 
-        self.thread_robot = QThread()
-        self.robot_filler = None
+        # self.thread_robot = QThread()
+        # self.robot_filler = None
 
-        self.thread_input = QThread()
-        self.input = None
+        # self.thread_input = QThread()
+        # self.input = None
 
         self.update()
 
         # self.start_input_thread()
 
 
-    def start_robot_thread(self):
-        if not self.thread_robot.isRunning():
-            self.thread_robot = QThread()
-            self.robot_filler = Robot_filler(robot_on = True)
-            self.robot_filler.moveToThread(self.thread_robot)
-            self.thread_robot.started.connect(self.robot_filler.run)
-            self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
-            self.input_request.error.connect(self.robot_filler.robot.stop_motors)
-            self.input_request.error.connect(app.window_view.close)
-            self.thread_robot.start()
+    # def start_robot_thread(self):
+    #     if not self.thread_robot.isRunning():
+    #         self.thread_robot = QThread()
+    #         self.robot_filler = Robot_filler(robot_on = True)
+    #         self.robot_filler.moveToThread(self.thread_robot)
+    #         self.thread_robot.started.connect(self.robot_filler.run)
+    #         self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
+    #         self.input_request.error.connect(self.robot_filler.robot.stop_motors)
+    #         self.input_request.error.connect(app.window_view.close)
+    #         self.thread_robot.start()
     
 
-    def stop_robot_thread(self):
-        if self.thread_robot is not None and self.thread_robot.isRunning():
-            self.robot_filler.stop()
-            self.thread_robot.quit()
-            self.thread_robot.wait()
-            # self.thread_robot = None
-            # self.robot_filler = None
+    # def stop_robot_thread(self):
+    #     if self.thread_robot is not None and self.thread_robot.isRunning():
+    #         self.robot_filler.stop()
+    #         self.thread_robot.quit()
+    #         self.thread_robot.wait()
+    #         # self.thread_robot = None
+    #         # self.robot_filler = None
 
 
-    def start_input_thread(self):
-        if not self.thread_robot.isRunning():
-            self.thread_input = QThread()
-            self.input_request = Input_request()
-            self.input_request.moveToThread(self.thread_input)
-            self.thread_input.started.connect(self.input_request.run)
+    # def start_input_thread(self):
+    #     if not self.thread_robot.isRunning():
+    #         self.thread_input = QThread()
+    #         self.input_request = Input_request()
+    #         self.input_request.moveToThread(self.thread_input)
+    #         self.thread_input.started.connect(self.input_request.run)
 
-            self.input_request.show_error.connect(app.window_error.show)
+    #         self.input_request.show_error.connect(app.window_error.show)
             
 
-            self.input_request.motor_monitor.on_signal.connect(app.window_start.close)
-            self.input_request.motor_monitor.off_signal.connect(app.window_start.show)
-            self.input_request.motor_monitor.off_signal.connect(app.window_view.close)
-            self.input_request.motor_monitor.off_signal.connect(self.stop_input_thread)
+    #         self.input_request.motor_monitor.on_signal.connect(app.window_start.close)
+    #         self.input_request.motor_monitor.off_signal.connect(app.window_start.show)
+    #         self.input_request.motor_monitor.off_signal.connect(app.window_view.close)
+    #         self.input_request.motor_monitor.off_signal.connect(self.stop_input_thread)
 
-            self.thread_input.start()
+    #         self.thread_input.start()
     
 
-    def stop_input_thread(self):
-        if self.thread_robot is not None and self.thread_robot.isRunning():
-            self.input_request.stop()
-            self.thread_input.quit()
-            self.thread_input.wait()
-            # self.thread_robot = None
-            # self.robot_filler = None
+    # def stop_input_thread(self):
+    #     if self.thread_robot is not None and self.thread_robot.isRunning():
+    #         self.input_request.stop()
+    #         self.thread_input.quit()
+    #         self.thread_input.wait()
+    #         # self.thread_robot = None
+    #         # self.robot_filler = None
 
 
     def fullscreen(self):        
@@ -174,7 +175,7 @@ class filler_control(QMainWindow):
         icon_size = QSize(60, 60)
         self.button_menu.setIconSize(icon_size)
         
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
         self.button_menu.setIcon(QIcon(file_path))
 
 
@@ -207,13 +208,13 @@ class filler_control(QMainWindow):
         print(self.play)
 
         if self.play == True:
-            file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-pause-button-100.png')
+            file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-pause-button-100.png')
             self.button_pause.setIcon(QIcon(file_path))
 
             # if raspberry:
             #     self.robot_filler.enable_robot_on(True)
         else:
-            file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
+            file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
             self.button_pause.setIcon(QIcon(file_path))
 
             # if raspberry:
@@ -235,7 +236,7 @@ class filler_control(QMainWindow):
         icon_size = QSize(60, 60)
         self.button_view.setIconSize(icon_size)
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
         self.button_view.setIcon(QIcon(file_path))
 
 

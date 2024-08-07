@@ -16,7 +16,10 @@ class Error_control(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        file_path = os.path.join('Filler_interface', 'Window_error', 'UI_error.ui')
+        
+        # file_path = os.path.join('Filler_interface', 'Window_error', 'UI_error.ui')
+
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_error', 'UI_error.ui')
         uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
@@ -32,12 +35,12 @@ class Error_control(QMainWindow):
         self.start_time = 5000
 
 
-        file_path = os.path.join('Filler_interface', '1x', 'innotech_min.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', '1x', 'innotech_min.png')
         pixmap = QPixmap(file_path)
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_no_color', 'error.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_no_color', 'error.png')
         pixmap = QPixmap(file_path)
         scaled_pixmap = pixmap.scaled(int(pixmap.width()* 0.8), int(pixmap.height()* 0.8), Qt.KeepAspectRatio)
         self.level_img.setPixmap(scaled_pixmap)

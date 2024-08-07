@@ -13,7 +13,8 @@ class Control(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        file_path = os.path.join('Filler_interface', 'Window_settings1', 'UI_settings.ui')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_settings1', 'UI_settings.ui')
+        # file_path = os.path.join('Filler_interface', 'Window_settings1', 'UI_settings.ui')
         uic.loadUi(file_path, self)
        
         self.statusBar().setHidden(True)
@@ -159,22 +160,22 @@ class Control(QMainWindow):
 
     
     def set_icons(self):
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
         self.button_menu.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-replay-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-replay-100.png')
         self.button_reset.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-back-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-back-100.png')
         self.button_left.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-forward-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-forward-100.png')
         self.button_right.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-subtract-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-subtract-100.png')
         self.button_minus.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-plus-math-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-plus-math-100.png')
         self.button_plus.setIcon(QIcon(file_path))
 
 

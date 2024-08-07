@@ -105,7 +105,7 @@ class Control(Control):
         self.button_reset.released.connect(self.button_reset_released)
 
         
-        file_path = os.path.join('Filler_interface', 'Window_settings2', 'Data')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Window_settings2', 'Data')
         self.memory = Memory(db_path = file_path, db_file = 'memory_db')
         
         self.param_list = self.get_parametrs()

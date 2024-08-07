@@ -11,7 +11,8 @@ class Pop_up_control(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        file_path = os.path.join('Filler_interface', 'Window_pop_up', 'UI_pop_up.ui')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_pop_up', 'UI_pop_up.ui')
+        # file_path = os.path.join('Filler_interface', 'Window_pop_up', 'UI_pop_up.ui')
         uic.loadUi(file_path, self)
        
         self.statusBar().setHidden(True)

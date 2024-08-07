@@ -100,17 +100,44 @@ class Interface(QObject):
 
 					# self.draw_box_all(image_draw)
 
-					point = (self.x, self.y)
-					point = self.camera.perspective.transform_coord(point)
+					# point = (self.x, self.y)
+					# point = self.camera.perspective.transform_coord(point)
 
-					point = self.camera.perspective.scale(point)
+					# point = self.camera.perspective.scale(point)
 
-					self.camera.perspective.draw(image_draw)
+					# self.camera.perspective.draw(image_draw)
+
+					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 200, (255, 0, 255), 2)
+					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 600, (255, 0, 255), 2)
+					
+					
+					center1 = (int(self.camera.img_width/2), self.camera.img_height - 150)  # ����� ������� �������
+					axes1 = (210, 120)  # ������� ���� ������� �������
+					angle1 = 0  # ���� �������� ������� �������
+					startAngle1 = 0  # ��������� ���� ���� ������� �������
+					endAngle1 = 360  # �������� ���� ���� ������� �������
+					color1 = (0, 255, 0)  # ���� ������� ������� (�������)
+					thickness1 = 2  # ������� ����� ������� �������
+					
+					cv2.ellipse(image_draw, center1, axes1, angle1, startAngle1, endAngle1, color1, thickness1)
+					
+					center1 = (int(self.camera.img_width/2), self.camera.img_height - 150)  # ����� ������� �������
+					axes1 = (300, 210)  # ������� ���� ������� �������
+					angle1 = 0  # ���� �������� ������� �������
+					startAngle1 = 0  # ��������� ���� ���� ������� �������
+					endAngle1 = 360  # �������� ���� ���� ������� �������
+					color1 = (0, 255, 0)  # ���� ������� ������� (�������)
+					thickness1 = 2  # ������� ����� ������� �������
+					
+					cv2.ellipse(image_draw, center1, axes1, angle1, startAngle1, endAngle1, color1, thickness1)
+
 
 					pixmap = image_draw
 
+
 			img_monitor = pixmap[60:430,:]
-			h, w, ch = img_monitor.shape		
+			h, w, ch = img_monitor.shape
+		
 
 			q_image = QImage(img_monitor.data.tobytes(), w, h, ch * w, QImage.Format_BGR888)
 			q_image = q_image.scaled(720, 480, Qt.KeepAspectRatio)

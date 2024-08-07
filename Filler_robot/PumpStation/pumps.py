@@ -10,9 +10,12 @@ from Raspberry.pins_table import pins
 from Filler_interface import app
 
 
-class Pump():
+class Pump(QObject):
+    bottle = pyqtSignal()
 
     def __init__(self, name, motor):
+        super().__init__()
+
         self.print_on = True
 
         self.name = name
@@ -20,24 +23,29 @@ class Pump():
         self.motor = motor
         
         self.turn = 0
-        self.ml = 30 + 2
+        self.ml = 30
         self.amount = 1
         self.step_amount = 0.003
         self.speed = 10
         self.speed_k = 100
 
-        self.bottle_ml = 100
-        self.bottle_min = 50
+        self.bottle_ml = 1000
+        self.bottle_min = 100
 
         self.warnning = False
         self.ready = False
     
 
     def ml_to_steps(self, ml):
-        steps = int(ml / self.step_amount)
+        if self.bottle_ml >= self.bottle_min:
+            steps = int((ml + 2) / self.step_amount)
+            self.bottle_ml -= ml
 
-        if self.print_on:
-            print(f'pump {self.name}, ml_to_steps // output: steps = {steps}')
+            # self.bottle.emit(self.bottle_ml)
+
+            if self.print_on:
+                print(self.ml, self.step_amount)
+                print(f'pump {self.name}, ml_to_steps // output: steps = {steps} bottle {self.bottle_ml}')
 
         return steps
     
@@ -75,6 +83,9 @@ class Pump():
 
 class Pump_station(QObject):
     minus_pump = pyqtSignal()
+
+    
+
     
     def __init__(self):
         super().__init__()

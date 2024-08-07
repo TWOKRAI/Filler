@@ -24,7 +24,10 @@ class View_control(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        file_path = os.path.join('Filler_interface', 'Window_view', 'UI_view.ui')
+
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_view', 'UI_view.ui')
+
+        # file_path = os.path.join('Filler_interface', 'Window_view', 'UI_view.ui')
         uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
@@ -34,7 +37,7 @@ class View_control(QMainWindow):
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
-        file_path = os.path.join('Filler_interface', '1x', 'innotech_min.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', '1x', 'innotech_min.png')
         pixmap = QPixmap(file_path)
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
@@ -74,7 +77,8 @@ class View_control(QMainWindow):
 
 
     def show(self):
-        app.threads.start_robot_thread(camera_on = True, neuron_on = True, interface_on = True, robot_on = True)
+        app.threads.stop_robot_thread()
+        app.threads.start_view_thread(camera_on = True, neuron_on = True, interface_on = True, robot_on = False)
 
         if app.on_fullscreen: self.fullscreen()
 

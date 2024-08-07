@@ -4,8 +4,11 @@ from PIL import Image, ImageOps, ImageDraw
 
 class Style():
     def __init__(self):
-        self.icon_path_orig = os.path.join('Filler_interface', 'Style_windows', 'icons')
-        self.icon_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black')
+        self.icon_path_orig = os.path.join('/home/innotech/Project/Filler/Filler_interface/Style_windows/icons')
+        self.icon_path  = os.path.join('/home/innotech/Project/Filler/Filler_interface/Style_windows/icons_black')
+        
+        # self.icon_path_orig = os.path.join('Filler_interface', 'Style_windows', 'icons')
+        # self.icon_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black')
 
         self.text_color = (65, 69, 67)
 
@@ -23,7 +26,9 @@ class Style():
 
 
     def style(self):
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'style_green.css')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Style_windows', 'style_green.css')
+        
+        # file_path = os.path.join('Filler_interface', 'Style_windows', 'style_green.css')
 
         with open(file_path, 'r') as f:
             custom_style = f.read()

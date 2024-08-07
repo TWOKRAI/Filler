@@ -139,7 +139,7 @@ class Perspective:
 
         
         x = x * 1
-        y = y * 0.85
+        y = y * 0.87
 
         print(y)
 
@@ -147,11 +147,12 @@ class Perspective:
 
         print(y)
 
-        if abs(x) > 13.3:
+        if abs(x) > 13:
             x = x * 1.1
+            y = y * 1
         
         if y < 19.5:
-            y = y * 1.05
+            y = y * 1.07
 
  
         # if y > 21:

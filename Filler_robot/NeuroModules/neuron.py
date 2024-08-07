@@ -10,11 +10,15 @@ from Filler_robot.VisionTech.camera import Camera
 from Lib.Decorators.wrapper import _timing
 
 
-file = open("Filler_robot/NeuroModules/models/coco.txt","r")
+file_path = os.path.join('/home/innotech/Project/Filler/Filler_robot/NeuroModules/models', 'coco.txt')
+file = open(file_path,"r")
+# file = open("Filler_robot/NeuroModules/models/coco.txt","r")
 classes = file.read().split('\n')
 #print(classes)
 
-classes_file = 'Filler_robot/NeuroModules/models/coco.names'
+file_path = os.path.join('/home/innotech/Project/Filler/Filler_robot/NeuroModules/models', 'coco.names')
+classes_file = file_path
+# classes_file = 'Filler_robot/NeuroModules/models/coco.names'
 class_names = []
 
 with open(classes_file, 'rt') as f:
@@ -43,23 +47,24 @@ class Neuron:
 
 		self.timer = Timer()
 
-		file_path1 = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov4-tiny.cfg')
-		file_path2 = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov4-tiny.weights')
-		self.net_v4 = cv2.dnn.readNetFromDarknet(file_path1, file_path2)
+		# file_path1 = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov4-tiny.cfg')
+		# file_path2 = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov4-tiny.weights')
+		# self.net_v4 = cv2.dnn.readNetFromDarknet(file_path1, file_path2)
 		# self.net_v4.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 		# self.net_v4.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
 
-		file_path = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov5n.onnx')
+		file_path = os.path.join('/home/innotech/Project/Filler/Filler_robot/NeuroModules/models', 'yolov5n.onnx')
+		# file_path = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov5n.onnx')
 		self.net_v5 = cv2.dnn.readNetFromONNX(file_path)
 		self.net_v5.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 		self.net_v5.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 		
 		self.mode = 0
 		
-		self.threshold = 0.3
+		self.threshold = 0.2
 		
-		self.nmsthreshold = 0.4
+		self.nmsthreshold = 0.3
 
 		self.list_find = {'cup': True, 'CUP': True, 'vase': True, 'wine glass': True, 'toilet': True, 'person': True}
 		

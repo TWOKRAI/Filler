@@ -3,6 +3,7 @@ import numpy as np
 import math
 from picamera2 import Picamera2
 import logging
+import os
 
 #from Lib.Decorators.wrapper import _timing
 from Filler_robot.VisionTech.perspective import Perspective
@@ -23,7 +24,9 @@ class Camera:
         config = self.picam.create_still_configuration(main={"size": (2592, 1944)})
         self.picam.configure(config)
 
-        self.cv_file = cv2.FileStorage('Filler_robot/VisionTech/calibration/camera_params.yml', cv2.FILE_STORAGE_READ)
+        path = os.path.join('/home/innotech/Project/Filler/Filler_robot/VisionTech/calibration', 'camera_params.yml')
+        self.cv_file = cv2.FileStorage(path, cv2.FILE_STORAGE_READ)
+        # self.cv_file = cv2.FileStorage('Filler_robot/VisionTech/calibration/camera_params.yml', cv2.FILE_STORAGE_READ)
         self.camera_matrix = self.cv_file.getNode('K').mat()
         self.distortion_coeffs = self.cv_file.getNode('D').mat()
         self.cv_file.release()

@@ -11,11 +11,15 @@ class Prepare_control(QMainWindow):
     calibration = pyqtSignal()
     reset_calibration = pyqtSignal()
     find_cup = pyqtSignal()
+    pumping = pyqtSignal()
+    stop_pumping = pyqtSignal()
+    start_filler = pyqtSignal()
 
     def __init__(self):
         super().__init__()
 
-        file_path = os.path.join('Filler_interface', 'Window_prepare', 'UI_prepare.ui')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_prepare', 'UI_prepare.ui')
+        # file_path = os.path.join('Filler_interface', 'Window_prepare', 'UI_prepare.ui')
         uic.loadUi(file_path, self)
 
         self.statusBar().setHidden(True)
@@ -124,7 +128,7 @@ class Prepare_control(QMainWindow):
 
     
     def button_reset_update(self):
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-replay-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-replay-100.png')
         self.button_reset.setIcon(QIcon(file_path))
 
 
@@ -133,6 +137,8 @@ class Prepare_control(QMainWindow):
         
         self.value = 0
         self.myprogressBar.setValue(self.value)
+
+        self.button_calibr.setEnabled(True)
 
         self.reset_calibration.emit()
 
@@ -146,7 +152,7 @@ class Prepare_control(QMainWindow):
         button_size = QSize(130, 120)
         self.button_menu.setFixedSize(button_size)
 
-        file_path = os.path.join('Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
         self.button_menu.setIcon(QIcon(file_path))
 
 
@@ -191,10 +197,31 @@ class Prepare_control(QMainWindow):
                 }
 
                 app.window_filler
+            case 3:
+                name_button = {
+                    0: 'Прокачка',
+                    1: 'Start2',
+                }
+
+                app.window_filler
+            case 4:
+                name_button = {
+                    0: 'Стоп',
+                    1: 'Start2',
+                }
+
+                app.window_filler
+            case 6:
+                name_button = {
+                    0: 'Начать',
+                    1: 'Start2',
+                }
+
+                app.window_filler
 
             case _:
                 name_button = {
-                    0: 'Прокачка',
+                    0: 'Начать',
                     1: 'Start0',
                 }
         
@@ -254,19 +281,19 @@ class Prepare_control(QMainWindow):
                 }
                                 
                 self.label.setText(label_name[self.lang])
-
+                
                 self.value = 50
 
             case 3:
                 
                 self.find_cup.emit()
 
-                self.value = 21
+            case 4:
+                self.pumping.emit()
 
+        
             case 5:
-                self.find_cup.emit()
-
-                self.value = 21
+                self.stop_pumping.emit()
 
             case _:
                 pass
@@ -336,20 +363,24 @@ class Prepare_control(QMainWindow):
                 self.value = 90
             case 5:
                 label_name = {
-                    0: 'Идет прокачка (нажмите стоп, когда ситстема заполниться)',
+                    0: 'Прокачка закончена',
                     1: 'Началась rrrr калибровка робота (Подождите)',
                 }
 
                 self.label.setText(label_name[self.lang])
-                self.button_calibr.setEnabled(False)
+                self.button_calibr.setEnabled(True)
 
                 self.label.setText(label_name[self.lang])
 
                 self.value = 100
-            case 4:
+            case 6:
+                app.threads.stop_robot_thread()
+                app.threads.start_filler_thread(camera_on = True, neuron_on =  True, interface_on =  True, robot_on =  True)
                 app.window_filler.show()
                 self.hide()
                 self.param_num = 0
+
+                
             case _:
                 pass
         
@@ -389,6 +420,20 @@ class Prepare_control(QMainWindow):
 
                 print(self.value)
                 
+            case 2:
+                label_name = {
+                    0: 'Система готова (Нажмите Начать)',
+                    1: 'Началась rrrr калибровка робота (Подождите)',
+                }
+
+                self.label.setText(label_name[self.lang])
+                self.button_calibr.setEnabled(True)
+
+                self.value = 100
+
+                self.myprogressBar.setValue(self.value)
+
+                print(self.value)
             
         
 

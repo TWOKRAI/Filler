@@ -15,7 +15,8 @@ class Control(QMainWindow):
 
         self.window_name = 'datetime'
 
-        file_path = os.path.join('Filler_interface', 'Window_datetime', 'UI_datetime.ui')
+        # file_path = os.path.join('Filler','Filler_interface', 'Window_datetime', 'UI_datetime.ui')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_datetime', 'UI_datetime.ui')
         uic.loadUi(file_path, self)
         
 
@@ -26,7 +27,7 @@ class Control(QMainWindow):
 
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
 
-        file_path = os.path.join('Filler_interface', '1x', 'innotech_min.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', '1x', 'innotech_min.png')
         pixmap = QPixmap(file_path)
         scaled_pixmap = pixmap.scaled(int(pixmap.width() * 0.5), int(pixmap.height() * 0.5), Qt.KeepAspectRatio)
         self.innotech_min.setPixmap(scaled_pixmap)
