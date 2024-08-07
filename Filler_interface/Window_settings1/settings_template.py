@@ -112,24 +112,9 @@ class Control(QMainWindow):
         pass
     
 
-    def text_color(self):
-        color = self.color_text[self.param_num]
-
-        print('text_color')
-
-        if color is not None:
-            value_id = self.value_id[self.param_num]
-            color = color[value_id]
-
-            print(value_id, color)
-
-            if color is not None:
-                color = color
-            else:
-                color = app.styling.text_color
-        else:
+    def text_color(self, color):
+        if color is None:
             color = app.styling.text_color
-
 
         style = f"color: rgb({color[0]}, {color[1]}, {color[2]});"
         

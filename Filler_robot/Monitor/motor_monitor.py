@@ -8,6 +8,8 @@ from Raspberry.pins_table import pins
 class Motor_monitor(QObject):
     on_signal = pyqtSignal() 
     off_signal = pyqtSignal() 
+    button_signal = pyqtSignal() 
+
 
     def __init__(self):
         super().__init__()
@@ -38,6 +40,8 @@ class Motor_monitor(QObject):
 
 
     def run(self):
+        self.button_signal.emit()
+
         self.running = True 
         
         switch_out = pins.switch_out.get_value()

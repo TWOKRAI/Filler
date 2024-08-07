@@ -9,7 +9,7 @@ import io
 
 
 from Filler_interface.app import app
-from Filler_interface.threads import thread
+# from Filler_interface.threads import thread
 
 
 try:
@@ -74,7 +74,7 @@ class View_control(QMainWindow):
 
 
     def show(self):
-        thread.start_robot_thread(camera_on = True, neuron_on = True, interface_on = True)
+        app.threads.start_robot_thread(camera_on = True, neuron_on = True, interface_on = True, robot_on = True)
 
         if app.on_fullscreen: self.fullscreen()
 
@@ -92,7 +92,7 @@ class View_control(QMainWindow):
 
 
     def close(self):
-        thread.stop_robot_thread()
+        app.threads.stop_robot_thread()
 
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(

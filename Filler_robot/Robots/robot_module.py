@@ -82,8 +82,12 @@ class Axis:
 	
 
 
-class Robot_module:
+class Robot_module(QObject):
+	prepare = pyqtSignal(int)
+
 	def __init__(self, camera = None, neuron = None, interface = None):
+		super().__init__()
+
 		self.camera = camera
 		self.neuron = neuron
 		self.interface = interface
@@ -94,7 +98,7 @@ class Robot_module:
 
 		self.first_go = False
 
-		self.calibration_ready = True
+		self.calibration_ready = False
 		self.calib_distance = 1000
 
 		self.stopped = False
@@ -106,6 +110,9 @@ class Robot_module:
 
 		self.radius_min = 16
 		self.radius_max = 27
+
+		self.pumping_find = False
+		self.find = False
 
 		self.home = False
 
@@ -138,13 +145,13 @@ class Robot_module:
 		self.axis_y.motor.enable_on(False)
 		self.axis_y.motor.speed_def = 0.0001
 		self.axis_y.motor.direction = False
-		self.axis_y.step_angle = 0.13
+		self.axis_y.step_angle = 0.125
 		self.axis_y.arm_lenght = 12
 		self.axis_y.angle_0 = 120
 		self.axis_y.angle = self.axis_y.angle_0
 		self.axis_y.y0 = 0
 		self.axis_y.z0 = 22.5
-		self.axis_y.limit_min = 0
+		self.axis_y.limit_min = 5
 		self.axis_y.limit_max = 122
 		
 
@@ -160,16 +167,13 @@ class Robot_module:
 		self.axis_z.angle = self.axis_z.angle_0
 		self.axis_z.limit_min = 145
 		self.axis_z.limit_max = 95
-
-		self.calibration()
 		
 
 	def running(self):
-		self.move_objects()
-		# if self.calibration_ready:
-		# 	self.move_objects()
+		if self.calibration_ready:
+			self.move_objects()
 
-
+	
 	def enable_motors(self, value = False):
 		self.axis_x.motor.enable_on(value)
 		self.axis_y.motor.enable_on(value)
@@ -554,7 +558,7 @@ class Robot_module:
 		return limit_check
 
 
-	def move_objects(self):
+	def move_objects(self, pumping = False):
 		self.enable_motors(True)
 		
 		list_objects = self.neuron.objects_filter
@@ -580,14 +584,12 @@ class Robot_module:
 				
 				self.go_to_point(x, y, z)
 
-				
-
 				# self.neuron.find_objects()
 
 
 				if self.button_stop == False:
-					if y <= 18:
-						for _ in range(6):
+					if y >= 19.5:
+						for _ in range(10):
 							self.camera.read_cam()
 							self.neuron.find_objects()
 							self.interface.save_image(interface = 1)
@@ -600,17 +602,29 @@ class Robot_module:
 								value_y = 0
 							finally:
 								if abs(list_objects[i][4] - value_x) < self.neuron.region_x or abs(list_objects[i][5] - value_y < self.neuron.region_y):
-									self.pump_station.run()
-									list_objects[i][0] = True
+									if not self.pumping_find:
+										self.pump_station.run()
+										list_objects[i][0] = True
+										self.interface.save_image(interface = 1)
+									else:
+										self.find = True
 								
 								if value_x != 0 and value_y != 0:
 									break
 					else:
-						self.pump_station.run()
-						list_objects[i][0] = True
+						if not self.pumping_find:
+							self.pump_station.run()
+							list_objects[i][0] = True
+						else:
+							self.find = True
 
-					self.interface.save_image(interface = 1)
-					self.go_home()
+					if not self.pumping_find:
+						self.interface.save_image(interface = 1)
+						self.go_home()
+
+
+					if self.find == True:
+						self.prepare.emit(1)
 
 			i += 1
 		
@@ -650,10 +664,15 @@ class Robot_module:
 	def calibration(self):
 		self.enable_motors(True)
 
-		asyncio.run(self._calibration_async())
-		self.move(970, 0, 0)
+		QThread.msleep(1000)
+
+		if not self.calibration_ready:
+			asyncio.run(self._calibration_async())
+			self.move(970, 0, 0)
 
 		self.calibration_ready = True
+
+		self.prepare.emit(0)
 
 
 	def go_home(self):
@@ -676,7 +695,7 @@ class Robot_module:
 
 		self.null_value()
 
-		self.enable_motors(False)
+		# self.enable_motors(False)
 
 		print('go home')
 

@@ -1,4 +1,5 @@
 import asyncio
+import time
 
 # from graphic_speed import Plotter
 # from Lib.Decorators.wrapper import _timing, _log_input_output
@@ -185,12 +186,14 @@ class Motor:
 		time_distance = 0
 		k = 0.01
 
-		while True:
+		while not self.stop:
 			if self.stop == True:
 				break
 
 			if acc == False:
 				step = frequency * 1 / sec * k
+
+				self.step_freq = step
 
 				if step < 1: 
 					step = 1
@@ -217,21 +220,20 @@ class Motor:
 
 				
 				acc = True
-				
 
 			time_distance += k
 			# print(time_distance)
+
 			await asyncio.sleep(k)
 						
 			if time_distance >= stop_distance - sec:
 				break
 		
-		
-		self.pin_step.frequency = frequency
-		self.pin_step.value = 0.5
 
+		for f in range(frequency, -1, -int(self.step_freq)):
+			if self.stop == True:
+				break
 
-		for f in range(frequency, -1, -int(step)):
 			self.pin_step.frequency = f
 			self.pin_step.value = 0.5
 			
@@ -246,10 +248,20 @@ class Motor:
 
 		self.stop_for = False
 		self.pin_step.value = 0
-		
+
+	
 
 	def freq(self, frequency, k):
 		asyncio.run(self._freq_async(self, frequency, k))
+
+
+	def stop_freq(self):
+		self.pin_step.frequency = 0
+		self.pin_step.value = 0
+
+		self.stop = True
+
+		print('STOPOOOOP')
 
 
 	# @_log_input_output(False)
@@ -259,3 +271,14 @@ class Motor:
 			return self._move_async(distance)
 		else:
 			asyncio.run(self._move_async(distance))
+
+	
+	async def test(self):
+		while not self.stop:
+			print(id(self.stop))
+
+			await asyncio.sleep(1)
+
+
+			if self.stop:
+				break

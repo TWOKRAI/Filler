@@ -167,12 +167,12 @@ class Neuron:
 
 					# cv2.line(image, (int(xr_center), yr_center), (int(xr_center - self.perspective * 4), y1 + h), (255, 255, 0), 1)
 
-					yr_center_2 = int((y1 + h) - h * 0.2) 
+					yr_center_2 = int((y1 + h) - h * 0.3) 
 					
 					if xr_center >= self.camera.img_width / 2:
-						xr_center_2 = int((xr_center - self.perspective * 3) + (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
+						xr_center_2 = int((xr_center - self.perspective * 2)) #+ (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
 					else:
-						xr_center_2 = int((xr_center - self.perspective * 3) - (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
+						xr_center_2 = int((xr_center - self.perspective * 2)) #- (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
 
 					# if x1 <= self.camera.img_width/2 and  y1 >= 300:
 					# 	xr_center_2 = int(x1 + w / 2) - self.perspective * 1.7

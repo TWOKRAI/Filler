@@ -183,7 +183,7 @@ class Interface(QObject):
 
 				cv2.line(image, (x1, yr_center), (x1 + w, yr_center), (255, 255, 0), 1)
 				
-				# cv2.line(image, (int(xr_center), yr_center), (int(xr_center - perspective * 4), y1 + h), (255, 255, 0), 1)
+				#cv2.line(image, (int(xr_center), yr_center), (int(xr_center - perspective * 4), y1 + h), (255, 255, 0), 1)
 
 				cv2.line(image, (int(xr_center), yr_center), (int(xr_center_2), yr_center_2), (255, 255, 0), 1)
 

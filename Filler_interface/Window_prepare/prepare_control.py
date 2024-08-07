@@ -1,14 +1,17 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtCore import Qt, QSize, QTimer, QThread
+from PyQt5.QtCore import Qt, QSize, QTimer, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon, QFont
 import os
 
 from Filler_interface.app import app
-from Filler_robot.robot_main import Robot_filler
 
 
 class Prepare_control(QMainWindow):
+    calibration = pyqtSignal()
+    reset_calibration = pyqtSignal()
+    find_cup = pyqtSignal()
+
     def __init__(self):
         super().__init__()
 
@@ -73,25 +76,6 @@ class Prepare_control(QMainWindow):
         self.update()
 
 
-    def start_robot_thread(self, robot_on = False):
-        if not self.thread_robot.isRunning():
-            self.thread_robot = QThread()
-            self.robot_filler = Robot_filler(robot_on = True)
-            self.robot_filler.moveToThread(self.thread_robot)
-            self.thread_robot.started.connect(self.robot_filler.run)
-            self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
-            self.thread_robot.start()
-    
-
-    def stop_robot_thread(self):
-        if self.thread_robot is not None and self.thread_robot.isRunning():
-            self.robot_filler.stop()
-            self.thread_robot.quit()
-            self.thread_robot.wait()
-            # self.thread_robot = None
-            # self.robot_filler = None
-
-
     def show(self):
         if app.on_fullscreen: self.fullscreen()
 
@@ -103,6 +87,8 @@ class Prepare_control(QMainWindow):
         app.window_focus = self.window_name
         print(app.window_focus)
         app.close_windows()
+
+        app.threads.start_robot_thread(camera_on = True, neuron_on = True, interface_on = True, robot_on = True)
 
 
     def fullscreen(self):        
@@ -148,6 +134,8 @@ class Prepare_control(QMainWindow):
         self.value = 0
         self.myprogressBar.setValue(self.value)
 
+        self.reset_calibration.emit()
+
         self.update_text()
 
 
@@ -184,13 +172,21 @@ class Prepare_control(QMainWindow):
         match self.param_num:
             case 0:
                 name_button = {
-                    0: 'Начать 1',
+                    0: 'Калибровка',
                     1: 'Start1',
                 }
 
             case 1:
                 name_button = {
-                    0: 'Начать 2',
+                    0: 'Продолжить',
+                    1: 'Start2',
+                }
+
+                app.window_filler
+
+            case 2:
+                name_button = {
+                    0: 'Начать',
                     1: 'Start2',
                 }
 
@@ -198,7 +194,7 @@ class Prepare_control(QMainWindow):
 
             case _:
                 name_button = {
-                    0: 'Начать 0',
+                    0: 'Прокачка',
                     1: 'Start0',
                 }
         
@@ -222,6 +218,60 @@ class Prepare_control(QMainWindow):
     def button_calibr_clicked(self):
         self.param_num += 1
 
+        print(self.param_num)
+
+        match self.param_num:
+            case 0:
+                name_button = {
+                    0: 'Калибровка',
+                    1: 'Start1',
+                }
+                               
+                label_name = {
+                    0: 'Поставьте руку робота в нулевую позицию и нажмите Калибровка',
+                    1: 'Выставте ttttку робота в нулевую позицию и нажмите продолжить',
+                }
+
+                self.label.setText(label_name[self.lang])
+                
+            case 1:
+                label_name = {
+                    0: 'Началась калибровка робота (Подождите)',
+                    1: 'Началась rrrr калибровка робота (Подождите)',
+                }
+
+                self.label.setText(label_name[self.lang])
+                self.button_calibr.setEnabled(False)
+        
+                self.calibration.emit()
+
+                self.value = 21
+            
+            case 2:
+                label_name = {
+                    0: 'Поставьте стакан для прокачки системы и нажмите Начать',
+                    1: 'Поставьте rrrr стакан для розлива и нажмите стоп когда пойдет вода',
+                }
+                                
+                self.label.setText(label_name[self.lang])
+
+                self.value = 50
+
+            case 3:
+                
+                self.find_cup.emit()
+
+                self.value = 21
+
+            case 5:
+                self.find_cup.emit()
+
+                self.value = 21
+
+            case _:
+                pass
+        
+
         self.label_update()
         self.button_calibr_update()
 
@@ -241,45 +291,106 @@ class Prepare_control(QMainWindow):
         match self.param_num:
             case 0:
                 label_name = {
-                    0: 'Выставте руку робота в нулевую позицию и нажмите продолжить',
+                    0: 'Поставьте руку робота в нулевую позицию и нажмите Калибровка',
                     1: 'Выставте ttttку робота в нулевую позицию и нажмите продолжить',
                 }
 
                 self.label.setText(label_name[self.lang])
-                
+
             case 1:
                 label_name = {
                     0: 'Началась калибровка робота (Подождите)',
                     1: 'Началась rrrr калибровка робота (Подождите)',
                 }
-                                
-                self.label.setText(label_name[self.lang])
 
-                self.value += 33
+                self.label.setText(label_name[self.lang])
+                self.button_calibr.setEnabled(False)
+                
             case 2:
                 label_name = {
-                    0: 'Поставьте стакан для розлива и нажмите стоп когда пойдет вода',
+                    0: 'Поставьте стакан для прокачки системы и нажмите Начать',
                     1: 'Поставьте rrrr стакан для розлива и нажмите стоп когда пойдет вода',
                 }
                                 
                 self.label.setText(label_name[self.lang])
 
-                self.value += 33
+                self.value = 50
+
             case 3:
                 label_name = {
-                    0: 'Система готова. Нажмите продолжить',
-                    1: 'Система готова444. Нажмите продолжить',
+                    0: 'Идет обнаружение стакана',
+                    1: 'Началась rrrr калибровка робота (Подождите)',
+                }
+
+                self.label.setText(label_name[self.lang])
+                self.button_calibr.setEnabled(False)
+
+            case 4:
+                label_name = {
+                    0: 'Идет прокачка системы, нажмите Стоп когда система заполниться',
+                    1: 'Поставьте rrrr стакан для розлива и нажмите стоп когда пойдет вода',
                 }
                                 
                 self.label.setText(label_name[self.lang])
 
-                self.value += 34
+                self.value = 90
+            case 5:
+                label_name = {
+                    0: 'Идет прокачка (нажмите стоп, когда ситстема заполниться)',
+                    1: 'Началась rrrr калибровка робота (Подождите)',
+                }
+
+                self.label.setText(label_name[self.lang])
+                self.button_calibr.setEnabled(False)
+
+                self.label.setText(label_name[self.lang])
+
+                self.value = 100
             case 4:
                 app.window_filler.show()
                 self.hide()
                 self.param_num = 0
             case _:
                 pass
+        
+
+    def update_prepare(self, id):
+        print('id', id)
+
+        match id:
+            case 0:
+                label_name = {
+                    0: 'Калибровка готова (Нажмите продолжить)',
+                    1: 'Началась rrrr калибровка робота (Подождите)',
+                }
+
+                self.label.setText(label_name[self.lang])
+                self.button_calibr.setEnabled(True)
+
+                self.value = 40
+
+                self.myprogressBar.setValue(self.value)
+
+                print(self.value)
+
+
+            case 1:
+                label_name = {
+                    0: 'Стакан обнаружен (Нажмите Прокачка)',
+                    1: 'Началась rrrr калибровка робота (Подождите)',
+                }
+
+                self.label.setText(label_name[self.lang])
+                self.button_calibr.setEnabled(True)
+
+                self.value = 65
+
+                self.myprogressBar.setValue(self.value)
+
+                print(self.value)
+                
+            
+        
 
 
 window_prepare = Prepare_control()

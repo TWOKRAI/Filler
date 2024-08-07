@@ -6,7 +6,7 @@ import os
 
 from Filler_interface.app import app
 
-from Filler_interface.threads import thread
+# from Filler_interface.threads import thread
 
 try:
     # from Filler_robot.NeuroModules.interface import interface

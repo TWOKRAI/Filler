@@ -22,7 +22,7 @@ class Robot_filler(QObject):
 
         self.camera_on = camera_on
         self.neuron_on = neuron_on 
-        self.inteface_on = interface_on
+        self.interface_on = interface_on
         self.robot_on = robot_on
         
         clear_file('log_temp.txt')
@@ -33,7 +33,6 @@ class Robot_filler(QObject):
     
 
     def run(self) -> None:
-        self.robot.enable_motors(True)
 
         while self.running:
             # temp = check_temperature()
@@ -41,7 +40,7 @@ class Robot_filler(QObject):
             
             if self.camera_on: self.camera.running()
             if self.neuron_on: self.neuron.find_objects()
-            if self.inteface_on: self.interface.running()
+            if self.interface_on: self.interface.running()
             if self.robot_on: self.robot.running()
 
             if self.robot_on: QThread.msleep(2000)
@@ -65,3 +64,31 @@ class Robot_filler(QObject):
             self.robot_on = False
 
 
+    def calibration(self):
+        self.robot.calibration()
+
+
+    def reset_calibration(self):
+        self.robot.calibration_ready = False
+
+        self.robot.pumping_find = False
+        self.robot.find = False
+
+        self.robot.enable_motors(False)
+
+        print('reset')
+
+
+    def find_cup(self):
+        self.robot.pumping_find = True
+
+        while self.running:
+            if self.camera_on: self.camera.running()
+            if self.neuron_on: self.neuron.find_objects()
+            if self.robot_on: self.robot.running()
+
+            if self.robot.find:
+                self.robot.find = False
+                break
+
+        self.camera.stop()

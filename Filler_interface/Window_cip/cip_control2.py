@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtCore import QTimer, QSize
+from PyQt5.QtCore import QTimer, QSize, pyqtSignal, QObject
 from PyQt5.QtGui import QIcon, QFont
 import os
 
@@ -12,6 +12,11 @@ from Filler_interface.filler import filler
 
 
 class Cip_control(Control):
+    power_pumps = pyqtSignal()
+    stop_pumps_signal = pyqtSignal()
+    speed_pumps = pyqtSignal(int)
+    direction_pumps = pyqtSignal(bool)
+
     def __init__(self):
         super().__init__()
         
@@ -128,6 +133,10 @@ class Cip_control(Control):
         self.enable_control()
 
 
+    def show(self):
+        super().show()
+
+
     def update(self):
         self.label_window_update()
         self.coll_params_update()
@@ -166,6 +175,7 @@ class Cip_control(Control):
             2: filler.param21,
             3: filler.param31,
             4: filler.param41,
+            5: filler.param41,
         }
     
         return self.param_list
@@ -182,6 +192,8 @@ class Cip_control(Control):
         filler.param21 = self.param_list[2]
         filler.param31 = self.param_list[3]
         filler.param41 = self.param_list[4]
+        filler.param41 = self.param_list[5]
+
 
         print(filler.param11, filler.param21, filler.param31, filler.param41)
 
@@ -191,10 +203,11 @@ class Cip_control(Control):
 
     
     def default_parametrs(self):
-        filler.param11 = 2
+        filler.param11 = 8
         filler.param21 = 0
-        filler.param31 = 1
-        filler.param41 = 1
+        filler.param31 = 8
+        filler.param41 = 0
+        filler.param41 = 0
 
         self.param_list = self.get_parametrs()
         self.memory_write(self.param_list)
@@ -280,7 +293,7 @@ class Cip_control(Control):
     def coll_params_update(self):
         size_text = 21
         
-        text = f'{self.param_num} / {len(self.param_list) + 1}'
+        text = f'{self.param_num} / {len(self.param_list)}'
         self.coll_params.setText(str(text))
 
         font = QFont()
@@ -325,6 +338,15 @@ class Cip_control(Control):
                 size_text = 90
             case 5:
                 value = self.param_list[self.param_num]
+
+                value_text = [
+                    ['Выкл', 'Off'],
+                    ['Вкл', 'On'],
+                    ]
+
+                value = value_text[value]
+                value = value[self.lang]
+
                 size_text = 90
             case 6:
                 value = self.param_list[self.param_num]
@@ -460,7 +482,7 @@ class Cip_control(Control):
                 size_text = 30
             case 5:
                 text = {
-                    0: 'Дозировка напитка 1',
+                    0: 'Оба насоса: Состояние',
                     1: 'Цвет 21 (Иконка)',
                     2: '',
                     3: '',
@@ -504,23 +526,54 @@ class Cip_control(Control):
 
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] > 0:
+                if self.param_list[self.param_num] > 1:
                     self.param_list[self.param_num] -= 1
+
+                self.put_parametrs()
+
             case 2:
                 if self.param_list[self.param_num] > 0:
                     self.param_list[self.param_num] -= 1
+
+                self.put_parametrs()
+
+                self.text_color(None)
+
+                self.stop_pumps_signal.emit()
+                app.threads.stop_pumps_thread()
+
             case 3:
-                if self.param_list[self.param_num] > 0:
+                if self.param_list[self.param_num] > 1:
                     self.param_list[self.param_num] -= 1
+
+                self.put_parametrs()
             case 4:
                 if self.param_list[self.param_num] > 0:
                     self.param_list[self.param_num] -= 1
+
+                self.put_parametrs()
+
+                self.text_color(None)
+
+                self.stop_pumps_signal.emit()
+                app.threads.stop_pumps_thread()
+
             case 5:
-                if self.param_list[self.param_num] >= 5:
-                    self.param_list[self.param_num] -= 5
+                if self.param_list[self.param_num] > 0:
+                    self.param_list[self.param_num] -= 1
+
+                self.put_parametrs()
+
+                self.text_color(None)
+
+                self.stop_pumps_signal.emit()
+                app.threads.stop_pumps_thread()
+
             case 6:
                 if self.param_list[self.param_num] >= 5:
                     self.param_list[self.param_num] -= 5
+                
+                self.put_parametrs()
 
         self.update()
         self.enable_control()
@@ -554,7 +607,7 @@ class Cip_control(Control):
     def minus_enable(self):
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] <= 0:
+                if self.param_list[self.param_num] <= 1:
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
@@ -566,7 +619,7 @@ class Cip_control(Control):
                     self.button_minus.setEnabled(True)
 
             case 3:
-                if self.param_list[self.param_num] <= 0:
+                if self.param_list[self.param_num] <= 1:
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
@@ -606,6 +659,13 @@ class Cip_control(Control):
                     self.param_list[self.param_num] += 1
                     
                 self.put_parametrs()
+
+                self.text_color((63, 140, 110))
+
+                speed_1 = self.param_list[1]
+                speed_2 = self.param_list[3]
+               
+                app.threads.start_pumps_thread(True, False, speed_1, speed_2)
                 
             case 3:
                 if self.param_list[self.param_num] < 10:
@@ -618,12 +678,26 @@ class Cip_control(Control):
                     self.param_list[self.param_num] += 1
                 
                 self.put_parametrs()
+
+                self.text_color((63, 140, 110))
+
+                speed_1 = self.param_list[1]
+                speed_2 = self.param_list[3]
+               
+                app.threads.start_pumps_thread(False, True, speed_1, speed_2)
                 
             case 5:
-                if self.param_list[self.param_num] < 100:
-                    self.param_list[self.param_num] += 5
+                if self.param_list[self.param_num] < 1:
+                    self.param_list[self.param_num] += 1
                 
                 self.put_parametrs()
+
+                self.text_color((63, 140, 110))
+
+                speed_1 = self.param_list[1]
+                speed_2 = self.param_list[3]
+               
+                app.threads.start_pumps_thread(True, True, speed_1, speed_2)
                 
             case 6:
                 if self.param_list[self.param_num] < 120:
@@ -650,7 +724,8 @@ class Cip_control(Control):
                 self.button2.setGeometry(0, 0, self.width(), self.height())
                 self.button2.setEnabled(True)
             case 5:
-                pass
+                self.button2.setGeometry(0, 0, self.width(), self.height())
+                self.button2.setEnabled(True)
             case 6:
                 pass
             case 7:
@@ -740,6 +815,8 @@ class Cip_control(Control):
 
         
     def close(self):
+        self.stop_pumps_signal.emit()
+        
         self.minus()
         self.button2.setGeometry(0, 0, 1, 1)
         self.button2.setEnabled(False)

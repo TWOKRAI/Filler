@@ -1,4 +1,5 @@
 import asyncio
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
 from Filler_robot.MotorModules.motor import Motor
 # from Filler_robot.NeuroModules.neuron import neuron
@@ -6,7 +7,11 @@ from Filler_robot.MotorModules.motor import Motor
 from Raspberry.pins_table import pins
 
 
-class Pump:
+from Filler_interface import app
+
+
+class Pump():
+
     def __init__(self, name, motor):
         self.print_on = True
 
@@ -18,7 +23,8 @@ class Pump:
         self.ml = 30 + 2
         self.amount = 1
         self.step_amount = 0.003
-        self.speed = 1000
+        self.speed = 10
+        self.speed_k = 100
 
         self.bottle_ml = 100
         self.bottle_min = 50
@@ -41,37 +47,22 @@ class Pump:
 
 
     async def _pour_async(self, ml):
+        self.motor.stop = False
+        self.ready = False
+        
         self.turn = self.ml_to_steps(ml)
 
-        await self.motor._freq_async(self.speed, 1, self.turn)
+        speed = self.speed_k *self.speed 
 
-        # self.turn = self.ml_to_steps(ml)
-
-        # self.motor.limit_min = -1 * (self.turn + 1000)
-        # self.motor.limit_max = self.turn + 1000
-        
-        # if self.bottle_ml - ml >= ml:
-        #     self.motor.null_value()
-
-        #     # await self.motor.move(self.turn, async_mode=True)
-        #     await self.motor._freq_async(1000, 1, self.turn)
-
-        #     # # Создаем асинхронную задачу для вызова функции move мотора
-        #     # task = asyncio.create_task(self.motor.move(self.turn, async_mode=True))
-        #     # # Ожидаем завершения задачи
-        #     # await task
-
-        # else:
-        #     self.warnning = True
-        #     print(f'Pour {self.name}: WARNING')
-
-        # if self.print_on:
-        #     print(f'Pour {self.name} : {self.turn}')
+        await self.motor._freq_async(speed, 1, self.turn)
 
         self.ready = True
         
 
     def pour(self, ml, async_mode: bool = False):
+        self.motor.stop = False
+        self.ready = False
+
         self.motor.value = 0
         self.motor.error_limit = False
         
@@ -82,17 +73,25 @@ class Pump:
         
     
 
-class Pump_station:
-    def __init__(self): 
+class Pump_station(QObject):
+    minus_pump = pyqtSignal()
+    
+    def __init__(self):
+        super().__init__()
+
+        self.running = True
+
         self.motor_1 = Motor('pumps_1', pins.motor_p1_step, pins.motor_p1_dir, pins.motor_p1p2_enable)
         self.motor_1.speed_def = 0.000005
         self.motor_1.enable_on(False)
         self.pump_1 = Pump('pumps_1', self.motor_1)
+        self.pump_1_enable = True
 
         self.motor_2 = Motor('pumps_2',  pins.motor_p2_step, pins.motor_p2_dir, pins.motor_p1p2_enable)
         self.motor_2.speed_def = 0.000005
         self.motor_2.enable_on(False)
         self.pump_2 = Pump('pumps_2', self.motor_2)
+        self.pump_2_enable = True
         
         self.mode_game = False
         self.level = 1
@@ -102,10 +101,17 @@ class Pump_station:
         # self.statistic_pump_1 = int(neuron.memory_read('memory.txt','pump_1'))
         # self.statistic_pump_2 = int(neuron.memory_read('memory.txt', 'pump_2'))
         
+        self.stop = False
+        self.ready = False
+
+        app.window_cip.power_pumps.connect(self.run)
+
 
     def run(self):
+        self.enable_motors(True)
+
         asyncio.run(self._all_pour_async(self.pump_1.ml, self.pump_2.ml))
-        asyncio.run(self._all_pour_async(-0.3, -0.3))
+        asyncio.run(self._all_pour_async(-0.3, -0.3, stop = False))
 
         self.enable_motors(False)
 
@@ -114,17 +120,42 @@ class Pump_station:
         self.motor_1.enable_on(value)
         self.motor_2.enable_on(value)
 
+    
+    def stop_pumps2(self):
+        self.stop2 = True
 
-    def statistic_write(self):
-        self.statistic_pump_1 += self.pump_1.step_to_ml()
-        self.statistic_pump_2 += self.pump_2.step_to_ml()
+        self.pump_1.motor.stop = True
+        self.pump_2.motor.stop = True
+        
 
-        # neuron.memory_write('memory.txt', 'pump_1', self.statistic_pump_1)
-        # neuron.memory_write('memory.txt', 'pump_2', self.statistic_pump_2)
+    async def _stop_pumps(self):       
+        while not self.stop2:
+
+            if pins.button_stop.get_value():
+                self.stop_pumps2()
 
 
-    async def _all_pour_async(self, turn1, turn2):
-        self.enable_motors(True)
+            if self.stop2 == True or (self.pump_1.ready == True and self.pump_2.ready == True):
+                self.pump_1.motor.stop = True
+                self.pump_2.motor.stop = True
+
+                self.minus_pump.emit()
+
+                raise asyncio.CancelledError()
+
+            await asyncio.sleep(0.1)
+
+    
+    async def _pour_async2(self, motor, turn):
+        await motor._freq_async2(1000, 1, turn)
+
+
+    async def _all_pour_async(self, turn1, turn2, stop = True):
+        print( ' self.pump_1.motor.stop', self.pump_1.motor.stop,  self.pump_2.motor.stop)
+
+        self.stop2 = False
+        self.pump_1.ready = False
+        self.pump_2.ready = False
 
         # if self.mode_game == False:
         #     turn1 = self.pump_1.ml
@@ -135,13 +166,28 @@ class Pump_station:
 
         tasks = []
 
-        if turn1 != 0:
+        if stop == True:
+            tasks.append(asyncio.create_task(self._stop_pumps()))
+
+        # tasks.append(asyncio.create_task(self.pump_1.motor.test()))
+
+        if turn1 != 0 and self.pump_1_enable:
             tasks.append(asyncio.create_task(self.pump_1._pour_async(turn1)))
-
-        if turn2 != 0:
+        else:
+            self.pump_1.ready = True
+         
+        if turn2 != 0 and self.pump_2_enable:
             tasks.append(asyncio.create_task(self.pump_2._pour_async(-turn2)))
-        
-        await asyncio.gather(*tasks)
+        else:
+            self.pump_2.ready = True
 
+        try:
+            await asyncio.gather(*tasks)
+        except asyncio.CancelledError:
+            for task in tasks:
+                if not task.done():
+                    task.cancel()
+        
+        
         
 

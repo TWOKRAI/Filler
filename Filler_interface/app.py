@@ -250,7 +250,8 @@ from Filler_interface.Window_filler.filler_conrtol import filler_window
 app.window_filler = filler_window
 
 
-from Filler_interface.threads import thread
-thread.start_input_thread()
-
 app.ready = True
+
+from Filler_interface.threads import Thread
+app.threads = Thread()
+app.threads.start_input_thread()
