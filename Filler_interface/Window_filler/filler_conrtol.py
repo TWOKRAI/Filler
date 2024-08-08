@@ -18,6 +18,8 @@ try:
 except ImportError:
     raspberry = False
 
+from Filler_interface.filler import filler
+
 
 class filler_control(QMainWindow):
     def __init__(self):
@@ -79,54 +81,6 @@ class filler_control(QMainWindow):
         # self.start_input_thread()
 
 
-    # def start_robot_thread(self):
-    #     if not self.thread_robot.isRunning():
-    #         self.thread_robot = QThread()
-    #         self.robot_filler = Robot_filler(robot_on = True)
-    #         self.robot_filler.moveToThread(self.thread_robot)
-    #         self.thread_robot.started.connect(self.robot_filler.run)
-    #         self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
-    #         self.input_request.error.connect(self.robot_filler.robot.stop_motors)
-    #         self.input_request.error.connect(app.window_view.close)
-    #         self.thread_robot.start()
-    
-
-    # def stop_robot_thread(self):
-    #     if self.thread_robot is not None and self.thread_robot.isRunning():
-    #         self.robot_filler.stop()
-    #         self.thread_robot.quit()
-    #         self.thread_robot.wait()
-    #         # self.thread_robot = None
-    #         # self.robot_filler = None
-
-
-    # def start_input_thread(self):
-    #     if not self.thread_robot.isRunning():
-    #         self.thread_input = QThread()
-    #         self.input_request = Input_request()
-    #         self.input_request.moveToThread(self.thread_input)
-    #         self.thread_input.started.connect(self.input_request.run)
-
-    #         self.input_request.show_error.connect(app.window_error.show)
-            
-
-    #         self.input_request.motor_monitor.on_signal.connect(app.window_start.close)
-    #         self.input_request.motor_monitor.off_signal.connect(app.window_start.show)
-    #         self.input_request.motor_monitor.off_signal.connect(app.window_view.close)
-    #         self.input_request.motor_monitor.off_signal.connect(self.stop_input_thread)
-
-    #         self.thread_input.start()
-    
-
-    # def stop_input_thread(self):
-    #     if self.thread_robot is not None and self.thread_robot.isRunning():
-    #         self.input_request.stop()
-    #         self.thread_input.quit()
-    #         self.thread_input.wait()
-    #         # self.thread_robot = None
-    #         # self.robot_filler = None
-
-
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
 
@@ -143,8 +97,14 @@ class filler_control(QMainWindow):
 
         self.play = True
 
+        self.progressBar_1_update()
+        self.progressBar_2_update()
+
         # if raspberry:
         #     self.robot_filler.enable_robot_on(True)
+
+        self.progressBar_1.setFont(QFont(app.font_family, 25))
+        self.progressBar_2.setFont(QFont(app.font_family, 25))
 
     
     def language(self, lang):
@@ -157,8 +117,6 @@ class filler_control(QMainWindow):
         self.button_menu_update()
         self.button_pause_update()
         self.button_view_update()
-        self.progressBar_1_update()
-        self.progressBar_2_update()
         self.value_1_update()
         self.value_2_update()
         self.label_update()
@@ -183,6 +141,8 @@ class filler_control(QMainWindow):
         app.window_settings1.show()
         self.hide()
 
+        app.threads.stop_robot_thread()
+
 
     def button_menu_pressed(self):    
         self.timer.start()
@@ -195,6 +155,8 @@ class filler_control(QMainWindow):
     def on_timer_timeout(self):
         app.window_main_filler.show()
         self.hide()
+
+        app.threads.stop_robot_thread()
 
 
     
@@ -241,7 +203,7 @@ class filler_control(QMainWindow):
 
 
     def button_view_clicked(self):
-        app.window_main_filler.view()
+        app.window_view.show()
 
 
     def label_update(self):
@@ -296,10 +258,11 @@ class filler_control(QMainWindow):
         self.progressBar_1.setFormat(f"%v {pre_value}")
         self.progressBar_1.setFont(QFont(app.font_family, 25))
         self.progressBar_1.setMinimum(0)
-        self.progressBar_1.setMaximum(104)
-        self.progressBar_1.setAlignment(Qt.AlignTop) 
+        maximum = int(filler.param3*1.05)
+        self.progressBar_1.setMaximum(maximum)
+        self.progressBar_1.setAlignment(Qt.AlignTop)
+        self.progressBar_1.setValue(filler.param3)
 
-        self.progressBar_1.setValue(36)
     
 
     def progressBar_2_update(self):
@@ -313,10 +276,10 @@ class filler_control(QMainWindow):
         self.progressBar_2.setFormat(f"%v {pre_value}")
         self.progressBar_2.setFont(QFont(app.font_family, 25))
         self.progressBar_2.setMinimum(0)
-        self.progressBar_2.setMaximum(104)
-        self.progressBar_2.setAlignment(Qt.AlignTop) 
-
-        self.progressBar_2.setValue(36)
+        maximum = int(filler.param4*1.05)
+        self.progressBar_2.setMaximum(maximum)
+        self.progressBar_2.setAlignment(Qt.AlignTop)
+        self.progressBar_2.setValue(filler.param4)
 
 
     def progressBar_recolor(self):
@@ -353,7 +316,7 @@ class filler_control(QMainWindow):
 
         pre_value = pre_value[self.lang]
 
-        value = 11
+        value = filler.param5
 
         self.value_1.setText(f'{value} {pre_value}')
 
@@ -374,7 +337,7 @@ class filler_control(QMainWindow):
 
         pre_value = pre_value[self.lang]
 
-        value = 12
+        value = value = filler.param6
 
         self.value_2.setText(f'{value} {pre_value}')
 
@@ -455,5 +418,15 @@ class filler_control(QMainWindow):
         self.label_value_2.setText(f'{text}')
 
 
+    def update_bottle_1(self, bottle_1_ml):
+        print('НАСОСЫ ОБНОВИЛИСЬ', bottle_1_ml )
+        self.progressBar_1.setValue(bottle_1_ml)
+
+
+    def update_bottle_2(self, bottle_2_ml):
+        print('НАСОСЫ ОБНОВИЛИСЬ',  bottle_2_ml )
+        self.progressBar_2.setValue(bottle_2_ml)
+
+    
     
 filler_window = filler_control()

@@ -64,7 +64,7 @@ class Neuron:
 		
 		self.threshold = 0.2
 		
-		self.nmsthreshold = 0.3
+		self.nmsthreshold = 0.4
 
 		self.list_find = {'cup': True, 'CUP': True, 'vase': True, 'wine glass': True, 'toilet': True, 'person': True}
 		
@@ -92,8 +92,8 @@ class Neuron:
 
 		self.objects_filter = []
 		
-		self.region_x = 20
-		self.region_y = 20
+		self.region_x = 15
+		self.region_y = 15
 		self.leen = 1800
 		
 		self.hands_data = []
@@ -165,14 +165,20 @@ class Neuron:
 
 					self.perspective = (xr_center - img_width / 2) * 1 / self.factor_x
 
-					yr_center_2 = int((y1 + h )* 0.96 - w * (y1) / self.leen * 1.6)
+
+					if h < 150:
+						h1 = h
+					else:
+						h1 = h + 45
+					
+
+
+					# yr_center_2 = int((y1 + h )* 0.96 - w * (y1) / self.leen * 1.6)
 					
 					xr_center_2 = int(x1 + w / 1.8) - self.perspective * 1.2
 
-
-					# cv2.line(image, (int(xr_center), yr_center), (int(xr_center - self.perspective * 4), y1 + h), (255, 255, 0), 1)
-
-					yr_center_2 = int((y1 + h) - h * 0.3) 
+					
+					yr_center_2 = int((y1 + h1) - h1 * 0.3) 
 					
 					if xr_center >= self.camera.img_width / 2:
 						xr_center_2 = int((xr_center - self.perspective * 2)) #+ (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
@@ -324,7 +330,7 @@ class Neuron:
 			yr_center = obj[9]	
 			perspective = obj[10]
 			xr_center_2 = obj[11]
-			yr_center_2 = obj[12]	
+			yr_center_2 = obj[12]
 
 			x = x1
 			y = y1

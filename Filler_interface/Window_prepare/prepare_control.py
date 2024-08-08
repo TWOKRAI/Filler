@@ -133,6 +133,8 @@ class Prepare_control(QMainWindow):
 
 
     def reset(self):
+        app.threads.stop_robot_thread()
+
         self.param_num = 0
         
         self.value = 0
@@ -143,7 +145,7 @@ class Prepare_control(QMainWindow):
         self.reset_calibration.emit()
 
         self.update_text()
-
+        
 
     def button_menu_update(self):
         icon_size = QSize(60, 60)

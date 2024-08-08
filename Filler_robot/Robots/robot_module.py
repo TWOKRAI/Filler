@@ -594,7 +594,7 @@ class Robot_module(QObject):
 					break
 
 				if self.button_stop == False:
-					if y >= 16.5:
+					if y >= 18.5:
 						for _ in range(10):
 							self.camera.read_cam()
 							self.neuron.find_objects()
@@ -612,14 +612,15 @@ class Robot_module(QObject):
 									list_objects[i][0] = True
 									self.neuron.memory_objects = list_objects
 									self.interface.save_image(interface = 1)
-
-								
-								if value_x != 0 and value_y != 0:
+									
 									break
-					# else:
-					# 	self.pump_station.run()
-					# 	# self.neuron.memory_objects = list_objects
-					# 	list_objects[i][0] = True
+								
+								# if value_x != 0 and value_y != 0:
+								# 	break
+					else:
+						self.pump_station.run()
+						self.neuron.memory_objects = list_objects
+						list_objects[i][0] = True	
 
 
 					if not self.pumping_find:
@@ -629,9 +630,11 @@ class Robot_module(QObject):
 			i += 1
 		
 		# print('move_objects list_coord', list_objects)
-	
 
 		self.neuron.memory_objects = list_objects
+
+		if not self.pumping_find:
+			QThread.msleep(5000)
 
 
 	async def _detect_switch(self):

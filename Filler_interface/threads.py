@@ -34,6 +34,7 @@ class Thread():
 
                 self.thread_robot.started.connect(self.robot_filler.run)
 
+                
                 self.robot_filler.interface.frame_captured.connect(app.window_view.update_frame)
                 # self.input_request.error.connect(self.robot_filler.robot.stop_motors)
 
@@ -62,6 +63,9 @@ class Thread():
                 self.robot_filler.robot.pump_station.pump_2.bottle_ml = filler.param4
                 self.robot_filler.robot.pump_station.pump_1.ml = filler.param5
                 self.robot_filler.robot.pump_station.pump_2.ml = filler.param6
+
+                self.robot_filler.robot.pump_station.bottle_1.connect(app.window_filler.update_bottle_1)
+                self.robot_filler.robot.pump_station.bottle_2.connect(app.window_filler.update_bottle_2)
 
                 self.thread_robot.started.connect(self.robot_filler.run)
 

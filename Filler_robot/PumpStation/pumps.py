@@ -9,10 +9,9 @@ from Raspberry.pins_table import pins
 
 from Filler_interface import app
 
+from Filler_interface.filler import filler
 
 class Pump(QObject):
-    bottle = pyqtSignal()
-
     def __init__(self, name, motor):
         super().__init__()
 
@@ -29,6 +28,8 @@ class Pump(QObject):
         self.speed = 10
         self.speed_k = 100
 
+        self.dir = 1
+
         self.bottle_ml = 1000
         self.bottle_min = 100
 
@@ -37,11 +38,11 @@ class Pump(QObject):
     
 
     def ml_to_steps(self, ml):
+        steps = 0
+        
         if self.bottle_ml >= self.bottle_min:
             steps = int((ml + 2) / self.step_amount)
-            self.bottle_ml -= ml
-
-            # self.bottle.emit(self.bottle_ml)
+            self.bottle_ml -= ml * self.dir
 
             if self.print_on:
                 print(self.ml, self.step_amount)
@@ -60,9 +61,13 @@ class Pump(QObject):
         
         self.turn = self.ml_to_steps(ml)
 
-        speed = self.speed_k *self.speed 
+        speed = self.speed_k * self.speed 
 
         await self.motor._freq_async(speed, 1, self.turn)
+
+        # QThread.sleep(1)
+        
+        # await self.motor._freq_async(speed, 1, 1000 * -self.dir)
 
         self.ready = True
         
@@ -78,14 +83,23 @@ class Pump(QObject):
             return self._pour_async(ml)
         else:
             asyncio.run(self._pour_async(ml))
-        
+    
+
+    async def _pour_async_down(self, dir):
+        self.motor.stop = False
+        self.ready = False
+
+        if dir == True:
+            await self.motor._freq_async(600, 1, 500 * self.dir)
+        else:
+            await self.motor._freq_async(600, 1, -500 * self.dir)
     
 
 class Pump_station(QObject):
     minus_pump = pyqtSignal()
-
+    bottle_1 = pyqtSignal(int)
+    bottle_2 = pyqtSignal(int)
     
-
     
     def __init__(self):
         super().__init__()
@@ -103,6 +117,7 @@ class Pump_station(QObject):
         self.motor_2.enable_on(False)
         self.pump_2 = Pump('pumps_2', self.motor_2)
         self.pump_2_enable = True
+        self.pump_2.dir = -1
         
         self.mode_game = False
         self.level = 1
@@ -122,9 +137,14 @@ class Pump_station(QObject):
         self.enable_motors(True)
 
         asyncio.run(self._all_pour_async(self.pump_1.ml, self.pump_2.ml))
-        asyncio.run(self._all_pour_async(-0.3, -0.3, stop = False))
+        # asyncio.run(self._all_pour_async(-0.3, -0.3, stop = False))
+        # QThread.sleep(1)
+        # asyncio.run(self._all_pour_async2())
 
         self.enable_motors(False)
+
+        self.bottle_1.emit(int(self.pump_1.bottle_ml)) 
+        self.bottle_2.emit(int(self.pump_2.bottle_ml)) 
 
     
     def enable_motors(self, value = False):
@@ -199,6 +219,23 @@ class Pump_station(QObject):
                 if not task.done():
                     task.cancel()
         
-        
-        
+    
+    async def _all_pour_async2(self):
+        print('START DOWN')
 
+        self.stop2 = False
+        self.pump_1.ready = False
+        self.pump_2.ready = False
+
+        tasks = []
+
+        tasks.append(asyncio.create_task(self.pump_1._pour_async_down(True)))
+        tasks.append(asyncio.create_task(self.pump_2._pour_async_down(True)))
+
+        try:
+            await asyncio.gather(*tasks)
+        except asyncio.CancelledError:
+            for task in tasks:
+                if not task.done():
+                    task.cancel()
+        

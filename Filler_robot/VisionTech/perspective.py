@@ -138,8 +138,24 @@ class Perspective:
         # y = y * (1 - y * y / 1000
 
         
+        # x = x * 1
+        # y = y * 0.87
+
+        # print(y)
+
+        # # x = x * 0.95
+
+        # print(y)
+
+        # if abs(x) > 13:
+        #     x = x * 1.1
+        #     y = y * 0.95
+        
+        # if y < 19.5:
+        #     y = y * 1.07
+
         x = x * 1
-        y = y * 0.87
+        y = y * 0.85
 
         print(y)
 
@@ -151,8 +167,9 @@ class Perspective:
             x = x * 1.1
             y = y * 1
         
-        if y < 19.5:
+        if y < 16.5:
             y = y * 1.07
+
 
  
         # if y > 21:

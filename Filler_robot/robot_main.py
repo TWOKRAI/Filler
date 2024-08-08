@@ -52,9 +52,9 @@ class Robot_filler(QObject):
             if self.interface_on: self.interface.running()
             if self.robot_on: self.robot.running()
 
-            if self.robot_on: QThread.msleep(3000)
+            # if self.robot_on: QThread.msleep(3000)
 
-            QThread.msleep(1000)
+            # QThread.msleep(1000)
 
         self.camera.stop()
 

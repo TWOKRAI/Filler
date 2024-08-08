@@ -137,7 +137,7 @@ class Main_filler_control(QMainWindow):
         )
         
         app.setStyleSheet(new_stylesheet)
-        app.window_view.show()
+        app.window_view.show(1)
         
         #self.hide()
 
