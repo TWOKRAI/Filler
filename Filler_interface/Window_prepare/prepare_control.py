@@ -92,7 +92,7 @@ class Prepare_control(QMainWindow):
         print(app.window_focus)
         app.close_windows()
 
-        app.threads.start_robot_thread(camera_on = True, neuron_on = True, interface_on = True, robot_on = True)
+        # app.threads.start_robot_thread(camera_on = True, neuron_on = True, interface_on = True, robot_on = True)
 
 
     def fullscreen(self):        

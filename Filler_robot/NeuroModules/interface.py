@@ -111,31 +111,31 @@ class Interface(QObject):
 					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 600, (255, 0, 255), 2)
 					
 					
-					center1 = (int(self.camera.img_width/2), self.camera.img_height - 150)  # ����� ������� �������
-					axes1 = (210, 120)  # ������� ���� ������� �������
-					angle1 = 0  # ���� �������� ������� �������
-					startAngle1 = 0  # ��������� ���� ���� ������� �������
-					endAngle1 = 360  # �������� ���� ���� ������� �������
-					color1 = (0, 255, 0)  # ���� ������� ������� (�������)
-					thickness1 = 2  # ������� ����� ������� �������
+					# center1 = (int(self.camera.img_width/2), self.camera.img_height - 150)  #   
+					# axes1 = (210, 120)  #    
+					# angle1 = 0  #    
+					# startAngle1 = 0  #     
+					# endAngle1 = 360  #     
+					# color1 = (0, 255, 0) 
+					# thickness1 = 2  #    
 					
-					cv2.ellipse(image_draw, center1, axes1, angle1, startAngle1, endAngle1, color1, thickness1)
+					# cv2.ellipse(image_draw, center1, axes1, angle1, startAngle1, endAngle1, color1, thickness1)
 					
-					center1 = (int(self.camera.img_width/2), self.camera.img_height - 150)  # ����� ������� �������
-					axes1 = (300, 210)  # ������� ���� ������� �������
-					angle1 = 0  # ���� �������� ������� �������
-					startAngle1 = 0  # ��������� ���� ���� ������� �������
-					endAngle1 = 360  # �������� ���� ���� ������� �������
-					color1 = (0, 255, 0)  # ���� ������� ������� (�������)
-					thickness1 = 2  # ������� ����� ������� �������
+					# center1 = (int(self.camera.img_width/2), self.camera.img_height - 150)  #   
+					# axes1 = (300, 210)  #    
+					# angle1 = 0  #    
+					# startAngle1 = 0  #     
+					# endAngle1 = 360  #     
+					# color1 = (0, 255, 0) 
+					# thickness1 = 2  #    
 					
-					cv2.ellipse(image_draw, center1, axes1, angle1, startAngle1, endAngle1, color1, thickness1)
+					# cv2.ellipse(image_draw, center1, axes1, angle1, startAngle1, endAngle1, color1, thickness1)
 
 
 					pixmap = image_draw
 
 
-			img_monitor = pixmap[60:430,:]
+			img_monitor = pixmap[160:530,:]
 			h, w, ch = img_monitor.shape
 		
 

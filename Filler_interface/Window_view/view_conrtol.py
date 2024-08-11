@@ -1,29 +1,19 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
-from PyQt5.QtCore import Qt, pyqtSlot, QThread
+from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtGui import QPixmap
 import os
 import numpy as np
-from PIL import Image
-import io
+# from PIL import Image
+# import io
 
 
 from Filler_interface.app import app
-# from Filler_interface.threads import thread
-
-
-try:
-    from Filler_robot.NeuroModules.interface import interface
-    from Filler_robot.robot_main import Robot_filler
-    raspberry = True
-except ImportError:
-    raspberry = False
 
 
 class View_control(QMainWindow):
     def __init__(self):
         super().__init__()
-
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_view', 'UI_view.ui')
 
@@ -49,28 +39,6 @@ class View_control(QMainWindow):
 
         self.frame_label = None
 
-    #     self.thread_robot = None
-    #     self.robot_filler = None
-
-
-    # def start_robot_thread(self):
-    #     if self.thread_robot is None or not self.thread_robot.isRunning():
-    #         self.thread_robot = QThread()
-    #         self.robot_filler = Robot_filler()
-    #         self.robot_filler.moveToThread(self.thread_robot)
-    #         self.thread_robot.started.connect(self.robot_filler.run)
-    #         interface.frame_captured.connect(self.update_frame)
-    #         self.thread_robot.start()
-    
-
-    # def stop_robot_thread(self):
-    #     if self.thread_robot is not None and self.thread_robot.isRunning():
-    #         self.robot_filler.stop()
-    #         self.thread_robot.quit()
-    #         self.thread_robot.wait()
-    #         self.thread_robot = None
-    #         self.robot_filler = None
-
 
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
@@ -78,8 +46,10 @@ class View_control(QMainWindow):
 
     def show(self, id = 0):
         if id == 1:
-            app.threads.stop_robot_thread()
-            app.threads.start_view_thread(camera_on = True, neuron_on = True, interface_on = True, robot_on = False)
+            app.threads.robot_filler.camera_on = True
+            app.threads.robot_filler.neuron_on = True 
+            app.threads.robot_filler.interface_on = True
+            app.threads.start_robot_thread()
 
         if app.on_fullscreen: self.fullscreen()
 

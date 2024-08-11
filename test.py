@@ -27,6 +27,11 @@ class Filler(QThread):
     def go(self):
         print("go")
 
+        for i in range(5):
+            print('go2')
+            time.sleep(1)
+
+
 class MyWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -65,7 +70,6 @@ class MyWindow(QWidget):
 
     def go(self):
         self.filler.go()
-        print("go")
 
     def update_count(self, count):
         self.count_label.setText(f'Count: {count}')

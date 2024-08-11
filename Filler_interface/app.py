@@ -177,7 +177,7 @@ class App(QApplication):
             print(f'close: {self.window_prepare.window_name}')
 
         if self.window_focus != self.window_view.window_name:
-            self.window_view.hide()
+            self.window_view.close()
             print(f'close: {self.window_view.window_name}')
 
         if self.window_focus != self.window_filler.window_name:
@@ -195,6 +195,56 @@ class App(QApplication):
         if self.window_focus != self.window_robot.window_name:
             self.window_robot.hide()
             print(f'close: {self.window_robot.window_name}')
+
+
+    def show_windows(self):
+        match self.window_focus:
+            case self.window_start.window_name:
+                self.window_start.hide()
+                self.window_start.show()
+
+            case self.window_main_filler.window_name:
+                self.window_main_filler.hide()
+                self.window_main_filler.show()
+            
+            case self.window_list1.window_name:
+                self.window_list1.show()
+
+            case self.window_statistic.window_name:
+                self.window_statistic.hide()
+                self.window_statistic.show()
+            
+            case self.window_settings1.window_name:
+                self.window_settings1.hide()
+                self.window_settings1.show()
+                
+            case self.window_settings2.window_name:
+                self.window_settings2.hide()
+                self.window_settings2.show()
+
+            case self.window_prepare.window_name:
+                self.window_prepare.hide()
+                self.window_prepare.show()
+            
+            case self.window_view.window_name:
+                self.window_view.close(1)
+                self.window_view.show()
+
+            case self.window_filler.window_name:
+                self.window_filler.hide()
+                self.window_filler.show()
+
+            case self.window_error.window_name:
+                self.window_error.hide()
+                self.window_error.show()
+
+            case self.window_cip.window_name:
+                self.window_cip.hide()
+                self.window_cip.show()
+
+            case self.window_robot.window_name:
+                self.window_robot.hide()
+                self.window_robot.show()
 
 
     def exit(self):
@@ -255,3 +305,6 @@ app.ready = True
 from Filler_interface.threads import Thread
 app.threads = Thread()
 app.threads.start_input_thread()
+
+
+

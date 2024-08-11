@@ -30,8 +30,8 @@ class low_control(QMainWindow, Ui_low):
 
     
     def close(self):
-        app.window_main_filler.hide()
         app.close_windows()
+        app.show_windows()
 
 
 

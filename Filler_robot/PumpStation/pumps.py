@@ -6,10 +6,10 @@ from Filler_robot.MotorModules.motor import Motor
 
 from Raspberry.pins_table import pins
 
-
 from Filler_interface import app
 
 from Filler_interface.filler import filler
+
 
 class Pump(QObject):
     def __init__(self, name, motor):

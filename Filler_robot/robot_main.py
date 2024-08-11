@@ -9,7 +9,7 @@ from Filler_robot.Robots.robot_module import Robot_module
 from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 
-class Robot_filler(QObject):
+class Robot_filler(QThread):
     def __init__(self, camera_on = True, neuron_on = True, interface_on = True, robot_on = False) -> None:
         super().__init__()
 

@@ -74,6 +74,8 @@ class Camera:
         img_read = self.picam.capture_array()
         
         img_calibration = self.calibraion(img_read)
+        img_calibration = img_read
+
         
         self.img_width, self.img_height = img_calibration.shape[1], img_calibration.shape[0]
         
@@ -85,7 +87,8 @@ class Camera:
 
         image_warp = cv2.warpAffine(img_calibration, M, (self.img_width, self.img_height)) 
 
-        image_cropp = image_warp[0:1900, 380:2280,:3]
+        # image_cropp = image_warp[0:1900, 380:2280,:3]
+        image_cropp = image_warp[100:1800, 480:2180,:3]
 
         img_resize = cv2.resize(image_cropp, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
         
@@ -96,7 +99,7 @@ class Camera:
         # print('Camera read')
         # print(type(image_out), self.img_width, self.img_height)
 
-        # cv2.imwrite('test.png',image_out)
+        cv2.imwrite('test.png', self.image_out)
         
         return self.image_out
     

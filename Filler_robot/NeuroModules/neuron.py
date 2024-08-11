@@ -55,16 +55,14 @@ class Neuron:
 
 
 		file_path = os.path.join('/home/innotech/Project/Filler/Filler_robot/NeuroModules/models', 'yolov5n.onnx')
-		# file_path = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov5n.onnx')
 		self.net_v5 = cv2.dnn.readNetFromONNX(file_path)
-		self.net_v5.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
-		self.net_v5.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+		# self.net_v5.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+		# self.net_v5.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 		
 		self.mode = 0
 		
-		self.threshold = 0.2
-		
-		self.nmsthreshold = 0.4
+		self.threshold = 0.05
+		self.nmsthreshold = 0.3
 
 		self.list_find = {'cup': True, 'CUP': True, 'vase': True, 'wine glass': True, 'toilet': True, 'person': True}
 		
@@ -198,14 +196,14 @@ class Neuron:
 				self.objects_all = []
 
 		return self.objects_all
-		
+	
 
 	def detect_v4(self, image):
 		self.objects_all = []
 
 		# image = cv2.resize(image, (320, 320), interpolation = cv2.INTER_AREA)
 		
-		blob = cv2.dnn.blobFromImage(image, 1/255, (320, 320), [0,0,0], 1, crop = False)
+		blob = cv2.dnn.blobFromImage(image, 1/255, (320, 320), [0,0,0], 1, crop = True)
 		self.net_v4.setInput(blob)
 		detections = self.net_v4.forward()[0]
 		

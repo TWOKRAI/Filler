@@ -72,6 +72,7 @@ class Main_filler_control(QMainWindow):
         self.set_icons()
 
 
+
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
 
