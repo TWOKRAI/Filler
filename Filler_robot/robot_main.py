@@ -10,6 +10,8 @@ from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 
 class Robot_filler(QThread):
+    prepare = pyqtSignal()
+
     def __init__(self, camera_on = True, neuron_on = True, interface_on = True, robot_on = False) -> None:
         super().__init__()
 
@@ -24,6 +26,9 @@ class Robot_filler(QThread):
         self.neuron_on = neuron_on 
         self.interface_on = interface_on
         self.robot_on = robot_on
+
+        self.calibratiom_func = False
+        self.filler_run = False
         
         clear_file('log_temp.txt')
 
@@ -32,29 +37,48 @@ class Robot_filler(QThread):
 
     def stop(self):
         self.running = False
+        print('stop thread')
     
 
     def run(self) -> None:
+        print('START THREAD')
+
         self.running = True
         self.robot.pumping_find = False
         self.robot.find = False
-        print('33333333333333333')
+        
+        self.filler_run = False
+
+        i = 0
+
+        print('self.running', self.running)
 
         while self.running:
-            
             self.i += 1
             print(self.i)
             # temp = check_temperature()
             # write_to_file(temp, 'log_temp.txt')
+        
+            if self.filler_run:
+                if self.camera_on: self.camera.running()
+                if self.neuron_on: self.neuron.find_objects()
+                if self.interface_on: self.interface.running()
+                if self.robot_on: self.robot.running()
+ 
+            if self.calibratiom_func:
+                print('calibration 0')
+                self.robot.calibration()
+                print('calibration')
+                self.prepare.emit()
+
+                self.pumping()
+
+                self.calibratiom_func = False
+                self.robot.calibration_ready = True
+
+                # self.stop()
             
-            if self.camera_on: self.camera.running()
-            if self.neuron_on: self.neuron.find_objects()
-            if self.interface_on: self.interface.running()
-            if self.robot_on: self.robot.running()
-
-            # if self.robot_on: QThread.msleep(3000)
-
-            # QThread.msleep(1000)
+            QThread.msleep(100)
 
         self.camera.stop()
 
@@ -75,12 +99,6 @@ class Robot_filler(QThread):
             self.robot_on = False
 
 
-    def calibration(self):
-
-        self.robot.calibration()
-        print('calibration')
-
-
     def reset_calibration(self):
         self.robot.calibration_ready = False
 
@@ -92,11 +110,13 @@ class Robot_filler(QThread):
         print('reset')
 
 
-    def find_cup(self):
+    def pumping(self):
         self.robot.pumping_find = True
         self.robot.find = False
+        
+        self.robot_on = True
 
-        while self.running:
+        while not self.robot.find:
             if self.camera_on: self.camera.running()
             if self.neuron_on: self.neuron.find_objects()
             if self.robot_on: self.robot.running()
@@ -104,16 +124,29 @@ class Robot_filler(QThread):
             if self.robot.find:
                 self.robot.find = False
                 break
+            
+            print(' Не нашел')
         
         print('нашел')
 
-        self.camera.stop()
+        self.prepare.emit()
+
+        self.robot.pump_station.run()
+        self.prepare.emit()
+        self.robot.go_home()
+    
+        self.prepare.emit()
+
+        self.robot.pumping_find = False
+        self.robot.find = False
 
     
-    def pumping(self):
-        self.robot.pump_station.run()
-        self.robot.go_home()
-        self.robot.ready_calibration()
+    # def pumping(self):
+    #     self.robot.pump_station.run()
+    #     self.robot.go_home()
+    #     self.robot.calibration_ready = True
+
+    #     self.prepare.emit()
 
 
     def stop_pumping(self):
@@ -121,8 +154,8 @@ class Robot_filler(QThread):
 
 
     def start_filler(self):
-        self.robot_on = True
+        self.filler_run = True
         
-        print('START', self.robot_on)
-        self.run()
+        # print('START', self.robot_on)
+        # self.run()
 

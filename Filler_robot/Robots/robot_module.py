@@ -82,9 +82,7 @@ class Axis:
 	
 
 
-class Robot_module(QObject):
-	prepare = pyqtSignal(int)
-
+class Robot_module():
 	def __init__(self, camera = None, neuron = None, interface = None):
 		super().__init__()
 
@@ -134,7 +132,7 @@ class Robot_module(QObject):
 		
 		self.axis_x.motor.speed_def = 0.0001
 		self.axis_x.motor.direction = False
-		self.axis_x.step_angle = 0.045
+		self.axis_x.step_angle = 0.04
 		self.axis_x.angle_0 = 0
 		self.axis_x.angle = self.axis_x.angle_0
 		self.axis_x.limit_min = -90
@@ -145,23 +143,23 @@ class Robot_module(QObject):
 		self.axis_y.motor.enable_on(False)
 		self.axis_y.motor.speed_def = 0.0001
 		self.axis_y.motor.direction = False
-		self.axis_y.step_angle = 0.125
+		self.axis_y.step_angle = 0.135
 		self.axis_y.arm_lenght = 12
-		self.axis_y.angle_0 = 120
+		self.axis_y.angle_0 = 124
 		self.axis_y.angle = self.axis_y.angle_0
 		self.axis_y.y0 = 0
 		self.axis_y.z0 = 22.5
 		self.axis_y.limit_min = 5
-		self.axis_y.limit_max = 122
+		self.axis_y.limit_max = 130
 		
 
 		self.axis_z = Axis('motor_z', self.motor_z)
 		self.axis_z.motor.enable_on(False)
-		self.axis_z.motor.speed_def = 0.0001
+		self.axis_z.motor.speed_def = 0.0009
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
 		self.axis_z.direction_distance = False
-		self.axis_z.step_angle = 0.09
+		self.axis_z.step_angle = 0.135
 		self.axis_z.arm_lenght = 12
 		self.axis_z.angle_0 = 145
 		self.axis_z.angle = self.axis_z.angle_0
@@ -576,6 +574,7 @@ class Robot_module(QObject):
 		limit = False
 
 		for coord in list_coord:
+			print('PFITK')
 			x, y, z = coord
 
 			limit = self.check_limit(x, y, z)
@@ -589,8 +588,8 @@ class Robot_module(QObject):
 				# self.neuron.find_objects()
 
 				if self.pumping_find:
+					print('Ищет')
 					self.find = True
-					self.prepare.emit(1)
 					break
 
 				if self.button_stop == False:
@@ -676,7 +675,7 @@ class Robot_module(QObject):
 
 		self.null_value()
 
-		self.prepare.emit(0)
+		
 
 
 	def go_home(self):
@@ -703,10 +702,6 @@ class Robot_module(QObject):
 
 		print('go home')
 
-
-	def ready_calibration(self):
-		self.prepare.emit(2)
-		
 		
 	# def correction(self, list_coord):
 	# 	x = round(list_coord[0])
@@ -765,9 +760,11 @@ if __name__ == '__main__':
 	# self.axis_z.go_axis(1, 104)
 
 	robot.go_to_point(-12.8, 12.8, 11)
+	input()
 	robot.go_home()
 
 	robot.go_to_point(0, 16.8, 15)
+	input()
 	robot.go_home()
 	
 	robot.go_to_point(12.8, 16.8, 11)

@@ -21,7 +21,8 @@ class Camera:
             logging.error(f"Failed to initialize camera: {e}")
             raise
 
-        config = self.picam.create_still_configuration(main={"size": (2592, 1944)})
+        #config = self.picam.create_still_configuration(main={"size": (2592, 1944)})
+        config = self.picam.create_still_configuration(main={"size": (1640, 1232)})
         self.picam.configure(config)
 
         path = os.path.join('/home/innotech/Project/Filler/Filler_robot/VisionTech/calibration', 'camera_params.yml')
@@ -73,7 +74,7 @@ class Camera:
     def read_cam(self) -> np.ndarray:
         img_read = self.picam.capture_array()
         
-        img_calibration = self.calibraion(img_read)
+        #img_calibration = self.calibraion(img_read)
         img_calibration = img_read
 
         
@@ -87,9 +88,8 @@ class Camera:
 
         image_warp = cv2.warpAffine(img_calibration, M, (self.img_width, self.img_height)) 
 
-        # image_cropp = image_warp[0:1900, 380:2280,:3]
-        image_cropp = image_warp[100:1800, 480:2180,:3]
-
+        #image_cropp = image_warp[100:1800, 480:2180,:3]
+        image_cropp = image_warp[:, 200:1440]
         img_resize = cv2.resize(image_cropp, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
         
         self.image_out = cv2.cvtColor(img_resize, cv2.COLOR_RGB2BGR)
@@ -99,7 +99,7 @@ class Camera:
         # print('Camera read')
         # print(type(image_out), self.img_width, self.img_height)
 
-        cv2.imwrite('test.png', self.image_out)
+        cv2.imwrite('test2.png', self.image_out)
         
         return self.image_out
     

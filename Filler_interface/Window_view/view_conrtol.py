@@ -39,6 +39,8 @@ class View_control(QMainWindow):
 
         self.frame_label = None
 
+        self.view2 = False
+
 
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
@@ -46,10 +48,12 @@ class View_control(QMainWindow):
 
     def show(self, id = 0):
         if id == 1:
-            app.threads.robot_filler.camera_on = True
-            app.threads.robot_filler.neuron_on = True 
-            app.threads.robot_filler.interface_on = True
-            app.threads.start_robot_thread()
+            self.view2 = True
+        else:
+            self.view2 = False
+        #     app.threads.start_robot_thread()
+
+        app.threads.robot_filler.filler_run = True
 
         if app.on_fullscreen: self.fullscreen()
 
@@ -66,9 +70,9 @@ class View_control(QMainWindow):
         super().show()
 
 
-    def close(self, id = 0):
-        if id == 1:
-            app.threads.stop_robot_thread()
+    def close(self):
+        if self.view2 == True:
+            app.threads.robot_filler.filler_run = False
 
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(

@@ -61,8 +61,8 @@ class Neuron:
 		
 		self.mode = 0
 		
-		self.threshold = 0.05
-		self.nmsthreshold = 0.3
+		self.threshold = 0.4
+		self.nmsthreshold = 0.4
 
 		self.list_find = {'cup': True, 'CUP': True, 'vase': True, 'wine glass': True, 'toilet': True, 'person': True}
 		
@@ -361,6 +361,9 @@ class Neuron:
 			x = xr_center_2
 			y = yr_center_2
 			z = h * 0.061
+
+			if z > 12:
+				z += 2
 
 			point = (x, y)
 			

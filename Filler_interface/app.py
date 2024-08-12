@@ -296,15 +296,14 @@ app.window_cip = window_cip
 from Filler_interface.Window_robot.robot_control import window_robot
 app.window_robot = window_robot
 
-from Filler_interface.Window_filler.filler_conrtol import filler_window
-app.window_filler = filler_window
+from Filler_interface.Window_filler.filler_control2 import window_filler
+app.window_filler = window_filler
 
 
 app.ready = True
 
 from Filler_interface.threads import Thread
 app.threads = Thread()
-app.threads.start_input_thread()
 
 
 
