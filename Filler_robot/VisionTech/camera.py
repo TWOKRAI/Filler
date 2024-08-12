@@ -91,8 +91,9 @@ class Camera:
         #image_cropp = image_warp[100:1800, 480:2180,:3]
         image_cropp = image_warp[:, 200:1440]
         img_resize = cv2.resize(image_cropp, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
+        img_border = self.add_border(img_resize)
         
-        self.image_out = cv2.cvtColor(img_resize, cv2.COLOR_RGB2BGR)
+        self.image_out = cv2.cvtColor(img_border, cv2.COLOR_RGB2BGR)
 
         self.img_width, self.img_height = self.image_out.shape[1], self.image_out.shape[0]
 
@@ -103,3 +104,19 @@ class Camera:
         
         return self.image_out
     
+
+    def add_border(self, image):
+        # Проверяем, что изображение имеет размер 640x640
+        if image.shape[:2] != (640, 640):
+            raise ValueError("Изображение должно быть размером 640x640 пикселей")
+
+        # Создаем новое изображение с черным фоном
+        new_image = np.zeros((640, 640, 3), dtype=np.uint8)
+
+        # Масштабируем исходное изображение до размера 440x440 (640 - 2 * 100)
+        scaled_image = cv2.resize(image, (440, 440))
+
+        # Вставляем масштабированное изображение в центр нового изображения
+        new_image[100:540, 100:540] = scaled_image
+
+        return new_image
