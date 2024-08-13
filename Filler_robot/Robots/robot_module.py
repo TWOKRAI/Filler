@@ -168,8 +168,7 @@ class Robot_module():
 		
 
 	def running(self):
-		if self.calibration_ready:
-			self.move_objects()
+		self.move_objects()
 
 	
 	def enable_motors(self, value = False):
@@ -669,9 +668,7 @@ class Robot_module():
 		QThread.msleep(1000)
 
 		asyncio.run(self._calibration_async())
-		self.move(970, 0, 0)
-
-		self.calibration_ready = True
+		self.move(790, 0, 0)
 
 		self.null_value()
 

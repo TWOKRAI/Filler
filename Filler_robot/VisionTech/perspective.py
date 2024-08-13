@@ -157,11 +157,8 @@ class Perspective:
         x = x * 1
         y = y * 0.85
 
-        print(y)
 
         # x = x * 0.95
-
-        print(y)
 
         if abs(x) > 13:
             x = x * 1.1

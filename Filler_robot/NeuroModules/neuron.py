@@ -77,7 +77,7 @@ class Neuron:
 		self.limit_ymin = 0
 		self.limit_ymax = 300
 		
-		self.factor_x = 10
+		self.factor_x = 12
 		self.factor_y = 0.1
 		self.perspective = 0
 
@@ -163,32 +163,30 @@ class Neuron:
 
 					self.perspective = (xr_center - img_width / 2) * 1 / self.factor_x
 
+					print('H', h)
 
-					if h < 150:
-						h1 = h
+					if h <= 190:
+						xd = 0  
+						yd = 0
 					else:
-						h1 = h + 45
-					
-
-
-					# yr_center_2 = int((y1 + h )* 0.96 - w * (y1) / self.leen * 1.6)
-					
-					xr_center_2 = int(x1 + w / 1.8) - self.perspective * 1.2
+						xd = 10 
+						yd = 10
 
 					
-					yr_center_2 = int((y1 + h1) - h1 * 0.3) 
+					# xr_center_2 = int(x1 + w / 1.8) - self.perspective * 1.2
+
+					
+					# yr_center_2 = int((y1 + h1) - h1 * 0.3) 
 					
 					if xr_center >= self.camera.img_width / 2:
-						xr_center_2 = int((xr_center - self.perspective * 2)) #+ (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
+						xr_center_2 = int((xr_center - self.perspective * 2)) - xd #+ (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
 					else:
-						xr_center_2 = int((xr_center - self.perspective * 2)) #- (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
+						xr_center_2 = int((xr_center - self.perspective * 2)) + xd #- (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
 
-					# if x1 <= self.camera.img_width/2 and  y1 >= 300:
-					# 	xr_center_2 = int(x1 + w / 2) - self.perspective * 1.7
+					
+					yr_center_2 = int(((y1 + h) - w / 2 * 0.7) + (1 - abs(self.camera.img_height - (y1 + h)) / 700)) + yd
 
-					# yr_center_2 =  y1 + h
-					# xr_center_2 = (int(xr_center - self.perspective * 4), y1 + h)
-
+					yr_center = int((y1 + w / 2 * 0.5 * (1 + h/1000)))
 					xr_center = int(xr_center + self.perspective)
 
 					self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective, xr_center_2, yr_center_2])
@@ -242,7 +240,7 @@ class Neuron:
 			yr_center = int(y1 + w*(y1 + h * 1.2)/self.leen)
 			xr_center = int(x1 + w/2)
 					
-			self.perspective = (xr_center - wt/2) * 1/self.factor_x
+			self.perspective = (xr_center - wt/2) * 1/ self.factor_x
 			
 			print('perspective', self.perspective)
 			
@@ -381,9 +379,9 @@ class Neuron:
 			
 			list_coord.append((x, y, z))
 			
-			print('w', w)
+		# 	print('w', w)
 		
-		print('list_coord', list_coord)
+		# print('list_coord', list_coord)
 		
 		#input('PIXXXEL')
 		

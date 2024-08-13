@@ -91,7 +91,7 @@ class Camera:
         #image_cropp = image_warp[100:1800, 480:2180,:3]
         image_cropp = image_warp[:, 200:1440]
         img_resize = cv2.resize(image_cropp, (self.width_out, self.height_out), interpolation = cv2.INTER_AREA)
-        img_border = self.add_border(img_resize)
+        img_border = self.add_border(img_resize, 100)
         
         self.image_out = cv2.cvtColor(img_border, cv2.COLOR_RGB2BGR)
 
@@ -105,18 +105,25 @@ class Camera:
         return self.image_out
     
 
-    def add_border(self, image):
+    def add_border(self, image, border_width):
         # Проверяем, что изображение имеет размер 640x640
         if image.shape[:2] != (640, 640):
             raise ValueError("Изображение должно быть размером 640x640 пикселей")
 
+        # Проверяем, что ширина рамки не превышает половины размера изображения
+        if border_width * 2 >= 640:
+            raise ValueError("Ширина рамки слишком велика для изображения размером 640x640 пикселей")
+
         # Создаем новое изображение с черным фоном
         new_image = np.zeros((640, 640, 3), dtype=np.uint8)
 
-        # Масштабируем исходное изображение до размера 440x440 (640 - 2 * 100)
-        scaled_image = cv2.resize(image, (440, 440))
+        # Вычисляем размеры масштабированного изображения
+        scaled_size = 640 - 2 * border_width
+
+        # Масштабируем исходное изображение до размера scaled_size x scaled_size
+        scaled_image = cv2.resize(image, (scaled_size, scaled_size))
 
         # Вставляем масштабированное изображение в центр нового изображения
-        new_image[100:540, 100:540] = scaled_image
+        new_image[border_width:border_width + scaled_size, border_width:border_width + scaled_size] = scaled_image
 
         return new_image

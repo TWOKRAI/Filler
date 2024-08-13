@@ -53,7 +53,7 @@ class View_control(QMainWindow):
             self.view2 = False
         #     app.threads.start_robot_thread()
 
-        app.threads.robot_filler.filler_run = True
+        app.threads.robot_filler.filler_run()
 
         if app.on_fullscreen: self.fullscreen()
 
@@ -72,7 +72,7 @@ class View_control(QMainWindow):
 
     def close(self):
         if self.view2 == True:
-            app.threads.robot_filler.filler_run = False
+            app.threads.robot_filler.filler_stop()
 
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(

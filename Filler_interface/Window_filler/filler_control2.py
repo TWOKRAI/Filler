@@ -137,6 +137,8 @@ class Control(Control):
         super().button_menu_clicked()
         self.memory_write(self.param_list)
 
+        app.threads.robot_filler.filler_stop()
+
 
     def button_reset_pressed(self):
         self.timer_exit.start()
@@ -147,7 +149,7 @@ class Control(Control):
 
 
     def on_timer_reset(self):
-        app.exit()
+        super().button_menu_clicked()
 
 
     def get_parametrs(self): 

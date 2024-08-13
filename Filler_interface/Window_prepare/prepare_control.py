@@ -85,7 +85,6 @@ class Prepare_control(QMainWindow):
 
         super().show()
 
-        self.reset()
         self.update_text()
 
         app.window_focus = self.window_name
@@ -140,6 +139,8 @@ class Prepare_control(QMainWindow):
 
         self.button_calibr.setEnabled(True)
 
+        app.threads.robot_filler.calibration_stop()
+
         self.reset_calibration.emit()
 
         self.update_text()
@@ -157,11 +158,12 @@ class Prepare_control(QMainWindow):
 
 
     def button_menu_clicked(self):
+        app.threads.robot_filler.calibration_stop()
         app.window_main_filler.show()
         self.hide()
 
 
-    def button_menu_pressed(self):    
+    def button_menu_pressed(self):
         self.timer.start()
 
 
@@ -170,6 +172,8 @@ class Prepare_control(QMainWindow):
  
         
     def on_timer_timeout(self):
+        app.threads.robot_filler.calibration_stop()
+
         app.window_main_filler.show()
         self.hide()
     
@@ -245,10 +249,13 @@ class Prepare_control(QMainWindow):
 
         print(self.param_num)
 
+        if app.threads.robot_filler.robot.calibration_ready == True:
+            self.param_num = 5
+            app.threads.robot_filler.robot.calibration_ready = False
+
         match self.param_num:
             case 1:
-                app.threads.robot_filler.filler_run = False
-                app.threads.robot_filler.calibratiom_func = True
+                app.threads.robot_filler.calibration_run()
 
                 self.value = 25
 
@@ -266,13 +273,15 @@ class Prepare_control(QMainWindow):
             case 5:
                 self.value = 100
 
-                app.threads.robot_filler.calibratiom_func = False
+                app.threads.robot_filler.calibration_stop()
             case 6:
+                app.threads.robot_filler.filler_run()
+
+                app.threads.robot_filler.robot.calibration_ready = True
+
                 app.window_filler.show()
                 self.hide()
                 # self.param_num = 0
-
-                app.threads.robot_filler.filler_run = True
 
             case _:
                 pass
