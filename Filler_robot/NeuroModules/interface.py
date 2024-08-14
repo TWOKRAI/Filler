@@ -28,8 +28,10 @@ class Interface(QObject):
 		self.y = 0
 
 		self.img_monitor = None
+
+		self.point_calibr = [(), (), (), ()]
 		
-		# self.create_window()
+		self.create_window()
 
 
 	def _visual_line(func):
@@ -50,8 +52,20 @@ class Interface(QObject):
 	
 	def create_window(self):
 		cv2.namedWindow( "Detect" )
-		cv2.createTrackbar("x_point", "Detect" , 320, self.camera.img_width, nothing)
-		cv2.createTrackbar("y_point", "Detect" , 360, self.camera.img_height, nothing) #371
+		cv2.createTrackbar("x_point", "Detect" , self.camera.point_pixel[0][0], self.camera.img_width, nothing)
+		cv2.createTrackbar("y_point", "Detect" , self.camera.point_pixel[0][1], self.camera.img_height, nothing) #371
+		
+		cv2.createTrackbar("point_1_x", "Detect" , self.camera.point_pixel[0][0], self.camera.img_width, nothing)
+		cv2.createTrackbar("point_1_y", "Detect" , self.camera.point_pixel[0][1], self.camera.img_height, nothing) #371
+
+		cv2.createTrackbar("point_2_x", "Detect" , self.camera.point_pixel[1][0], self.camera.img_width, nothing)
+		cv2.createTrackbar("point_2_y", "Detect" , self.camera.point_pixel[1][1], self.camera.img_height, nothing) #371
+
+		cv2.createTrackbar("point_3_x", "Detect" , self.camera.point_pixel[2][0], self.camera.img_width, nothing)
+		cv2.createTrackbar("point_3_y", "Detect" , self.camera.point_pixel[2][1], self.camera.img_height, nothing) #371
+
+		cv2.createTrackbar("point_4_x", "Detect" , self.camera.point_pixel[3][0], self.camera.img_width, nothing)
+		cv2.createTrackbar("point_4_y", "Detect" , self.camera.point_pixel[3][1], self.camera.img_height, nothing) #371
 
 		self.get_trackbar()
 
@@ -60,12 +74,28 @@ class Interface(QObject):
 		self.x = cv2.getTrackbarPos("x_point", "Detect")
 		self.y = cv2.getTrackbarPos("y_point", "Detect")
 
+		self.x_1 = cv2.getTrackbarPos("point_1_x", "Detect")
+		self.y_1 = cv2.getTrackbarPos("point_1_y", "Detect")
+
+		self.x_2 = cv2.getTrackbarPos("point_2_x", "Detect")
+		self.y_2 = cv2.getTrackbarPos("point_2_y", "Detect")
+
+		self.x_3 = cv2.getTrackbarPos("point_3_x", "Detect")
+		self.y_3 = cv2.getTrackbarPos("point_3_y", "Detect")
+
+		self.x_4 = cv2.getTrackbarPos("point_4_x", "Detect")
+		self.y_4 = cv2.getTrackbarPos("point_4_y", "Detect")
+
+		self.point_calibr = [(self.x_1, self.y_1), (self.x_2, self.y_2), (self.x_3, self.y_3), (self.x_4, self.y_4)]
+
+		self.camera.perspective.write_point(self.point_calibr)
+
 
 	# @_timing(True)			
 	def show_img(self, image):
 		img_copy = image.img.copy()
 		
-		# self.draw_sight(img_copy)
+		self.draw_sight(img_copy)
 		# self.draw_limit_line(img_copy)
 		# self.draw_box_all(img_copy)
 		self.draw_box(img_copy)
@@ -96,16 +126,20 @@ class Interface(QObject):
 					pixmap = self.camera.image_out
 
 				case 1: 
+					self.get_trackbar()
+
 					image_draw = self.draw_box(self.camera.image_out, self.neuron.objects_filter)
 
 					# self.draw_box_all(image_draw)
 
-					# point = (self.x, self.y)
-					# point = self.camera.perspective.transform_coord(point)
+					image_draw = self.draw_sight(image_draw)
 
-					# point = self.camera.perspective.scale(point)
+					# # point = (self.x, self.y)
+					# # point = self.camera.perspective.transform_coord(point)
 
-					# self.camera.perspective.draw(image_draw)
+					# # point = self.camera.perspective.scale(point)
+
+					# # self.camera.perspective.draw(image_draw)
 
 					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 200, (255, 0, 255), 2)
 					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 600, (255, 0, 255), 2)
@@ -148,16 +182,16 @@ class Interface(QObject):
 
 		
 	
-	# @_visual_line
-	# def draw_sight(self, img):
-	# 	size = 300
+	def draw_sight(self, img):
+		size = 300
 	
-	# 	# cv2.line(img, (int(camera.img_width/2), int(camera.img_height/2) - size), (int(camera.img_width/2 ) , int(camera.img_height/2) + size), (0, 0, 0), 2)
-	# 	# cv2.line(img, (int(camera.img_width/2) - size, int(camera.img_height/2)), (int(camera.img_width/2) + size, int(camera.img_height/2)), (0, 0, 0), 2)
+		# cv2.line(img, (int(camera.img_width/2), int(camera.img_height/2) - size), (int(camera.img_width/2 ) , int(camera.img_height/2) + size), (0, 0, 0), 2)
+		# cv2.line(img, (int(camera.img_width/2) - size, int(camera.img_height/2)), (int(camera.img_width/2) + size, int(camera.img_height/2)), (0, 0, 0), 2)
 		
-	# 	cv2.line(img, (int(camera.img_width/2), int(camera.img_height/2) - size), (int(camera.img_width/2 ) , int(camera.img_height/2) + size), (0, 0, 0), 2)
-	# 	cv2.line(img, (int(camera.img_width/2) - size, int(camera.img_height/2)), (int(camera.img_width/2) + size, int(camera.img_height/2)), (0, 0, 0), 2)
+		cv2.line(img, (int(self.camera.img_width/2), int(self.camera.img_height/2) - size), (int(self.camera.img_width/2 ) , int(self.camera.img_height/2) + size), (0, 0, 0), 2)
+		cv2.line(img, (int(self.camera.img_width/2) - size, int(self.camera.img_height/2)), (int(self.camera.img_width/2) + size, int(self.camera.img_height/2)), (0, 0, 0), 2)
 
+		return img
 
 	# def perspective(self, img):
 	# 	cv2.circle(img, (self.x, self.y), 5, (255, 0, 255), -1)

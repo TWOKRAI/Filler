@@ -13,7 +13,6 @@ class Perspective:
 
         self.point1 = point_img[0]
         self.point2 = point_img[1]
-
         self.point3 = point_img[2]
         self.point4 = point_img[3]
 
@@ -39,6 +38,13 @@ class Perspective:
         self.intersection_point3 = self.line_intersection([(0, self.img_height),(self.img_width, self.img_height)], [self.point1, self.point2])
         self.intersection_point4 = self.line_intersection([(0, self.img_height),(self.img_width, self.img_height)], [self.point3, self.point4])
         self.intersection_point5 = (0, 0)
+    
+
+    def write_point(self, point_img):
+        self.point1 = point_img[0]
+        self.point2 = point_img[1]
+        self.point3 = point_img[2]
+        self.point4 = point_img[3]
 
 
     # Вычисление точки пересечения отрезков
@@ -154,18 +160,18 @@ class Perspective:
         # if y < 19.5:
         #     y = y * 1.07
 
-        x = x * 1
-        y = y * 0.85
+        # x = x * 1
+        # y = y * 0.85
 
 
         # x = x * 0.95
 
-        if abs(x) > 13:
-            x = x * 1.1
-            y = y * 1
+        # if abs(x) > 13:
+        #     x = x * 1.1
+        #     y = y * 1
         
-        if y < 16.5:
-            y = y * 1.07
+        # if y < 16.5:
+        #     y = y * 1.07
 
 
  

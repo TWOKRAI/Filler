@@ -332,6 +332,9 @@ class Neuron:
 			y = y1
 			z = h
 			
+
+			
+			
 			# if xr_center_2 < camera.img_width/2:
 			# 	x = xr_center_2 * 1
 			# else:
@@ -358,24 +361,42 @@ class Neuron:
 
 			x = xr_center_2
 			y = yr_center_2
-			z = h * 0.061
 
-			if z > 12:
-				z += 2
+			z = h * 0.05 * (1 + (abs(self.camera.img_height - yr_center_2 - 150)/130)**3) * (1 - abs(self.camera.img_width/2 - xr_center_2)/1300)
+			#z = h * 0.046 * (1 + abs(self.camera.img_height - yr_center_2)/500)
+			# if z > 12:
+			# 	z += 2
+
+
+			# v = v * 0.00034
+
+			# print('v', v)
+
 
 			point = (x, y)
-			
 			point = self.camera.perspective.transform_coord(point)
 			point = self.camera.perspective.scale(point)
 
-			# point = [10, 1]
+			point_1 = (x1, y1 + h)
+			point_1 = self.camera.perspective.transform_coord(point_1)
+			point_1 = self.camera.perspective.scale(point_1)
 
-			y = y * (1 - abs(x)/20)
+			point_2 = (x1 + w, y1 + h)
+			point_2 = self.camera.perspective.transform_coord(point_2)
+			point_2 = self.camera.perspective.scale(point_2)
 
+
+			dx = abs(point_1[0] - point_2[0])
+
+			v = (dx / 2) ** 2 * z * 1.2
+
+			print('VVV', v)
+			
 
 			x = round(point[0], 1)
 			y = round(point[1], 1)
 			z = round(z, 1)
+
 			
 			list_coord.append((x, y, z))
 			
