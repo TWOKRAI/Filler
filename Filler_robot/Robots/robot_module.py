@@ -3,7 +3,6 @@ import math
 from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
 
 from Filler_robot.MotorModules.motor import Motor
-from Filler_robot.PumpStation.pumps import Pump_station
 from Raspberry.pins_table import pins
 
 #from Lib.Decorators.wrapper import _timing
@@ -83,14 +82,14 @@ class Axis:
 
 
 class Robot_module():
-	def __init__(self, camera = None, neuron = None, interface = None):
+	def __init__(self, camera = None, neuron = None, interface = None, pump_station = None):
 		super().__init__()
 
 		self.camera = camera
 		self.neuron = neuron
 		self.interface = interface
 
-		self.pump_station = Pump_station()
+		self.pump_station = pump_station
 
 		self.print_on = True
 
@@ -178,19 +177,28 @@ class Robot_module():
 
 	
 	def stop_motors(self):
-		self.pump_station.enable_motors(False)
-		self.pump_station.motor_1.stop_for = True
-		self.pump_station.motor_2.stop_for = True
+		# self.pump_station.enable_motors(False)
+		# self.pump_station.motor_1.stop_for = True
+		# self.pump_station.motor_2.stop_for = True
+
 		self.axis_x.motor.stop_for = True
 		self.axis_y.motor.stop_for = True
 		self.axis_z.motor.stop_for = True
 
-		self.axis_x.motor.enable_on(False)
-		self.axis_y.motor.enable_on(False)
-		self.axis_z.motor.enable_on(False)
-
 		self.button_stop = True
+
+		self.calibration_ready = False
+
+	
+	def no_stop_motors(self):
+		self.pump_station.motor_1.stop_for = False
+		self.pump_station.motor_2.stop_for = False
+
+		self.axis_x.motor.stop_for = False
+		self.axis_y.motor.stop_for = False
+		self.axis_z.motor.stop_for = False
 		
+		self.enable_motors(False)
 
 
 	def null_value(self):
@@ -635,7 +643,7 @@ class Robot_module():
 			QThread.msleep(5000)
 
 
-	async def _detect_switch(self):
+	async def _detect_switch_x(self):
 		while True:
 			switch_x = pins.switch_x.get_value()
 
@@ -645,13 +653,40 @@ class Robot_module():
 			await asyncio.sleep(0.001)
 
 
-	async def _calibration_async(self):
+	async def _calibration_x_async(self):
 		tasks = []
 
 		distance_x = -3000
 		
-		tasks.append(asyncio.create_task(self._detect_switch()))
+		tasks.append(asyncio.create_task(self._detect_switch_x()))
 		tasks.append(asyncio.create_task(self.axis_x.motor.move(distance_x, async_mode=True)))
+			
+
+		try:
+			await asyncio.gather(*tasks)
+		except asyncio.CancelledError:
+			for task in tasks:
+				if not task.done():
+					task.cancel()
+	
+	
+	async def _detect_switch_y(self):
+		while True:
+			switch_y = pins.switch_y.get_value()
+
+			if switch_y:
+				raise asyncio.CancelledError()
+
+			await asyncio.sleep(0.001)
+
+
+	async def _calibration_y_async(self):
+		tasks = []
+
+		distance_y = -3000
+		
+		tasks.append(asyncio.create_task(self._detect_switch_y()))
+		tasks.append(asyncio.create_task(self.axis_y.motor.move(distance_y, async_mode=True)))
 			
 
 		try:
@@ -663,16 +698,23 @@ class Robot_module():
 
 
 	def calibration(self):
-		self.enable_motors(True)
+		self.axis_x.motor.enable_on(True)
+		self.axis_y.motor.enable_on(True)
+		self.axis_z.motor.enable_on(False)
 
 		QThread.msleep(1000)
 
-		asyncio.run(self._calibration_async())
+		switch_y = pins.switch_y.get_value()
+		if switch_y:
+			self.axis_y.motor.move(100)
+
+		asyncio.run(self._calibration_y_async())
+
+		asyncio.run(self._calibration_x_async())
 		self.move(790, 0, 0)
 
 		self.null_value()
 
-		
 
 
 	def go_home(self):

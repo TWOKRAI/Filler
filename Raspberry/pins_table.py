@@ -19,6 +19,7 @@ class Pins():
         self.switch_in = self.pin_init(6)
 
         self.switch_x = self.pin_init(25)
+        self.switch_y = self.pin_init(10)
 
         self.motor_x_step = self.pin_init(22)
         self.motor_x_dir = self.pin_init(27)
@@ -86,7 +87,7 @@ if __name__ == '__main__':
 
     
     while True:
-        pins.get_value_log(pins.switch_x)
-        pins.get_value_log(pins.button_stop)
-        pins.get_value_log(pins.button)
+        pins.get_value_log(pins.switch_y)
+        # pins.get_value_log(pins.button_stop)
+        # pins.get_value_log(pins.button)
         time.sleep(0.1)

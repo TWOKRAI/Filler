@@ -136,7 +136,6 @@ class Prepare_control(QMainWindow):
         
         self.value = 0
         self.myprogressBar.setValue(self.value)
-
         self.button_calibr.setEnabled(True)
 
         app.threads.robot_filler.calibration_stop()
@@ -188,21 +187,21 @@ class Prepare_control(QMainWindow):
 
             case 1:
                 name_button = {
-                    0: 'Подождите',
+                    0: 'ПОДОЖДИТЕ',
                     1: '',
                 }
 
 
             case 2:
                 name_button = {
-                    0: 'Подождите',
+                    0: 'ПОДОЖДИТЕ',
                     1: 'Start2',
                 }
 
 
             case 3:
                 name_button = {
-                    0: 'Прокачка',
+                    0: 'ПОДОЖДИТЕ',
                     1: 'Start2',
                 }
 
@@ -247,7 +246,7 @@ class Prepare_control(QMainWindow):
     def button_calibr_clicked(self):
         self.param_num += 1
 
-        print(self.param_num)
+        print('self.param_num', self.param_num)
 
         if app.threads.robot_filler.robot.calibration_ready == True:
             self.param_num = 5

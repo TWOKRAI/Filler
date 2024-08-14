@@ -61,7 +61,9 @@ class Pump(QObject):
         
         self.turn = self.ml_to_steps(ml)
 
-        speed = self.speed_k * self.speed 
+        speed = int(self.speed_k * self.speed)
+
+        print('speed', self.speed_k, speed, self.turn)
 
         await self.motor._freq_async(speed, 1, self.turn)
 
@@ -99,7 +101,6 @@ class Pump_station(QObject):
     minus_pump = pyqtSignal()
     bottle_1 = pyqtSignal(int)
     bottle_2 = pyqtSignal(int)
-    
     
     def __init__(self):
         super().__init__()
@@ -152,18 +153,23 @@ class Pump_station(QObject):
         self.motor_2.enable_on(value)
 
     
-    def stop_pumps2(self):
+    def stop_pumps(self):
         self.stop2 = True
 
         self.pump_1.motor.stop = True
         self.pump_2.motor.stop = True
-        
+
+        self.enable_motors(False)
+
+        self.motor_1.stop_for = True
+        self.motor_2.stop_for = True
+
 
     async def _stop_pumps(self):       
         while not self.stop2:
 
             if pins.button_stop.get_value():
-                self.stop_pumps2()
+                self.stop_pumps()
 
 
             if self.stop2 == True or (self.pump_1.ready == True and self.pump_2.ready == True):
@@ -187,13 +193,6 @@ class Pump_station(QObject):
         self.stop2 = False
         self.pump_1.ready = False
         self.pump_2.ready = False
-
-        # if self.mode_game == False:
-        #     turn1 = self.pump_1.ml
-        #     turn2 = self.pump_2.ml
-        # else:
-        #     turn1 = game_ruletka.pour()
-        #     turn2 = game_ruletka.pour()
 
         tasks = []
 

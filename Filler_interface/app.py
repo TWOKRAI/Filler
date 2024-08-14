@@ -290,7 +290,7 @@ app.window_view = window_view
 from Filler_interface.Window_error.error_conrtol import window_error
 app.window_error = window_error
 
-from Filler_interface.Window_cip.cip_control2 import window_cip
+from Filler_interface.Window_cip.cip_control3 import window_cip
 app.window_cip = window_cip
 
 from Filler_interface.Window_robot.robot_control import window_robot

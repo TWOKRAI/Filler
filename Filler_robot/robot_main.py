@@ -4,6 +4,7 @@ import numpy as np
 from Filler_robot.VisionTech.camera import Camera
 from Filler_robot.NeuroModules.neuron import Neuron
 from Filler_robot.NeuroModules.interface import Interface
+from Filler_robot.PumpStation.pumps import Pump_station
 from Filler_robot.Robots.robot_module import Robot_module
 
 from Raspberry.Temperature import check_temperature, write_to_file, clear_file
@@ -20,7 +21,8 @@ class Robot_filler(QThread):
         self.camera = Camera()
         self.neuron = Neuron(self.camera)
         self.interface = Interface(self.camera, self.neuron)
-        self.robot = Robot_module(self.camera, self.neuron, self.interface)
+        self.pump_station = Pump_station()
+        self.robot = Robot_module(self.camera, self.neuron, self.interface, self.pump_station)
 
         self.camera_on = camera_on
         self.neuron_on = neuron_on 
@@ -31,6 +33,8 @@ class Robot_filler(QThread):
         self.calibration_func = False
         self.view = False
         self.cip = False
+
+        self.button_error = False 
         
         clear_file('log_temp.txt')
 
@@ -73,13 +77,19 @@ class Robot_filler(QThread):
             if self.calibration_func:
                 self.robot.calibration()
                 
-                self.prepare.emit()
+                if not self.button_error: self.prepare.emit()
 
                 self.pumping()
 
                 self.calibratiom_func = False
 
                 # self.stop()
+
+            if self.cip:
+                self.pump_station.run()
+
+                self.cip_stop()
+
             
             QThread.msleep(100)
 
@@ -178,13 +188,13 @@ class Robot_filler(QThread):
         print('нашел')
 
         if self.calibration_func:
-            self.prepare.emit()
+            if not self.button_error: self.prepare.emit()
 
             self.robot.pump_station.run()
-            self.prepare.emit()
+            if not self.button_error: self.prepare.emit()
             self.robot.go_home()
         
-            self.prepare.emit()
+            if not self.button_error: self.prepare.emit()
 
             self.robot.pumping_find = False
             self.robot.find = False
@@ -193,9 +203,16 @@ class Robot_filler(QThread):
     def stop_pumping(self):
         self.robot.pump_station.stop_pumps2()
 
+    # def start_filler(self):
+    #     self.filler_run = True
 
-    def start_filler(self):
-        self.filler_run = True
-        
+    def on_button_error(self):
+        self.button_error = True
 
 
+    def no_button_error(self):
+        self.robot.no_stop_motors()
+
+        self.button_error = False
+
+        self.calibration_stop()

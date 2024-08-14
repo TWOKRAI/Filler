@@ -51,6 +51,7 @@ class Input_request(QThread):
     show_error = pyqtSignal()
     close_error = pyqtSignal()
     error = pyqtSignal()
+    no_error = pyqtSignal()
 
 
     def __init__(self) -> None:
@@ -85,6 +86,7 @@ class Input_request(QThread):
                 else:
                     if self.button_error == True:
                         self.close_error.emit()
+                        self.no_error.emit()
 
                     self.button_error = False
                 

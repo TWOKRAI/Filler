@@ -34,7 +34,7 @@ class Motor_monitor(QObject):
         self.direction = True
 
         self.state_button = False
-        self.not_button = False
+        self.not_button = True
 
         self.motor.enable_on(True)
 
@@ -59,9 +59,9 @@ class Motor_monitor(QObject):
 
         elif switch_in == False and switch_out == False:
             if self.state_button:
-                distance = self.distance
-            else:
                 distance = -self.distance
+            else:
+                distance = self.distance
 
         asyncio.run(self._move_async(distance, detect = True))
         self.direction = not self.direction

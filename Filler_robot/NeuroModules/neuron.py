@@ -362,7 +362,7 @@ class Neuron:
 			x = xr_center_2
 			y = yr_center_2
 
-			z = h * 0.05 * (1 + (abs(self.camera.img_height - yr_center_2 - 150)/130)**3) * (1 - abs(self.camera.img_width/2 - xr_center_2)/1300)
+			z = h * 0.047 * (1 + (abs(self.camera.img_height - yr_center_2 - 150)/130)**3) * (1 - abs(self.camera.img_width/2 - xr_center_2)/1300)
 			#z = h * 0.046 * (1 + abs(self.camera.img_height - yr_center_2)/500)
 			# if z > 12:
 			# 	z += 2
