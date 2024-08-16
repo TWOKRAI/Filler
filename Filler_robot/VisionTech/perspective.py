@@ -38,6 +38,9 @@ class Perspective:
         self.intersection_point3 = self.line_intersection([(0, self.img_height),(self.img_width, self.img_height)], [self.point1, self.point2])
         self.intersection_point4 = self.line_intersection([(0, self.img_height),(self.img_width, self.img_height)], [self.point3, self.point4])
         self.intersection_point5 = (0, 0)
+
+        self.a = 0.516441
+        self.b = 0.0143
     
 
     def write_point(self, point_img):
@@ -128,77 +131,45 @@ class Perspective:
         return self.new_point
     
 
+    # def scale(self, pixel_point):
+    #     # Вычисляем коэффициенты преобразования
+    #     sx = (self.point_real_3[0] - self.point_real_1[0]) / (self.point3[0] - self.point1[0])
+    #     sy = (self.point_real_2[1] - self.point_real_1[1]) / (self.point2[1] - self.point1[1])
+    #     tx = self.point_real_1[0] - sx * self.point1[0]
+    #     ty = self.point_real_1[1] - sy * self.point1[1]
+
+    #     # Преобразуем точку
+    #     x = sx * pixel_point[0] + tx
+    #     y = sy * pixel_point[1] + ty
+
+    #     x = round(x, 1)
+    #     y = round(y, 1)
+
+    #     self.scale_point = (x, y)
+
+    #     return self.scale_point
+    
+
     def scale(self, pixel_point):
         # Вычисляем коэффициенты преобразования
         sx = (self.point_real_3[0] - self.point_real_1[0]) / (self.point3[0] - self.point1[0])
         sy = (self.point_real_2[1] - self.point_real_1[1]) / (self.point2[1] - self.point1[1])
         tx = self.point_real_1[0] - sx * self.point1[0]
         ty = self.point_real_1[1] - sy * self.point1[1]
-
+        
         # Преобразуем точку
         x = sx * pixel_point[0] + tx
         y = sy * pixel_point[1] + ty
 
-        # y = y / (1.6 + y/1000)
-
-        # y = y * (1 - y * y / 1000
-
-        
-        # x = x * 1
-        # y = y * 0.87
-
-        # print(y)
-
-        # # x = x * 0.95
-
-        # print(y)
-
-        # if abs(x) > 13:
-        #     x = x * 1.1
-        #     y = y * 0.95
-        
-        # if y < 19.5:
-        #     y = y * 1.07
-
-        # x = x * 1
-        # y = y * 0.85
-
-
-        # x = x * 0.95
-
-        # if abs(x) > 13:
-        #     x = x * 1.1
-        #     y = y * 1
-        
-        # if y < 16.5:
-        #     y = y * 1.07
-
-
- 
-        # if y > 21:
-        #     y = y - 1.2
-        # elif 20 <= y < 21:
-        #     y = y - 1.1
-        # elif 19 <= y < 20:
-        #     y = y - 1.2
-        # if 18 <= y < 19:
-        #     y = y - 1
-        # if 17 <= y < 18:
-        #     y = y - 1.1
-        # if 16 <= y < 17:
-        #     y = y - 1
-        # elif 15 <= y < 16:
-        #     y = y - 1.4
-        # elif 14 <= y < 15:
-        #     y = y - 1.4
-        # else:
-        #     y = y
-
+        # Корректировка y по перспективе
+        # Пример квадратичного преобразования
+        print('YYYYYY', y, self.a, self.b)
+        y_corrected = self.a * y + self.b * y**2
 
         x = round(x, 1)
-        y = round(y, 1)
+        y_corrected = round(y_corrected, 1)
 
-        self.scale_point = (x, y)
+        self.scale_point = (x, y_corrected)
 
         return self.scale_point
 
@@ -220,14 +191,16 @@ class Perspective:
         cv2.circle(image, self.intersection_point4, 8, (255, 0, 255), -1)
 
         cv2.line(image, self.point1, self.point3, (70, 160, 160), 2)
-        
-
+    
         cv2.circle(image, self.intersection_point5, 3, (255, 0, 255), -1)
 
         cv2.line(image, self.intersection_point, self.point, (70, 160, 160), 2)
 
         cv2.circle(image, self.point, 5, (0, 90, 255),-1)
         cv2.line(image, self.intersection_point2, self.point, (120, 100, 160), 2)
+
+        for i in range(4):
+            cv2.circle(image, (self.point[0], int((self.a * (self.point[1] - i*20) + self.b * (self.point[1] - i*20)**2))), 5, (0, 90, 255),-1)
 
         cv2.circle(image, (self.new_point[0], self.new_point[1]), 7, (0, 90, 255), -1)
         cv2.putText(image, f"{self.scale_point[0]}, {self.scale_point[1]}", (self.new_point[0] - 20, self.new_point[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)

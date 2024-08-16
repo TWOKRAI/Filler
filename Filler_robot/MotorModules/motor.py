@@ -273,14 +273,13 @@ class Motor:
 			asyncio.run(self._move_async(distance))
 
 	
-	async def test(self):
-		while not self.stop:
-			print(id(self.stop))
+	# async def test(self):
+	# 	while not self.stop:
+	# 		print(id(self.stop))
 
-			await asyncio.sleep(1)
+	# 		await asyncio.sleep(1)
 
-
-			if self.stop:
-				break
+	# 		if self.stop:
+	# 			break
 
 	

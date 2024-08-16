@@ -34,7 +34,7 @@ class Camera:
 
         self.calibration_on = True
         
-        print(self.camera_matrix, self.distortion_coeffs)
+        #print(self.camera_matrix, self.distortion_coeffs)
         
         self.picam.start()
         
@@ -48,8 +48,8 @@ class Camera:
 
         image = np.zeros((self.width_out, self.height_out, 3), dtype=np.uint8)
         
-        self.point_pixel = [(126, 508), (219, 318), (517, 508), (422, 318)]
-        self.point_real = [(-12, 12.5), (-12, 33.5), (12, 12.5), (12, 33.5)]
+        self.point_pixel = [(113, 508), (205, 319), (522, 508), (431, 317)]
+        self.point_real = [(-12, 15.5), (-12, 30.8), (12.5, 15.5), (12.5, 30.8)]
         
         self.perspective = Perspective(image, self.point_pixel, self.point_real)
 
@@ -82,7 +82,7 @@ class Camera:
         
         center = (self.img_width // 2, self.img_height // 2)
 
-        angle = 0.75
+        angle = -1.0
         scale = 1.0
         M = cv2.getRotationMatrix2D(center, angle, scale)
 

@@ -53,19 +53,22 @@ class Interface(QObject):
 	def create_window(self):
 		cv2.namedWindow( "Detect" )
 		cv2.createTrackbar("x_point", "Detect" , self.camera.point_pixel[0][0], self.camera.img_width, nothing)
-		cv2.createTrackbar("y_point", "Detect" , self.camera.point_pixel[0][1], self.camera.img_height, nothing) #371
+		cv2.createTrackbar("y_point", "Detect" , self.camera.point_pixel[0][1], self.camera.img_height, nothing)
 		
 		cv2.createTrackbar("point_1_x", "Detect" , self.camera.point_pixel[0][0], self.camera.img_width, nothing)
-		cv2.createTrackbar("point_1_y", "Detect" , self.camera.point_pixel[0][1], self.camera.img_height, nothing) #371
+		cv2.createTrackbar("point_1_y", "Detect" , self.camera.point_pixel[0][1], self.camera.img_height, nothing)
 
 		cv2.createTrackbar("point_2_x", "Detect" , self.camera.point_pixel[1][0], self.camera.img_width, nothing)
-		cv2.createTrackbar("point_2_y", "Detect" , self.camera.point_pixel[1][1], self.camera.img_height, nothing) #371
+		cv2.createTrackbar("point_2_y", "Detect" , self.camera.point_pixel[1][1], self.camera.img_height, nothing)
 
 		cv2.createTrackbar("point_3_x", "Detect" , self.camera.point_pixel[2][0], self.camera.img_width, nothing)
-		cv2.createTrackbar("point_3_y", "Detect" , self.camera.point_pixel[2][1], self.camera.img_height, nothing) #371
+		cv2.createTrackbar("point_3_y", "Detect" , self.camera.point_pixel[2][1], self.camera.img_height, nothing) 
 
 		cv2.createTrackbar("point_4_x", "Detect" , self.camera.point_pixel[3][0], self.camera.img_width, nothing)
-		cv2.createTrackbar("point_4_y", "Detect" , self.camera.point_pixel[3][1], self.camera.img_height, nothing) #371
+		cv2.createTrackbar("point_4_y", "Detect" , self.camera.point_pixel[3][1], self.camera.img_height, nothing)
+
+		cv2.createTrackbar("a", "Detect" , int(abs(self.camera.perspective.a) * 100000), 9999, nothing)
+		cv2.createTrackbar("b", "Detect" , int(abs(self.camera.perspective.b) * 100000), 9999, nothing)
 
 		self.get_trackbar()
 
@@ -86,6 +89,9 @@ class Interface(QObject):
 		self.x_4 = cv2.getTrackbarPos("point_4_x", "Detect")
 		self.y_4 = cv2.getTrackbarPos("point_4_y", "Detect")
 
+		# self.camera.perspective.a = cv2.getTrackbarPos("a", "Detect") / 100000
+		# self.camera.perspective.b = -1 * cv2.getTrackbarPos("b", "Detect") / 100000
+ 
 		self.point_calibr = [(self.x_1, self.y_1), (self.x_2, self.y_2), (self.x_3, self.y_3), (self.x_4, self.y_4)]
 
 		self.camera.perspective.write_point(self.point_calibr)
@@ -133,13 +139,14 @@ class Interface(QObject):
 					# self.draw_box_all(image_draw)
 
 					image_draw = self.draw_sight(image_draw)
+					image_draw = self.line_h(image_draw, 40)
 
-					# # point = (self.x, self.y)
-					# # point = self.camera.perspective.transform_coord(point)
+					point = (self.x, self.y)
+					point = self.camera.perspective.transform_coord(point)
 
-					# # point = self.camera.perspective.scale(point)
+					point = self.camera.perspective.scale(point)
 
-					# # self.camera.perspective.draw(image_draw)
+					image_draw = self.camera.perspective.draw(image_draw)
 
 					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 200, (255, 0, 255), 2)
 					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 600, (255, 0, 255), 2)
@@ -191,6 +198,13 @@ class Interface(QObject):
 		cv2.line(img, (int(self.camera.img_width/2), int(self.camera.img_height/2) - size), (int(self.camera.img_width/2 ) , int(self.camera.img_height/2) + size), (0, 0, 0), 2)
 		cv2.line(img, (int(self.camera.img_width/2) - size, int(self.camera.img_height/2)), (int(self.camera.img_width/2) + size, int(self.camera.img_height/2)), (0, 0, 0), 2)
 
+		return img
+
+
+	def line_h(self, img, h):
+		for i in range(20):
+			cv2.line(img, (0, int(i * h)), (self.camera.img_width , int(i * h)), (120, 120, 120), 1)
+		
 		return img
 
 	# def perspective(self, img):

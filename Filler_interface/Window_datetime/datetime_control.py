@@ -73,10 +73,6 @@ class Control(QMainWindow):
         self.button_raise()
         super().show()
 
-        app.window_focus = self.window_name
-        print(app.window_focus)
-        app.close_windows()
-
 
     def show_window(self):
         stylesheet = app.styleSheet()

@@ -13,6 +13,8 @@ class Pins():
         self.motor_dir = self.pin_init(19)
         self.motor_enable = self.pin_init(26)
 
+        self.laser = self.pin_init(24)
+
         self.button_stop = self.pin_init(14)
         self.button = self.pin_init(5)
         self.switch_out = self.pin_init(8)
@@ -42,6 +44,8 @@ class Pins():
         self.motor_p2_dir = self.pin_init(23)
 
         self.motor_p1p2_enable = self.pin_init(7)
+
+        self.laser.set_value(1)
 
 
     def release_all_lines(self):
@@ -87,7 +91,18 @@ if __name__ == '__main__':
 
     
     while True:
-        pins.get_value_log(pins.switch_y)
+        # pins.get_value_log(pins.switch_y)
         # pins.get_value_log(pins.button_stop)
         # pins.get_value_log(pins.button)
-        time.sleep(0.1)
+
+        time.sleep(1)
+        
+        pins.laser.set_value(1)
+        pins.get_value_log(pins.laser)
+
+        time.sleep(1)
+
+        pins.laser.set_value(1)
+
+        pins.get_value_log(pins.laser)
+
