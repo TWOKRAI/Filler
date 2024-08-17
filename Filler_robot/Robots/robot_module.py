@@ -165,6 +165,10 @@ class Robot_module():
 		self.axis_z.limit_min = 145
 		self.axis_z.limit_max = 95
 		
+		self.time_start_x = 0
+		self.time_start_y = 0
+		self.time_start_z = 0
+		
 
 	def running(self):
 		self.move_objects()
@@ -417,10 +421,18 @@ class Robot_module():
 			if self.stopped:
 				break
 
+			switch_y = pins.switch_y.get_value()
+
+			if switch_y:
+				self.axis_y.motor.stop = True
+				self.axis_y.motor.ready = True
+				break
+				
 			await asyncio.sleep(0.01)
 
 	
 	async def _limit(self):
+
 		while True:
 			if self.stopped:
 				break
@@ -430,28 +442,26 @@ class Robot_module():
 			# else:
 			# 	self.axis_z.motor.stop_for = False
 			
-			await asyncio.sleep(0.0001)
+			await asyncio.sleep(0.001)
 
 
-	async def _move_async(self, distance_x, distance_y, distance_z, detect = False):
-		
+	async def _move_async(self, distance_x, distance_y, distance_z, detect = False):	
 		self.stopped = False
 		tasks = []
 
 		if detect:
-			sensor_task = asyncio.create_task(self._detect_sensor())
+			tasks.append(asyncio.create_task(self._detect_sensor()))
 
-		limit_task = asyncio.create_task(self._limit())
+		# tasks.append(asyncio.create_task(self._limit()))
 
 		if distance_x != 0:
-			tasks.append(asyncio.create_task(self.axis_x.motor.move(distance_x, async_mode=True)))
+			tasks.append(asyncio.create_task(self.axis_x.motor.move(distance_x, async_mode=True, time_start = self.time_start_x)))
 		
 		if distance_y != 0:
-			tasks.append(asyncio.create_task(self.axis_y.motor.move(distance_y, async_mode=True)))
+			tasks.append(asyncio.create_task(self.axis_y.motor.move(distance_y, async_mode=True, time_start = self.time_start_y)))
 
 		if distance_z != 0:
-			
-			tasks.append(asyncio.create_task(self.axis_z.motor.move(distance_z, async_mode=True)))
+			tasks.append(asyncio.create_task(self.axis_z.motor.move(distance_z, async_mode=True, time_start = self.time_start_z)))
 			
 		try:
 			await asyncio.gather(*tasks)
@@ -462,14 +472,18 @@ class Robot_module():
 
 		self.stopped = True
 
-		if detect:
-			sensor_task.cancel()
+		self.time_start_x = 0
+		self.time_start_y = 0
+		self.time_start_z = 0
+
+		# if detect:
+		# 	sensor_task.cancel()
 		
-		limit_task.cancel()
+		# limit_task.cancel()
 
 
-	def move(self, distance_x, distance_y, distance_z):
-		asyncio.run(self._move_async(distance_x, distance_y, distance_z))
+	def move(self, distance_x, distance_y, distance_z, detect = False):
+		asyncio.run(self._move_async(distance_x, distance_y, distance_z, detect))
 
 
 	def go_to_point(self, x, y, z):
@@ -531,11 +545,10 @@ class Robot_module():
 		self.distance_y_end = self.distance_y
 		self.distance_z_end = self.distance_z
 
-		
+
+		self.time_start_z = 0.5
 
 		self.move(self.distance_x, self.distance_y, self.distance_z)
-		# self.move(0, 0, 90)
-		
 		
 		print('go_to_point Приехал в координаты:', 
 			'x:', x1, 'angle x:', self.axis_x.angle_real(),
@@ -565,6 +578,12 @@ class Robot_module():
 
 
 	def move_objects(self, pumping = False):
+		switch_y = pins.switch_y.get_value()
+
+		if not switch_y:
+			self.calibration()
+
+
 		self.enable_motors(True)
 		
 		list_objects = self.neuron.objects_filter
@@ -572,10 +591,8 @@ class Robot_module():
 
 		# if self.print_on:
 		print('move_objects list_objects', list_objects)
-		
-		
+	
 		print('move_objects list_coord', list_coord)
-
 
 		i = 0
 		limit = False
@@ -583,6 +600,11 @@ class Robot_module():
 		for coord in list_coord:
 			print('PFITK')
 			x, y, z = coord
+
+			if z > 12:
+				z = z + 3
+
+			y = y - 1.5
 
 			limit = self.check_limit(x, y, z)
 
@@ -704,9 +726,11 @@ class Robot_module():
 
 		QThread.msleep(1000)
 
+		self.go_home_marker = True
+
 		switch_y = pins.switch_y.get_value()
 		if switch_y:
-			self.axis_y.motor.move(100)
+			self.axis_y.motor.move(50)
 
 		asyncio.run(self._calibration_y_async())
 
@@ -716,22 +740,12 @@ class Robot_module():
 		self.null_value()
 
 
-
 	def go_home(self):
-		# if self.distance_x_end >= 0:
-		# 	self.distance_x_end = -self.distance_x_end
-		# else:
-		# 	self.distance_x_end = self.distance_x_end
+		if self.distance_y_end <= 750:
+			self.time_start_y = 0.5
 
-		
-		print(self.distance_x_end, -self.distance_y_end, -self.distance_z_end)
-
-		# self.move(0, 0, -90)
-		self.move(-self.distance_x_end, -self.distance_y_end, -self.distance_z_end)
-
-		# self.axis_y.motor.speed_def = self.axis_y.motor.speed_def * 20
-		# self.move(0, -10, 0)
-		# self.axis_y.motor.speed_def = self.axis_y.motor.speed_def / 20
+		self.move(-self.distance_x_end, -self.distance_y_end - 500, -self.distance_z_end, detect = True)
+		self.axis_z.motor.enable_on(False)
 
 		self.home = True
 
@@ -741,44 +755,19 @@ class Robot_module():
 
 		print('go home')
 
-		
-	# def correction(self, list_coord):
-	# 	x = round(list_coord[0])
-	# 	y = round(list_coord[1])
 
-	# 	list_correction_y = self.neuron.memory_read('correction.txt', y)
-	# 	print(list_correction_y)
+	def move_cip(self):
+		self.axis_x.motor.enable_on(False)
+		self.axis_y.motor.enable_on(True)
+		self.axis_z.motor.enable_on(False)
 
-	# 	try:
-	# 		correction_x = list_correction_y[x]
-	# 		correction_x = 0
-	# 		print('такой ключ есть')
-	# 		input() 
-	# 	except KeyError:
-	# 		correction_x = 1
+		switch_y = pins.switch_y.get_value()
+		if switch_y:
+			self.move(0, 800, 0)
+		else:
+			self.move(0, -1000, 0, detect = True)
+			self.move(0, 800, 0)
 
-	# 	distance_x = 0
-	# 	distance_y = 0
-
-	# 	while list_correction_y != 0 and correction_x != 0:
-	# 		axis = input()
-
-	# 		if axis == 'x':
-	# 			distance_x = int(input(f'distance {axis}'))
-	# 			self.motor_x.move(distance_x)
-			
-	# 		if axis == 'y':
-	# 			distance_y = int(input(f'distance {axis}'))
-	# 			self.motor_y.move(distance_y)
-
-	# 		if axis == 'p':
-	# 			self.neuron.memory_write('correction.txt', y, list_correction_y)
-	# 			print(f'Save {list_correction_y[x]}')
-	# 			list_correction_y[x] = (distance_x, distance_y)
-	
-	# 			break
-
-#robot = Robot_module()
 
 if __name__ == '__main__':
 	robot = Robot_module()

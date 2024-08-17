@@ -61,7 +61,7 @@ class Neuron:
 		
 		self.mode = 0
 		
-		self.threshold = 0.4
+		self.threshold = 0.2
 		self.nmsthreshold = 0.4
 
 		self.list_find = {'cup': True, 'CUP': True, 'vase': True, 'wine glass': True, 'toilet': True, 'person': True}

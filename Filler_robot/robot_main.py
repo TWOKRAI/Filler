@@ -33,6 +33,8 @@ class Robot_filler(QThread):
         self.calibration_func = False
         self.view = False
         self.cip = False
+        self.cip_move = False
+        self.calibration_only = False
 
         self.button_error = False 
         
@@ -90,6 +92,14 @@ class Robot_filler(QThread):
 
                 self.cip_stop()
 
+            if self.calibration_only:
+                self.robot.calibration()
+                self.calibration_only = False
+
+            if self.cip_move:
+                self.robot.move_cip()
+
+                self.cip_move_stop()
             
             QThread.msleep(100)
 
@@ -101,6 +111,7 @@ class Robot_filler(QThread):
         self.filler = False
         self.calibratiom_func = False
         self.cip = False
+        self.cip_move = False
 
     def view_stop(self):
         self.view = False
@@ -111,6 +122,7 @@ class Robot_filler(QThread):
         self.filler = True
         self.calibration_func = False
         self.cip = False
+        self.cip_move = False
 
 
     def filler_stop(self):
@@ -122,6 +134,7 @@ class Robot_filler(QThread):
         self.filler = False
         self.calibration_func = True
         self.cip = False
+        self.cip_move = False
 
 
     def calibration_stop(self):
@@ -133,26 +146,32 @@ class Robot_filler(QThread):
         self.filler = False
         self.calibration_func = False
         self.cip = True
+        self.cip_move = False
 
 
     def cip_stop(self):
         self.cip = False
 
 
-    # @pyqtSlot(bool)
-    def enable_neuron_on(self, value = False):
-        if value:
-            self.neuron_on = True
-        else:
-            self.neuron_on = False
-    
-    
-    # @pyqtSlot(bool)
-    def enable_robot_on(self, value = False):
-        if value:
-            self.robot_on = True
-        else:
-            self.robot_on = False
+    def cip_move_run(self):
+        self.view = False
+        self.filler = False
+        self.calibration_func = False
+        self.cip = False
+        self.cip_move = True
+
+
+    def cip_move_stop(self):
+        self.cip_move = False
+
+
+    def calibration_only_run(self):
+        self.view = False
+        self.filler = False
+        self.calibration_func = False
+        self.cip = False
+        self.cip_move = False
+        self.calibration_only = True
 
 
     def reset_calibration(self):
@@ -203,8 +222,6 @@ class Robot_filler(QThread):
     def stop_pumping(self):
         self.robot.pump_station.stop_pumps2()
 
-    # def start_filler(self):
-    #     self.filler_run = True
 
     def on_button_error(self):
         self.button_error = True

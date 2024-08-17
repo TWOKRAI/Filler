@@ -99,7 +99,7 @@ class Motor:
 		return abs(speed)
 
 	
-	async def _move_async(self, distance: int, print_log = False):
+	async def _move_async(self, distance: int, print_log = False, time_start = 0):
 		self.ready = False
 		self.error_limit = False
 
@@ -118,11 +118,15 @@ class Motor:
 		else:
 			direction = False
 
+		if time_start > 0:
+			await asyncio.sleep(time_start)
+
 		for step in range(int(self.distance)):
 			if self.stop_for:
 				print(f'{self.name}, self.stop_for')
 				while self.stop_for:
 					await asyncio.sleep(self.speed_def)
+
 			
 			if self.limit_min <= self.value and self.value >= self.limit_max:
 				self.error_limit = True
@@ -167,6 +171,7 @@ class Motor:
 
 
 		self.stop_for = False
+		self.stop = False
 	
 
 	# @_timing(True)
@@ -266,11 +271,11 @@ class Motor:
 
 	# @_log_input_output(False)
 	# @_timing(True)
-	def move(self, distance: int, async_mode: bool = False):
+	def move(self, distance: int, async_mode: bool = False, time_start = 0):
 		if async_mode:
-			return self._move_async(distance)
+			return self._move_async(distance,  time_start = time_start)
 		else:
-			asyncio.run(self._move_async(distance))
+			asyncio.run(self._move_async(distance, time_start = time_start))
 
 	
 	# async def test(self):

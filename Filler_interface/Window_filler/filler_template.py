@@ -11,7 +11,7 @@ class Control(QMainWindow):
     def __init__(self):
         super().__init__()
         
-        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_settings1', 'UI_settings.ui')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_filler', 'UI_filler2.ui')
         # file_path = os.path.join('Filler_interface', 'Window_settings1', 'UI_settings.ui')
         uic.loadUi(file_path, self)
        
@@ -86,7 +86,7 @@ class Control(QMainWindow):
         self.button_menu.setIcon(QIcon(file_path))
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
-        self.button_reset.setIcon(QIcon(file_path))
+        self.button_view.setIcon(QIcon(file_path))
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-subtract-100.png')
         self.button_left.setIcon(QIcon(file_path))

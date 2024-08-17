@@ -111,7 +111,7 @@ class Cip_control(Control):
 
         self.button2.clicked.connect(self.close)
 
-
+        self.move_ready = False
         
         self.timer_exit = QTimer(self)
         self.timer_exit.setSingleShot(True)
@@ -136,6 +136,25 @@ class Cip_control(Control):
     def show(self):
         super().show()
 
+        self.pop_up_cip()
+
+
+    def pop_up_cip(self):
+        app.window_pop_up.hide()
+        app.window_pop_up.text = [
+            'Вы хотите начать очистку? Подтверждая робот выйдет в робочую зону!', 
+            'Volume1 /ml',
+            'Volumen 1 /ml', 
+            '體積 1 /毫升',
+        ]
+
+        app.window_pop_up.show(self.move_cip)
+
+        
+    def move_cip(self):
+        app.threads.robot_filler.cip_move_run()
+        self.move_ready = True
+
 
     def update(self):
         self.label_window_update()
@@ -155,6 +174,9 @@ class Cip_control(Control):
     def button_menu_clicked(self):
         super().button_menu_clicked()
         self.memory_write(self.param_list)
+
+        app.threads.robot_filler.calibration_only_run()
+        self.move_ready = False
 
 
     def button_reset_pressed(self):
@@ -343,7 +365,7 @@ class Cip_control(Control):
         match self.param_num:
             case 1:
                 text = {
-                    0: 'Насос 1: Скорость',
+                    0: 'Насоы: Скорость',
                     1: 'Volume 1 /ml',
                     2: 'Sprache',
                     3: '語言',
@@ -352,7 +374,7 @@ class Cip_control(Control):
                 size_text = 30
             case 2:
                 text = {
-                    0: 'Насос 1: Состояние',
+                    0: 'Насосы: Состояние',
                     1: 'Volume2 /ml',
                     2: '',
                     3: '',
@@ -467,16 +489,19 @@ class Cip_control(Control):
                 self.put_parametrs()
             case 2:
                 if self.param_list[self.param_num] < 1:
-                    self.param_list[self.param_num] += 1
-                    
-                self.put_parametrs()
+                    if self.move_ready == True:
+                        self.param_list[self.param_num] += 1
+                        
+                        self.put_parametrs()
 
-                self.text_color((63, 140, 110))
+                        self.text_color((63, 140, 110))
 
-                app.threads.robot_filler.pump_station.pump_1.speed_k = self.param_list[1] * 10
-                app.threads.robot_filler.pump_station.pump_2.speed_k = self.param_list[1] * 10
+                        app.threads.robot_filler.pump_station.pump_1.speed_k = self.param_list[1] * 10
+                        app.threads.robot_filler.pump_station.pump_2.speed_k = self.param_list[1] * 10
 
-                app.threads.robot_filler.cip_run()
+                        app.threads.robot_filler.cip_run()
+                    else:
+                        self.pop_up_cip()
 
         self.update()
         self.enable_control()

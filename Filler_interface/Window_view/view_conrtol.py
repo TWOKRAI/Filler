@@ -49,11 +49,10 @@ class View_control(QMainWindow):
     def show(self, id = 0):
         if id == 1:
             self.view2 = True
+            app.threads.robot_filler.view_run()   
         else:
             self.view2 = False
-        #     app.threads.start_robot_thread()
-
-        app.threads.robot_filler.filler_run()
+                 
 
         if app.on_fullscreen: self.fullscreen()
 
@@ -72,7 +71,7 @@ class View_control(QMainWindow):
 
     def close(self):
         if self.view2 == True:
-            app.threads.robot_filler.filler_stop()
+            app.threads.robot_filler.view_stop()
 
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(
@@ -107,7 +106,6 @@ class View_control(QMainWindow):
 
     @pyqtSlot(QPixmap)
     def update_frame(self, frame):
-        
         self.label.setPixmap(frame)
 
         if self.focus_window:

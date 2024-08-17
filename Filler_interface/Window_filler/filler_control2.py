@@ -36,10 +36,10 @@ class Control(Control):
         self.button_menu.pressed.connect(self.button_menu_pressed)
         self.button_menu.released.connect(self.button_menu_released)
 
-        self.button_reset.setMinimumSize(button_size)
-        self.button_reset.setIconSize(icon_size)
+        self.button_view.setMinimumSize(button_size)
+        self.button_view.setIconSize(icon_size)
 
-        self.button_reset.clicked.connect(self.show_popup)
+        self.button_view.clicked.connect(self.show_popup)
 
         self.timer_left_pressed = QTimer(self)
         self.timer_left_pressed.setInterval(int(300))
@@ -103,8 +103,8 @@ class Control(Control):
         self.timer_exit.setInterval(6000) 
         self.timer_exit.timeout.connect(self.on_timer_reset)
 
-        self.button_reset.pressed.connect(self.button_reset_pressed)
-        self.button_reset.released.connect(self.button_reset_released)
+        self.button_view.pressed.connect(self.button_view_pressed)
+        self.button_view.released.connect(self.button_view_released)
 
         file_path = os.path.join('Filler_interface', 'Window_settings1', 'Data')
         self.memory = Memory(db_path = file_path, db_file = 'memory_db')
@@ -120,10 +120,9 @@ class Control(Control):
 
     def update(self):
         self.label_window_update()
-        self.coll_params_update()
         self.value_update()
         self.value_mini_update()
-        self.name_params_update()
+        #self.name_params_update()
     
     
     def enable_control(self):
@@ -140,11 +139,11 @@ class Control(Control):
         app.threads.robot_filler.filler_stop()
 
 
-    def button_reset_pressed(self):
+    def button_view_pressed(self):
         self.timer_exit.start()
 
 
-    def button_reset_released(self):
+    def button_view_released(self):
         self.timer_exit.stop()
 
 
@@ -250,21 +249,6 @@ class Control(Control):
         font.setBold(False)
         font.setWeight(50)
         self.label_window.setFont(font)
-
-
-    def coll_params_update(self):
-        size_text = 21
-        
-        text = f'{self.param_num} / {len(self.param_list) + 1}'
-        text = f''
-        self.coll_params.setText(str(text))
-
-        font = QFont()
-        font.setFamily(app.font_family)
-        font.setPointSize(size_text)
-        font.setBold(False)
-        font.setWeight(50)
-        self.coll_params.setFont(font)
 
 
     def value_update(self):
