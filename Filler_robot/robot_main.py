@@ -6,6 +6,7 @@ from Filler_robot.NeuroModules.neuron import Neuron
 from Filler_robot.NeuroModules.interface import Interface
 from Filler_robot.PumpStation.pumps import Pump_station
 from Filler_robot.Robots.robot_module import Robot_module
+from Filler_robot.VisionTech.laser import Laser
 
 from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
@@ -22,8 +23,9 @@ class Robot_filler(QThread):
         self.neuron = Neuron(self.camera)
         self.interface = Interface(self.camera, self.neuron)
         self.pump_station = Pump_station()
-        self.robot = Robot_module(self.camera, self.neuron, self.interface, self.pump_station)
-
+        self.laser = Laser() 
+        self.robot = Robot_module(self.camera, self.neuron, self.interface, self.pump_station, self.laser)
+        
         self.camera_on = camera_on
         self.neuron_on = neuron_on 
         self.interface_on = interface_on
@@ -36,11 +38,15 @@ class Robot_filler(QThread):
         self.cip_move = False
         self.calibration_only = False
 
+        self.first_view = False
+
         self.button_error = False 
         
         clear_file('log_temp.txt')
 
         self.i = 0
+
+        self.laser.on_off(1)
 
 
     def stop(self):
@@ -65,16 +71,36 @@ class Robot_filler(QThread):
             # temp = check_temperature()
             # write_to_file(temp, 'log_temp.txt')
 
+            if not self.view and not self.filler:
+                self.laser.on_off(1)
+
+
             if self.view:
-                if self.camera_on: self.camera.running()
-                if self.neuron_on: self.neuron.find_objects()
-                if self.interface_on: self.interface.running()
+                if not self.first_view:
+                    self.camera.running()
+                    self.neuron.find_objects()
+                    self.interface.running()
+                    self.first_view = True
+
+                self.laser.on_off(0)
+                self.neuron_vision()
+
+                self.laser.freq_func(200, 15)
+
+                self.interface.running()
+
+                QThread.msleep(500)
  
             if self.filler:
-                if self.camera_on: self.camera.running()
-                if self.neuron_on: self.neuron.find_objects()
-                if self.interface_on: self.interface.running()
-                if self.robot_on: self.robot.running()
+                self.laser.on_off(0)
+                self.neuron_vision()
+
+                self.laser.freq_func(200, 15)
+
+                self.interface.running()
+                self.robot.running()
+
+                QThread.msleep(1400)
  
             if self.calibration_func:
                 self.robot.calibration()
@@ -106,6 +132,23 @@ class Robot_filler(QThread):
         self.camera.stop()
 
 
+    def neuron_vision(self):
+        self.camera.running()
+        self.camera.running()
+        
+        self.camera.running()
+        self.neuron.find_objects()
+        self.interface.running()
+
+        self.camera.running()
+        self.neuron.find_objects()
+        self.interface.running()
+
+        self.camera.running()
+        self.neuron.find_objects()
+        self.interface.running()
+
+
     def view_run(self):
         self.view = True
         self.filler = False
@@ -115,6 +158,7 @@ class Robot_filler(QThread):
 
     def view_stop(self):
         self.view = False
+        self.first_view = False
 
 
     def filler_run(self):
@@ -192,8 +236,8 @@ class Robot_filler(QThread):
         self.robot_on = True
 
         while not self.robot.find and self.calibration_func:
-            if self.camera_on: self.camera.running()
-            if self.neuron_on: self.neuron.find_objects()
+            self.neuron_vision()
+
             if self.robot_on: self.robot.running()
 
             if self.robot.find:

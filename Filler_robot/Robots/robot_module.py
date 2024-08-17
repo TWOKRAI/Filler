@@ -82,14 +82,14 @@ class Axis:
 
 
 class Robot_module():
-	def __init__(self, camera = None, neuron = None, interface = None, pump_station = None):
+	def __init__(self, camera = None, neuron = None, interface = None, pump_station = None, laser = None):
 		super().__init__()
 
 		self.camera = camera
 		self.neuron = neuron
 		self.interface = interface
-
 		self.pump_station = pump_station
+		self.laser = laser
 
 		self.print_on = True
 
@@ -168,6 +168,8 @@ class Robot_module():
 		self.time_start_x = 0
 		self.time_start_y = 0
 		self.time_start_z = 0
+
+		self.laser_on = False
 		
 
 	def running(self):
@@ -445,7 +447,7 @@ class Robot_module():
 			await asyncio.sleep(0.001)
 
 
-	async def _move_async(self, distance_x, distance_y, distance_z, detect = False):	
+	async def _move_async(self, distance_x, distance_y, distance_z, detect = False):
 		self.stopped = False
 		tasks = []
 
@@ -560,7 +562,6 @@ class Robot_module():
 		#time.sleep(1)
 
 
-
 	def check_limit(self, x, y, z):
 		limit_check = False
 
@@ -583,7 +584,6 @@ class Robot_module():
 		if not switch_y:
 			self.calibration()
 
-
 		self.enable_motors(True)
 		
 		list_objects = self.neuron.objects_filter
@@ -597,14 +597,17 @@ class Robot_module():
 		i = 0
 		limit = False
 
+		completed = False
+
 		for coord in list_coord:
-			print('PFITK')
 			x, y, z = coord
 
-			if z > 12:
-				z = z + 3
-
-			y = y - 1.5
+			# if z > 12:
+			# 	z = z + 3
+			
+			z = z + 1
+			x = x * 0.9
+			y = y * 0.9
 
 			limit = self.check_limit(x, y, z)
 
@@ -622,47 +625,23 @@ class Robot_module():
 					break
 
 				if self.button_stop == False:
-					if y >= 18.5:
-						for _ in range(10):
-							self.camera.read_cam()
-							self.neuron.find_objects()
-							self.interface.save_image(interface = 1)
-
-							try:
-								value_x = self.neuron.objects_filter[i][4]
-								value_y = self.neuron.objects_filter[i][5]
-							except:
-								value_x = 0
-								value_y = 0
-							finally:
-								if abs(list_objects[i][4] - value_x) < self.neuron.region_x:
-									self.pump_station.run()
-									list_objects[i][0] = True
-									self.neuron.memory_objects = list_objects
-									self.interface.save_image(interface = 1)
-									
-									break
-								
-								# if value_x != 0 and value_y != 0:
-								# 	break
-					else:
-						self.pump_station.run()
-						self.neuron.memory_objects = list_objects
-						list_objects[i][0] = True	
-
+					self.pump_station.run()
+					completed = True
+					list_objects[i][0] = True
+					self.neuron.memory_objects = list_objects
+					self.interface.save_image(interface = 1)
 
 					if not self.pumping_find:
-						self.interface.save_image(interface = 1)
 						self.go_home()
 
 			i += 1
 		
-		# print('move_objects list_coord', list_objects)
+		if completed and not self.pumping_find:
+			self.laser.on_off(0)
+			QThread.msleep(3000)
 
-		self.neuron.memory_objects = list_objects
-
-		if not self.pumping_find:
-			QThread.msleep(5000)
+			self.laser.on_off(1)
+			QThread.msleep(1000)
 
 
 	async def _detect_switch_x(self):
@@ -730,7 +709,9 @@ class Robot_module():
 
 		switch_y = pins.switch_y.get_value()
 		if switch_y:
+			self.axis_y.motor.speed_def = 0.001
 			self.axis_y.motor.move(50)
+			self.axis_y.motor.speed_def = 0.001
 
 		asyncio.run(self._calibration_y_async())
 
