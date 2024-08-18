@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import math
 
+from numpy.polynomial.polynomial import Polynomial
+
 
 class Perspective:
     def __init__(self, image, point_img, point_real) -> None:
@@ -39,9 +41,34 @@ class Perspective:
         self.intersection_point4 = self.line_intersection([(0, self.img_height),(self.img_width, self.img_height)], [self.point3, self.point4])
         self.intersection_point5 = (0, 0)
 
-        self.a = 0.516441
-        self.b = 0.0143
-    
+        self.a = 0.762
+        self.b = 0.00567
+
+
+        # Измеренные координаты
+        points1 = np.array([
+            (0, 13.0),
+            (0, 18.1),
+            (0, 22.3),
+            (0, 25.5),
+            (0, 28.4),
+            (0, 30.4),
+            (0, 32.5),
+            (0, 34),
+        ])
+
+        # Реальные координаты
+        points2 = np.array([
+            (0, 13),
+            (0, 16),
+            (0, 19),
+            (0, 22),
+            (0, 25),
+            (0, 28),
+            (0, 31),
+            (0, 34),
+        ])
+            
 
     def write_point(self, point_img):
         self.point1 = point_img[0]
@@ -163,8 +190,12 @@ class Perspective:
 
         # Корректировка y по перспективе
         # Пример квадратичного преобразования
-        print('YYYYYY', y, self.a, self.b)
+        # print('YYYYYY', y, self.a, self.b)
         y_corrected = self.a * y + self.b * y**2
+
+        # y_corrected = y
+
+        y_corrected = y*(1 - 1/y * 2.2)
 
         x = round(x, 1)
         y_corrected = round(y_corrected, 1)
@@ -219,44 +250,12 @@ class Perspective:
 
         return image
 
-# if __name__ == '__main__':
-#     def nothing(x):
-#         pass
 
-#     # Размеры изображения
-#     img_width = 640
-#     img_height = 800
+    def polynom(self):
+        # Извлекаем y-координаты
+        y_measured = self.points_pixel[:, 1]
+        y_real = self.points_real[:, 1]
 
-#     cv2.namedWindow( "Image" )
-#     cv2.createTrackbar("x", "Image" , 220, img_height, nothing)
-#     cv2.createTrackbar("y", "Image" , 700, img_height, nothing)
-
-#     image = np.zeros((img_height, img_width, 3), dtype=np.uint8)
-
-#     point1 = (180, 700)
-#     point2 = (220, 540)
-
-#     point3 = (460, 700)
-#     point4 = (420, 540)
-
-#     point_pixel = [(180, 700), (220, 540), (460, 700), (420, 540)]
-#     point_real = [(10, 20), (10, 90), (70, 20), (70, 90)]
-
-#     matrix = Perspective(image, point_pixel, point_real)
-
-
-#     while True:
-#         image = np.zeros((img_height, img_width, 3), dtype=np.uint8)
-
-#         x = cv2.getTrackbarPos('x', "Image")
-#         y = cv2.getTrackbarPos('y', "Image")
-        
-#         point = (x, y)
-
-#         point = matrix.transform_coord(point)
-#         point = matrix.scale(point)
-
-#         matrix.draw(image)
-
-#         cv2.imshow("Image", image)
-#         cv2.waitKey(1)
+        # Полиномиальная регрессия (например, степень 2)
+        degree = 2
+        self.p = Polynomial.fit(y_measured, y_real, degree)

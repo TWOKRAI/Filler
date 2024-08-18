@@ -48,8 +48,8 @@ class Camera:
 
         image = np.zeros((self.width_out, self.height_out, 3), dtype=np.uint8)
         
-        self.point_pixel = [(113, 508), (205, 319), (522, 508), (431, 317)]
-        self.point_real = [(-12, 15.5), (-12, 30.8), (12.5, 15.5), (12.5, 30.8)]
+        self.point_pixel = [(113, 508), (212, 302), (522, 508), (421, 302)]
+        self.point_real = [(-12, 13.0), (-12, 34.0), (12, 13.0), (12, 34.0)]
         
         self.perspective = Perspective(image, self.point_pixel, self.point_real)
 
@@ -82,7 +82,7 @@ class Camera:
         
         center = (self.img_width // 2, self.img_height // 2)
 
-        angle = -1.0
+        angle = 0.0
         scale = 1.0
         M = cv2.getRotationMatrix2D(center, angle, scale)
 
@@ -100,7 +100,7 @@ class Camera:
         # print('Camera read')
         # print(type(image_out), self.img_width, self.img_height)
 
-        cv2.imwrite('test2.png', self.image_out)
+        # cv2.imwrite('test2.png', self.image_out)
         
         return self.image_out
     

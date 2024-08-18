@@ -640,9 +640,6 @@ class Robot_module():
 			self.laser.on_off(0)
 			QThread.msleep(3000)
 
-			self.laser.on_off(1)
-			QThread.msleep(1000)
-
 
 	async def _detect_switch_x(self):
 		while True:

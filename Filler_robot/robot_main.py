@@ -66,8 +66,9 @@ class Robot_filler(QThread):
         print('self.running', self.running)
 
         while self.running:
-            self.i += 1
-            print(self.i)
+            # self.i += 1
+            # print(self.i)
+
             # temp = check_temperature()
             # write_to_file(temp, 'log_temp.txt')
 
@@ -76,6 +77,7 @@ class Robot_filler(QThread):
 
 
             if self.view:
+                
                 if not self.first_view:
                     self.camera.running()
                     self.neuron.find_objects()
@@ -83,24 +85,26 @@ class Robot_filler(QThread):
                     self.first_view = True
 
                 self.laser.on_off(0)
-                self.neuron_vision()
+                
+                self.camera.running()
+                #self.neuron_vision()
 
-                self.laser.freq_func(200, 15)
+                #self.laser.running()
 
                 self.interface.running()
-
-                QThread.msleep(500)
  
             if self.filler:
                 self.laser.on_off(0)
+
+                self.camera.running()
                 self.neuron_vision()
 
-                self.laser.freq_func(200, 15)
+                self.laser.running()
 
                 self.interface.running()
                 self.robot.running()
 
-                QThread.msleep(1400)
+                #QThread.msleep(1500)
  
             if self.calibration_func:
                 self.robot.calibration()
@@ -133,7 +137,6 @@ class Robot_filler(QThread):
 
 
     def neuron_vision(self):
-        self.camera.running()
         self.camera.running()
         
         self.camera.running()
