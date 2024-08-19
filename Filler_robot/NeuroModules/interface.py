@@ -138,15 +138,17 @@ class Interface(QObject):
 
 					# self.draw_box_all(image_draw)
 
-					image_draw = self.draw_sight(image_draw)
-					image_draw = self.line_h(image_draw, 40)
+					# image_draw = self.draw_sight(image_draw)
+					# image_draw = self.line_h(image_draw, 40)
 
-					point = (self.x, self.y)
-					point = self.camera.perspective.transform_coord(point)
+					# point = (self.x, self.y)
+					# point = self.camera.perspective.transform_coord(point)
 
-					point = self.camera.perspective.scale(point)
+					# point = self.camera.perspective.scale(point)
 
-					image_draw = self.camera.perspective.draw(image_draw)
+					# image_draw = self.camera.perspective.draw(image_draw)
+
+
 
 					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 200, (255, 0, 255), 2)
 					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 600, (255, 0, 255), 2)
@@ -246,6 +248,9 @@ class Interface(QObject):
 				#print('wfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww', camera.perspective_transformed([neuron.list_coord[i][0] * 10, neuron.list_coord[i][1] * 10]), neuron.list_coord[i][0] * 10, neuron.list_coord[i][1] * 10)
 
 				text = f'{id_obj}' + ':' + label + ' ' + f'{ready}'
+
+				text = f'{id_obj}: {label}' 
+
 				cv2.rectangle(image,(x1, y1),(x1 + w, y1 + h), color_box, 2)
 				cv2.putText(image, text, (x1, y1 + h + 15), cv2.FONT_HERSHEY_COMPLEX, 0.7, color_box, 1)
 

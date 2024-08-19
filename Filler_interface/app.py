@@ -54,8 +54,7 @@ class App(QApplication):
 
         self.window_low.show()
         self.window_start.show_animation()
-        self.window_filler.show()
-
+ 
         sys.exit(app.exec_()) 
     
 

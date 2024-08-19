@@ -208,7 +208,7 @@ class Prepare_control(QMainWindow):
   
             case 4:
                 name_button = {
-                    0: 'Готово',
+                    0: 'ПОДОЖДИТЕ',
                     1: 'Start2',
                 }
 
@@ -273,8 +273,9 @@ class Prepare_control(QMainWindow):
                 self.value = 100
 
                 app.threads.robot_filler.calibration_stop()
+
             case 6:
-                app.threads.robot_filler.filler_run()
+                # app.threads.robot_filler.filler_run()
 
                 app.threads.robot_filler.robot.calibration_ready = True
 
@@ -346,7 +347,7 @@ class Prepare_control(QMainWindow):
 
             case 5:
                 label_name = {
-                    0: 'Прокачка закончена',
+                    0: 'Система готова',
                     1: 'Началась rrrr калибровка робота (Подождите)',
                 }
 
@@ -358,11 +359,14 @@ class Prepare_control(QMainWindow):
                 self.value = 100
             case 6:
                 label_name = {
-                    0: '',
+                    0: 'Система готова',
                     1: '',
                 }
-            case _:
-                pass
+            case 7:
+                label_name = {
+                    0: 'Система готова',
+                    1: '',
+                }
 
 
         self.label.setText(label_name[self.lang])

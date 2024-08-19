@@ -52,6 +52,8 @@ class Robot_filler(QThread):
 
         self.i = 0
 
+        self.calibration_only = True
+
         self.laser.on_off(1)
 
 
@@ -113,7 +115,6 @@ class Robot_filler(QThread):
 
                 self.interface.running()
                 
-                self.laser.on_off(1)
                 self.robot.running()
 
                 #QThread.msleep(1500)
@@ -130,7 +131,7 @@ class Robot_filler(QThread):
                 # self.stop()
 
             if self.cip:
-                self.pump_station.run()
+                self.pump_station.cip()
 
                 self.cip_stop()
 
@@ -251,7 +252,17 @@ class Robot_filler(QThread):
         self.robot_on = True
 
         while not self.robot.find and self.calibration_func:
-            self.neuron_vision()
+            self.laser.on_off(1)
+
+            self.camera.running()
+            find_tuple = self.neuron.find_objects()
+    
+            if find_tuple[1] > 0:
+                self.laser.running()
+                self.laser.on_off(0)
+
+                self.camera.running()
+                self.neuron.neuron_vision()
 
             if self.robot_on: self.robot.running()
 
@@ -268,7 +279,7 @@ class Robot_filler(QThread):
         if self.calibration_func:
             if not self.button_error: self.prepare.emit()
 
-            self.robot.pump_station.run()
+            self.pump_station.prepare()
             if not self.button_error: self.prepare.emit()
             self.robot.go_home()
         

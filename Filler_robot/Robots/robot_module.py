@@ -142,7 +142,7 @@ class Robot_module():
 		self.axis_y.motor.enable_on(False)
 		self.axis_y.motor.speed_def = 0.0001
 		self.axis_y.motor.direction = False
-		self.axis_y.step_angle = 0.122
+		self.axis_y.step_angle = 0.123
 		self.axis_y.arm_lenght = 12
 		self.axis_y.angle_0 = 124
 		self.axis_y.angle = self.axis_y.angle_0
@@ -158,7 +158,7 @@ class Robot_module():
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
 		self.axis_z.direction_distance = False
-		self.axis_z.step_angle = 0.12
+		self.axis_z.step_angle = 0.123
 		self.axis_z.arm_lenght = 12
 		self.axis_z.angle_0 = 145
 		self.axis_z.angle = self.axis_z.angle_0
@@ -187,9 +187,9 @@ class Robot_module():
 		# self.pump_station.motor_1.stop_for = True
 		# self.pump_station.motor_2.stop_for = True
 
-		self.axis_x.motor.stop_for = True
-		self.axis_y.motor.stop_for = True
-		self.axis_z.motor.stop_for = True
+		self.axis_x.motor.stop = True
+		self.axis_y.motor.stop = True
+		self.axis_z.motor.stop = True
 
 		self.button_stop = True
 
@@ -197,12 +197,12 @@ class Robot_module():
 
 	
 	def no_stop_motors(self):
-		self.pump_station.motor_1.stop_for = False
-		self.pump_station.motor_2.stop_for = False
+		self.pump_station.motor_1.stop = False
+		self.pump_station.motor_2.stop = False
 
-		self.axis_x.motor.stop_for = False
-		self.axis_y.motor.stop_for = False
-		self.axis_z.motor.stop_for = False
+		self.axis_x.motor.stop = False
+		self.axis_y.motor.stop = False
+		self.axis_z.motor.stop = False
 		
 		self.enable_motors(False)
 
@@ -487,6 +487,8 @@ class Robot_module():
 
 
 	def move(self, distance_x, distance_y, distance_z, detect = False):
+		self.laser.on_off(0)
+		
 		asyncio.run(self._move_async(distance_x, distance_y, distance_z, detect))
 
 
@@ -636,7 +638,7 @@ class Robot_module():
 					break
 
 				if self.button_stop == False:
-					self.pump_station.run()
+					self.pump_station.filler()
 					completed = True
 					list_objects[i][0] = True
 					self.neuron.memory_objects = list_objects
@@ -707,6 +709,8 @@ class Robot_module():
 
 
 	def calibration(self):
+		self.laser.on_off(0)
+
 		self.axis_x.motor.enable_on(True)
 		self.axis_y.motor.enable_on(True)
 		self.axis_z.motor.enable_on(False)
@@ -717,9 +721,10 @@ class Robot_module():
 
 		switch_y = pins.switch_y.get_value()
 		if switch_y:
-			self.axis_y.motor.speed_def = 0.001
-			self.axis_y.motor.move(50)
-			self.axis_y.motor.speed_def = 0.001
+			self.axis_y.motor.speed_def = 0.002
+			self.axis_y.motor.move(210)
+			self.axis_y.motor.speed_def = 0.0007
+			
 
 		asyncio.run(self._calibration_y_async())
 

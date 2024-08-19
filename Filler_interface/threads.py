@@ -72,6 +72,11 @@ class Thread():
                 app.window_prepare.reset_calibration.connect(self.robot_filler.reset_calibration)
                 app.window_prepare.pumping.connect(self.robot_filler.pumping)
 
+                self.robot_filler.pump_station.bottle_1.connect(app.window_filler.value_update_pump_1)
+                self.robot_filler.pump_station.bottle_2.connect(app.window_filler.value_update_pump_2)
+                self.robot_filler.pump_station.start_pump.connect(app.window_filler.start_pump)
+                self.robot_filler.pump_station.stop_pump.connect(app.window_filler.stop_pump)
+
                 # app.window_prepare.stop_pumping.connect(self.robot_filler.robot.pump_station.stop_pumps2)
                 # app.window_prepare.start_filler.connect(self.robot_filler.run2)
                 

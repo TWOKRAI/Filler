@@ -32,6 +32,8 @@ class Control(Control):
         self.timer.setInterval(1000) 
         self.timer.timeout.connect(self.on_timer_timeout)
 
+        self.step_button = 1
+
         self.button_menu.clicked.connect(self.button_menu_clicked)
         self.button_menu.pressed.connect(self.button_menu_pressed)
         self.button_menu.released.connect(self.button_menu_released)
@@ -39,17 +41,15 @@ class Control(Control):
         self.button_view.setMinimumSize(button_size)
         self.button_view.setIconSize(icon_size)
 
-        self.button_view.clicked.connect(self.show_popup)
+        self.button_view.clicked.connect(self.view)
 
 
-        self.button_settings.setMinimumSize(button_size)
-        self.button_settings.setIconSize(icon_size)
-
-        self.button_view.clicked.connect(self.show_popup)
-
+        self.button_start.setMinimumSize(button_size)
+        self.button_start.setIconSize(icon_size)
+        
 
         self.timer_left_pressed = QTimer(self)
-        self.timer_left_pressed.setInterval(int(300))
+        self.timer_left_pressed.setInterval(int(200/self.step_button))
         self.timer_left_pressed.timeout.connect(self.left)
 
         self.button_left.setMinimumSize(button_size)
@@ -60,7 +60,7 @@ class Control(Control):
         self.button_left.released.connect(self.left_released)
 
         self.timer_right_pressed = QTimer(self)
-        self.timer_right_pressed.setInterval(int(300))
+        self.timer_right_pressed.setInterval(int(200/self.step_button))
         self.timer_right_pressed.timeout.connect(self.right)
         
         self.button_right.setMinimumSize(button_size)
@@ -70,8 +70,7 @@ class Control(Control):
         self.button_right.pressed.connect(self.right_pressed)
         self.button_right.released.connect(self.right_released)
 
-        self.step_button = 1
-
+        
         self.timer_minus_pressed = QTimer(self)
         self.timer_minus_pressed.setInterval(int(200/self.step_button))
         self.timer_minus_pressed.timeout.connect(self.minus)
@@ -94,6 +93,8 @@ class Control(Control):
         self.button_plus.pressed.connect(self.plus_pressed)
         self.button_plus.released.connect(self.plus_released)
 
+        self.button_start.clicked.connect(self.button_start_clicked)
+
         self.set_icons()
 
         self.lang = 0
@@ -115,14 +116,23 @@ class Control(Control):
 
         file_path = os.path.join('Filler_interface', 'Window_settings1', 'Data')
         self.memory = Memory(db_path = file_path, db_file = 'memory_db')
+
+        self.pump_value_1 = 50
+        self.pump_value_2 = 100 
         
         self.param_list = self.get_parametrs()
         self.param_list = self.memory_read(self.param_list)
         self.put_parametrs()
         
+        self.play = False
 
         self.update()
         self.enable_control()
+
+
+    def show(self):
+        super().show()
+        self.play = False
 
 
     def update(self):
@@ -130,6 +140,8 @@ class Control(Control):
         self.value_update()
         self.value_mini_update()
         #self.name_params_update()
+
+        self.button_start_update()
     
     
     def enable_control(self):
@@ -160,10 +172,8 @@ class Control(Control):
 
     def get_parametrs(self): 
         self.param_list = {
-            1: filler.param3,
-            2: filler.param4,
-            3: filler.param5,
-            4: filler.param6,
+            1: self.pump_value_1,
+            2: self.pump_value_2,
         }
     
         return self.param_list
@@ -176,93 +186,70 @@ class Control(Control):
 
 
     def put_parametrs(self):
-        filler.param3 = self.param_list[1]
-        filler.param4 = self.param_list[2]
-        filler.param5 = self.param_list[3]
-        filler.param6 = self.param_list[4]
+        self.pump_value_1 = self.param_list[1]
+        self.pump_value_2 = self.param_list[2]
 
 
     def memory_write(self, data):
         self.memory.memory_write('data', data)
 
     
-    def default_parametrs(self):
+    def view(self):
         app.window_view.show()
         
 
     def label_window_update(self):
-        text = {
-            0: 'Напиток 1', 
-            1: 'SYSTEM SETTINGS',
-            2: 'SYSTEMEINSTELLUNGEN',
-            3: '系統設定',
-        }
+        pass
+        # text = {
+        #     0: 'НАПИТОК 1', 
+        #     1: 'SYSTEM SETTINGS',
+        #     2: 'SYSTEMEINSTELLUNGEN',
+        #     3: '系統設定',
+        # }
        
 
-        size_text = 21
+        # size_text = 30
         
-        text = text[self.lang]
-        self.label_window.setText(str(text))
+        # text = text[self.lang]
+        # self.label_window.setText(str(text))
         
 
-        font = QFont()
-        font.setFamily(app.font_family)
-        font.setPointSize(size_text)
-        font.setBold(False)
-        font.setWeight(50)
-        self.label_window.setFont(font)
+        # font = QFont()
+        # font.setFamily(app.font_family)
+        # font.setPointSize(size_text)
+        # font.setBold(False)
+        # font.setWeight(50)
+        # self.label_window.setFont(font)
 
-        text = {
-            0: 'Напиток 2', 
-            1: 'SYSTEM SETTINGS',
-            2: 'SYSTEMEINSTELLUNGEN',
-            3: '系統設定',
-        }
+        # text = {
+        #     0: 'НАПИТОК 2', 
+        #     1: 'SYSTEM SETTINGS',
+        #     2: 'SYSTEMEINSTELLUNGEN',
+        #     3: '系統設定',
+        # }
        
 
-        size_text = 21
+        # size_text = 30
         
-        text = text[self.lang]
-        self.label_window_2.setText(str(text))
+        # text = text[self.lang]
+        # self.label_window_2.setText(str(text))
         
 
-        font = QFont()
-        font.setFamily(app.font_family)
-        font.setPointSize(size_text)
-        font.setBold(False)
-        font.setWeight(50)
-        self.label_window_2.setFont(font)
+        # font = QFont()
+        # font.setFamily(app.font_family)
+        # font.setPointSize(size_text)
+        # font.setBold(False)
+        # font.setWeight(50)
+        # self.label_window_2.setFont(font)
 
 
     def value_update(self):
-        match self.param_num:
-            case 1:
-                value = self.param_list[self.param_num]
-                size_text = 85
-            case 2:
-                value = self.param_list[self.param_num]
-                size_text = 90
-            case 3:
-                value = self.param_list[self.param_num]
-                size_text = 90
-            case 4:
-                value = self.param_list[self.param_num]
-                size_text = 90
-            case 5:
-                value =  {
-                    0: 'Готово',
-                    1: 'Ready',
-                    2: 'Sprache',
-                    3: '語言',
-                }
-
-                value = value[self.lang]
-                size_text = 70
-            case _:
-                value = None
-                size_text = 60
-        
-        self.value.setText(str(value))
+        value_1 = self.param_list[1]
+        value_2 = self.param_list[2]
+        size_text = 70
+    
+        self.value.setText(str(f'1: {value_1}'))
+        self.value_2.setText(str(f'2: {value_2}'))
 
         font = QFont()
         font.setFamily(app.font_family)
@@ -270,7 +257,43 @@ class Control(Control):
         font.setBold(False)
         font.setWeight(50)
         self.value.setFont(font)
-    
+        self.value_2.setFont(font)
+
+
+    def start_pump(self): 
+        self.value_pump_1 = self.param_list[1]
+        self.value_pump_2 = self.param_list[2]
+
+
+    def stop_pump(self): 
+        self.value_update()
+
+
+    def value_update_pump_1(self):
+        step = 1000 * 0.004
+        step = int(round(step, 0))
+        self.value_pump_1 = self.value_pump_1 - step
+
+        value_1 = self.value_pump_1
+
+        if value_1 <= 0: 
+            value_1 = 0 
+
+        self.value.setText(str(f'1: {value_1}'))
+
+
+    def value_update_pump_2(self):
+        step = 1000 * 0.004
+        step = int(round(step, 0))
+        self.value_pump_2 = self.value_pump_2 - step
+
+        value_2 = self.value_pump_2
+
+        if value_2 <= 0: 
+            value_2 = 0 
+
+        self.value_2.setText(str(f'2: {value_2}'))
+
     
     def value_mini_update(self):
         match self.param_num:
@@ -331,6 +354,7 @@ class Control(Control):
         
         text = text[self.lang]
         self.value_mini.setText(str(text))
+        self.value_mini_2.setText(str(text))
 
         font = QFont()
         font.setFamily(app.font_family)
@@ -338,6 +362,7 @@ class Control(Control):
         font.setBold(False)
         font.setWeight(50)
         self.value_mini.setFont(font)
+        self.value_mini_2.setFont(font)
 
 
     def name_params_update(self):
@@ -414,24 +439,14 @@ class Control(Control):
 
         self.enable_control()
 
-        match self.param_num:
-            case 1:
-                if self.param_list[self.param_num] >= 50:
-                    self.param_list[self.param_num] -= 50
-            case 2:
-                if self.param_list[self.param_num] >= 50:
-                    self.param_list[self.param_num] -= 50
-            case 3:
-                if self.param_list[self.param_num] >= 5:
-                    self.param_list[self.param_num] -= 5
-            case 4:
-                if self.param_list[self.param_num] >= 5:
-                    self.param_list[self.param_num] -= 5
-            case 5:
-                pass
+        if self.param_list[1] >= 10:
+            self.param_list[1] -= 10
 
+        
         self.update()
         self.enable_control()
+
+        self.put_parametrs()
        
         
     def minus_released(self):
@@ -452,37 +467,16 @@ class Control(Control):
             
         self.update()
 
+        self.put_parametrs()
+
         self.memory_write(self.param_list)
 
 
     def minus_enable(self):
-        match self.param_num:
-            case 1:
-                if self.param_list[self.param_num] <= 10:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 2:
-                if self.param_list[self.param_num] <= 30:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 3:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 4:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 5:
-                self.button_minus.setEnabled(False)
+        if self.param_list[1] <= 0:
+            self.button_minus.setEnabled(False)
+        else:
+            self.button_minus.setEnabled(True)
 
 
     def plus(self):
@@ -490,37 +484,13 @@ class Control(Control):
 
         self.enable_control()
 
-        match self.param_num:
-            case 1:
-                if self.param_list[self.param_num] < 1000:
-                    self.param_list[self.param_num] += 50
-
-                self.put_parametrs()
-                
-            case 2:
-                if self.param_list[self.param_num] < 1200:
-                    self.param_list[self.param_num] += 50
-                
-                self.put_parametrs()
-                
-            case 3:
-                if self.param_list[self.param_num] < 100:
-                    self.param_list[self.param_num] += 5
-                
-                self.put_parametrs()
-                
-            case 4:
-                if self.param_list[self.param_num] < 120:
-                    self.param_list[self.param_num] += 5
-                
-                self.put_parametrs()
-                
-            case 5:
-                pass
-                
+        if self.param_list[1] < 1000:
+            self.param_list[1] += 10
 
         self.update()
         self.enable_control()
+
+        self.put_parametrs()
     
 
     def plus_released(self):
@@ -540,83 +510,114 @@ class Control(Control):
 
         self.update()
 
+        self.put_parametrs()
+
         self.memory_write(self.param_list)
         print('pressed')
 
 
     def plus_enable(self):
-        match self.param_num:
-            case 1:
-                if self.param_list[self.param_num] >= 1000:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 2:
-                if self.param_list[self.param_num] >= 1200:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 3:
-                if self.param_list[self.param_num] >= 100:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 4:
-                if self.param_list[self.param_num] >= 120:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 5:
-                self.button_plus.setEnabled(False)
-
+        if self.param_list[1] >= 1000:
+            self.button_plus.setEnabled(False)
+        else:
+            self.button_plus.setEnabled(True)
 
     
     def left(self):
-        if self.param_num > 1:
-            self.param_num -= 1
-
-        print(self.param_num)
+        super().left()
 
         self.enable_control()
-        self.update()
 
-        self.memory_write(self.param_list)
+        if self.param_list[2] >= 10:
+            self.param_list[2] -= 10
+
+        
+        self.update()
+        self.enable_control()
+
+        self.put_parametrs()
      
 
     def left_enable(self):
-        if self.param_num <= 1:
+        if self.param_list[2] <= 0:
             self.button_left.setEnabled(False)
         else:
             self.button_left.setEnabled(True)
+
     
+    def left_released(self):
+        super().left_released()
+
+        self.put_parametrs()
+
+        self.memory_write(self.param_list)
+
 
     def right(self):
-        if self.param_num < len(self.param_list) + 2:
-            self.param_num += 1
-        
-        match self.param_num:
-            case 6:
-                app.window_prepare.show()
-                self.hide()    
-
+        super().right()
 
         self.enable_control()
+
+        if self.param_list[2] < 1000:
+            self.param_list[2] += 10
+
         self.update()
+        self.enable_control()
+
+        self.put_parametrs()
+
+
+    def right_released(self):
+        super().right_released()
+
+        self.put_parametrs()
 
         self.memory_write(self.param_list)
 
 
     def right_enable(self):
-        if self.param_num >= len(self.param_list) + 2:
+        if self.param_list[1] >= 1000:
             self.button_right.setEnabled(False)
         else:
             self.button_right.setEnabled(True)
 
-            
+
+    def button_start_update(self):
+        # button_size = QSize(130, 120)
+        # self.button_start.setFixedSize(button_size)
+    
+        icon_size = QSize(70, 70)
+        self.button_start.setIconSize(icon_size)
+
+        print(self.play)
+
+        if self.play == True:
+            file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-pause-button-100.png')
+            self.button_start.setIcon(QIcon(file_path))
+
+            # if raspberry:
+            #     self.robot_filler.enable_robot_on(True)
+        else:
+            file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
+            self.button_start.setIcon(QIcon(file_path))
+
+
+            # if raspberry:
+            #     self.robot_filler.enable_robot_on(False)
+
+
+    def button_start_clicked(self):
+        self.play = not self.play
+        print('start')
+
+        if self.play == True:
+            app.threads.robot_filler.filler_run()
+        else:
+            app.threads.robot_filler.filler_stop()
+
+
+
+        self.button_start_update()            
 
 
 window_filler = Control()

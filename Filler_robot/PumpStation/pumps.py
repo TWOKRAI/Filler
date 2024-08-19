@@ -39,9 +39,10 @@ class Pump(QObject):
 
     def ml_to_steps(self, ml):
         steps = 0
-    
-        steps = int((ml + 2) / self.step_amount)
-        self.bottle_ml -= ml * self.dir
+        if ml >= 0:
+            steps = int(ml) / self.step_amount
+        else:
+            steps = int(ml) / self.step_amount
 
         if self.print_on:
             print(self.ml, self.step_amount)
@@ -100,8 +101,10 @@ class Pump(QObject):
 
 class Pump_station(QObject):
     minus_pump = pyqtSignal()
-    bottle_1 = pyqtSignal(int)
-    bottle_2 = pyqtSignal(int)
+    bottle_1 = pyqtSignal()
+    bottle_2 = pyqtSignal()
+    start_pump = pyqtSignal()
+    stop_pump = pyqtSignal()
     
     def __init__(self):
         super().__init__()
@@ -126,11 +129,16 @@ class Pump_station(QObject):
         self.turn_min = 0
         self.turn_max = 1000
 
+        self.filler_run = False
+
         # self.statistic_pump_1 = int(neuron.memory_read('memory.txt','pump_1'))
         # self.statistic_pump_2 = int(neuron.memory_read('memory.txt', 'pump_2'))
         
         self.stop = False
         self.ready = False
+
+        self.pump_1.motor.time_distance_2 = 0 
+        self.pump_2.motor.time_distance_2 = 0
 
         app.window_cip.power_pumps.connect(self.run)
 
@@ -145,8 +153,39 @@ class Pump_station(QObject):
 
         self.enable_motors(False)
 
-        self.bottle_1.emit(int(self.pump_1.bottle_ml)) 
-        self.bottle_2.emit(int(self.pump_2.bottle_ml)) 
+
+    def filler(self):
+        self.filler_run = True
+
+        self.enable_motors(True)
+
+        ml_1 = app.window_filler.pump_value_1 
+        ml_2 = app.window_filler.pump_value_2
+
+        asyncio.run(self._all_pour_async(ml_1, ml_2))
+
+        self.enable_motors(False)
+
+        self.stop_pump.emit()
+
+
+    def prepare(self):
+        self.filler_run = False
+        self.enable_motors(True)
+        
+        asyncio.run(self._all_pour_async(30, 30))
+
+        self.enable_motors(False)
+
+
+    def cip(self):
+        self.filler_run = False
+
+        self.enable_motors(True)
+
+        asyncio.run(self._all_pour_async(1000, 1000))
+
+        self.enable_motors(False)
 
     
     def enable_motors(self, value = False):
@@ -166,12 +205,13 @@ class Pump_station(QObject):
         self.motor_2.stop_for = True
 
 
-    async def _stop_pumps(self):       
-        while not self.stop2:
+    async def _stop_pumps(self):
+        self.pump_1.motor.time_distance_2 = 1
+        self.pump_2.motor.time_distance_2 = 1
 
+        while not self.stop2:
             if pins.button_stop.get_value():
                 self.stop_pumps()
-
 
             if self.stop2 == True or (self.pump_1.ready == True and self.pump_2.ready == True):
                 self.pump_1.motor.stop = True
@@ -180,6 +220,17 @@ class Pump_station(QObject):
                 self.minus_pump.emit()
 
                 raise asyncio.CancelledError()
+            
+            if self.filler_run:
+                if self.pump_1.motor.time_distance >= self.pump_1.motor.time_distance_2:
+                    self.pump_1.motor.time_distance_2 = self.pump_1.motor.time_distance + 1
+                    self.bottle_1.emit()
+                    #print(self.pump_1.motor.time_distance)
+
+                if self.pump_2.motor.time_distance >= self.pump_2.motor.time_distance_2:
+                    self.pump_2.motor.time_distance_2 = self.pump_2.motor.time_distance + 1 
+                    #print(self.pump_2.motor.time_distance)
+                    self.bottle_2.emit()
 
             await asyncio.sleep(0.1)
 
@@ -189,7 +240,10 @@ class Pump_station(QObject):
 
 
     async def _all_pour_async(self, turn1, turn2, stop = True):
+        self.start_pump.emit()
+
         print( ' self.pump_1.motor.stop', self.pump_1.motor.stop,  self.pump_2.motor.stop)
+        print( ' turn1, turn2', turn1,  turn2)
 
         self.stop2 = False
         self.pump_1.ready = False
@@ -239,3 +293,4 @@ class Pump_station(QObject):
                 if not task.done():
                     task.cancel()
         
+    

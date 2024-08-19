@@ -11,7 +11,7 @@ class Control(QMainWindow):
     def __init__(self):
         super().__init__()
         
-        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_filler', 'UI_filler2.ui')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface/Window_filler', 'UI_filler3.ui')
         # file_path = os.path.join('Filler_interface', 'Window_settings1', 'UI_settings.ui')
         uic.loadUi(file_path, self)
        
@@ -25,6 +25,14 @@ class Control(QMainWindow):
         self.pressed_plus = QTimer(self)
         self.pressed_plus.setInterval(500)
         self.pressed_plus.timeout.connect(self.plus_pressed_2)
+
+        self.pressed_left = QTimer(self)
+        self.pressed_left.setInterval(500)
+        self.pressed_left.timeout.connect(self.left_pressed_2)
+
+        self.pressed_right = QTimer(self)
+        self.pressed_right.setInterval(500)
+        self.pressed_right.timeout.connect(self.right_pressed_2)
 
     
     def fullscreen(self):        
@@ -89,7 +97,7 @@ class Control(QMainWindow):
         self.button_view.setIcon(QIcon(file_path))
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
-        self.button_settings.setIcon(QIcon(file_path))
+        self.button_start.setIcon(QIcon(file_path))
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-subtract-100.png')
         self.button_left.setIcon(QIcon(file_path))
@@ -161,14 +169,24 @@ class Control(QMainWindow):
 
 
     def left(self):
-        pass
+        self.timer_left_pressed.setInterval(int(500/(1 + self.step_button)))
+        self.step_button += 0.2
+
 
     def left_pressed(self):
-        self.timer_left_pressed.start()
+        self.pressed_left.start()
 
 
     def left_released(self):
+        self.pressed_left.stop()
         self.timer_left_pressed.stop()
+        self.step_button = 1
+
+
+    def left_pressed_2(self):
+        self.timer_left_pressed.start()
+        print('preeeesed minus')
+        self.pressed_left.stop()
 
     
     def left_enable(self):
@@ -176,15 +194,24 @@ class Control(QMainWindow):
     
 
     def right(self):
-        pass
+        self.timer_right_pressed.setInterval(int(500/(1 + self.step_button)))
+        self.step_button += 0.2
     
 
     def right_pressed(self):
+        self.pressed_right.start()
+
+
+    def right_pressed_2(self):
+        self.pressed_right.stop()
         self.timer_right_pressed.start()
+        print('preeeesed minus')
 
 
     def right_released(self):
+        self.pressed_right.stop()
         self.timer_right_pressed.stop()
+        self.step_button = 1
 
     
     def right_enable(self):
