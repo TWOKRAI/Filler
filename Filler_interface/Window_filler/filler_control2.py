@@ -41,6 +41,13 @@ class Control(Control):
 
         self.button_view.clicked.connect(self.show_popup)
 
+
+        self.button_settings.setMinimumSize(button_size)
+        self.button_settings.setIconSize(icon_size)
+
+        self.button_view.clicked.connect(self.show_popup)
+
+
         self.timer_left_pressed = QTimer(self)
         self.timer_left_pressed.setInterval(int(300))
         self.timer_left_pressed.timeout.connect(self.left)
@@ -184,64 +191,19 @@ class Control(Control):
         
 
     def label_window_update(self):
-        match self.param_num:
-            case 1:
-                text = {
-                    0: 'Напиток 1/2', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
+        text = {
+            0: 'Напиток 1', 
+            1: 'SYSTEM SETTINGS',
+            2: 'SYSTEMEINSTELLUNGEN',
+            3: '系統設定',
+        }
+       
 
-                size_text = 40
-            case 2:
-                text = {
-                    0: 'НАСТРОЙКА РОЗЛИВА', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
-            case 3:
-                text = {
-                    0: 'НАСТРОЙКА РОЗЛИВА', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
-            case 4:
-                text = {
-                    0: 'НАСТРОЙКА РОЗЛИВА', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
-            case 5:
-                text = {
-                    0: 'НАСТРОЙКА РОЗЛИВА', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
-            case _:
-                text = {
-                    0: 'НАСТРОЙКА РОЗЛИВА', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
+        size_text = 21
         
         text = text[self.lang]
         self.label_window.setText(str(text))
+        
 
         font = QFont()
         font.setFamily(app.font_family)
@@ -249,6 +211,27 @@ class Control(Control):
         font.setBold(False)
         font.setWeight(50)
         self.label_window.setFont(font)
+
+        text = {
+            0: 'Напиток 2', 
+            1: 'SYSTEM SETTINGS',
+            2: 'SYSTEMEINSTELLUNGEN',
+            3: '系統設定',
+        }
+       
+
+        size_text = 21
+        
+        text = text[self.lang]
+        self.label_window_2.setText(str(text))
+        
+
+        font = QFont()
+        font.setFamily(app.font_family)
+        font.setPointSize(size_text)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_window_2.setFont(font)
 
 
     def value_update(self):

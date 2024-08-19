@@ -435,32 +435,30 @@ class Neuron:
 			point = self.camera.perspective.transform_coord(point)
 			point = self.camera.perspective.scale(point)
 
-			point_1 = (x1, y1 + h)
-			point_1 = self.camera.perspective.transform_coord(point_1)
-			point_1 = self.camera.perspective.scale(point_1)
 
-			point_2 = (x1 + w, y1 + h)
-			point_2 = self.camera.perspective.transform_coord(point_2)
-			point_2 = self.camera.perspective.scale(point_2)
+			if point[0] <= self.camera.img_width/2:
+				dx = abs(x1 - xr_center)
+			else:
+				dx = abs(x1 + w - xr_center)
 
-
-			dx = abs(point_1[0] - point_2[0])
-
-			v = (dx / 2) ** 2 * z * 1.2
-
-			print('VVV', v)
 			
 
 			x = round(point[0], 1)
 			y = round(point[1], 1)
 
 
-			z = h / 19.2 * (1 + abs(15.7 - y) * 0.04)
+			z = h  / 19.2 
+			z2 = z * (1 + abs(15.7 - y) * 0.04)
 
-			z = round(z, 1)
+			z2 = round(z2, 1)
 
+			v = (3.142 * ((dx / 140) * z2/z) ** 2 * z / 100) * 1000 * 0.8
 			
-			list_coord.append((x, y, z))
+			print('VVV', v, dx, z2)
+
+			v = round(v, 1)
+			
+			list_coord.append((x, y, z2))
 			
 		# 	print('w', w)
 		

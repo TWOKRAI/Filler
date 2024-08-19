@@ -247,14 +247,14 @@ class Interface(QObject):
 
 				text = f'{id_obj}' + ':' + label + ' ' + f'{ready}'
 				cv2.rectangle(image,(x1, y1),(x1 + w, y1 + h), color_box, 2)
-				cv2.putText(image, text, (x1, y1 - 2), cv2.FONT_HERSHEY_COMPLEX, 0.7, color_box, 1)
+				cv2.putText(image, text, (x1, y1 + h + 15), cv2.FONT_HERSHEY_COMPLEX, 0.7, color_box, 1)
 
 				cv2.rectangle(image, (int(xr_center - 4), yr_center - 4),(int(xr_center + 4), yr_center + 4), (255, 255, 0), -1)
 				cv2.rectangle(image, (int(xr_center - self.neuron.region_x), yr_center - self.neuron.region_y),(int(xr_center + self.neuron.region_x), yr_center + self.neuron.region_y), (0, 255, 0), 1)
 				
 				cv2.rectangle(image, (int(xr_center_2 - 4), yr_center_2 - 4),(int(xr_center_2 + 4), yr_center_2 + 4), (255, 255, 0), -1)
 
-				cv2.putText(image, f'{self.neuron.list_coord[i]}', (x1 - 20, y1 - 20), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 0), 1)
+				cv2.putText(image, f'{self.neuron.list_coord[i]}', (x1, y1 + h + 32), cv2.FONT_HERSHEY_COMPLEX, 0.5, color_box, 1)
 
 				cv2.line(image, (x1, yr_center), (x1 + w, yr_center), (255, 255, 0), 1)
 				
