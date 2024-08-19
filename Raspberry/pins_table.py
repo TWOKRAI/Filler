@@ -89,20 +89,26 @@ if __name__ == '__main__':
     pins.get_value_log(pins.motor_z_enable)
     pins.get_value_log(pins.motor_p1p2_enable)
 
-    
+    pins.motor_p1p2_enable.set_value(1)
+
+    pins.motor_p2_dir.set_value(1)
+
     while True:
         # pins.get_value_log(pins.switch_y)
         # pins.get_value_log(pins.button_stop)
         # pins.get_value_log(pins.button)
 
-        time.sleep(1)
+        # time.sleep(1)
         
-        pins.laser.set_value(1)
-        pins.get_value_log(pins.laser)
+        # pins.laser.set_value(1)
+        # pins.get_value_log(pins.laser)
 
-        time.sleep(1)
+        # time.sleep(1)
 
-        pins.laser.set_value(1)
+        # pins.laser.set_value(1)
 
-        pins.get_value_log(pins.laser)
+        # pins.get_value_log(pins.laser)
 
+        pins.motor_p2_step.frequency = 30
+        
+        pins.motor_p2_step.value = 0.5

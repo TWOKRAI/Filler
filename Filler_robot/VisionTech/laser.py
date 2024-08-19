@@ -4,14 +4,14 @@ from PyQt5.QtCore import QThread
 
 class Laser:
     def __init__(self) -> None:
-        self.mode = 1
+        self.mode = 2
         self.laser_on = False
 
         self.first = False
 
         self.freq = 100
-        self.coll = 20
-        self.step = 10
+        self.coll = 30
+        self.step = 7
 
 
     def running(self):

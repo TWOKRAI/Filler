@@ -39,14 +39,13 @@ class Pump(QObject):
 
     def ml_to_steps(self, ml):
         steps = 0
-        
-        if self.bottle_ml >= self.bottle_min:
-            steps = int((ml + 2) / self.step_amount)
-            self.bottle_ml -= ml * self.dir
+    
+        steps = int((ml + 2) / self.step_amount)
+        self.bottle_ml -= ml * self.dir
 
-            if self.print_on:
-                print(self.ml, self.step_amount)
-                print(f'pump {self.name}, ml_to_steps // output: steps = {steps} bottle {self.bottle_ml}')
+        if self.print_on:
+            print(self.ml, self.step_amount)
+            print(f'pump {self.name}, ml_to_steps // output: steps = {steps} bottle {self.bottle_ml}')
 
         return steps
     
@@ -70,6 +69,8 @@ class Pump(QObject):
         # QThread.sleep(1)
         
         # await self.motor._freq_async(speed, 1, 1000 * -self.dir)
+        
+        await self.motor._freq_async(speed, 1, -500 * self.dir, accuration = False)
 
         self.ready = True
         
@@ -92,9 +93,9 @@ class Pump(QObject):
         self.ready = False
 
         if dir == True:
-            await self.motor._freq_async(600, 1, 500 * self.dir)
+            await self.motor._freq_async(10, 1, -500 * self.dir, accuration = False)
         else:
-            await self.motor._freq_async(600, 1, -500 * self.dir)
+            await self.motor._freq_async(10, 1, -500 * self.dir, accuration = False)
     
 
 class Pump_station(QObject):

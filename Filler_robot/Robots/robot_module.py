@@ -142,13 +142,13 @@ class Robot_module():
 		self.axis_y.motor.enable_on(False)
 		self.axis_y.motor.speed_def = 0.0001
 		self.axis_y.motor.direction = False
-		self.axis_y.step_angle = 0.135
+		self.axis_y.step_angle = 0.122
 		self.axis_y.arm_lenght = 12
 		self.axis_y.angle_0 = 124
 		self.axis_y.angle = self.axis_y.angle_0
 		self.axis_y.y0 = 0
 		self.axis_y.z0 = 22.5
-		self.axis_y.limit_min = 5
+		self.axis_y.limit_min = 7
 		self.axis_y.limit_max = 130
 		
 
@@ -158,7 +158,7 @@ class Robot_module():
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
 		self.axis_z.direction_distance = False
-		self.axis_z.step_angle = 0.135
+		self.axis_z.step_angle = 0.12
 		self.axis_z.arm_lenght = 12
 		self.axis_z.angle_0 = 145
 		self.axis_z.angle = self.axis_z.angle_0
@@ -205,6 +205,8 @@ class Robot_module():
 		self.axis_z.motor.stop_for = False
 		
 		self.enable_motors(False)
+
+		self.button_stop = False
 
 
 	def null_value(self):
@@ -549,7 +551,7 @@ class Robot_module():
 
 
 		self.time_start_z = 0.5
-
+	
 		self.move(self.distance_x, self.distance_y, self.distance_z)
 		
 		print('go_to_point Приехал в координаты:', 
@@ -604,10 +606,19 @@ class Robot_module():
 
 			# if z > 12:
 			# 	z = z + 3
+
+			z = z + 2
+
+			if z > 13: 
+				z = z + 2
+
 			
-			z = z + 1
-			x = x * 0.9
-			y = y * 0.9
+			if y > 14:
+				y = y * (1 - abs(14 - y) /140)
+				x = x * (1 - abs(14 - y) /140)
+
+			# x = x * 0.9
+			# y = y * 0.9
 
 			limit = self.check_limit(x, y, z)
 

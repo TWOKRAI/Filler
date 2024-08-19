@@ -44,6 +44,7 @@ class Timer:
 class Neuron:
 	def __init__(self, camera):
 		self.camera = camera
+		self.interface = None
 
 		self.timer = Timer()
 
@@ -61,7 +62,7 @@ class Neuron:
 		
 		self.mode = 0
 		
-		self.threshold = 0.33
+		self.threshold = 0.4
 		self.nmsthreshold = 0.4
 
 		self.list_find = {'cup': True, 'CUP': True, 'vase': True, 'wine glass': True, 'toilet': True, 'person': True}
@@ -77,7 +78,7 @@ class Neuron:
 		self.limit_ymin = 0
 		self.limit_ymax = 300
 		
-		self.factor_x = 12
+		self.factor_x = 9
 		self.factor_y = 0.1
 		self.perspective = 0
 
@@ -96,13 +97,60 @@ class Neuron:
 		
 		self.hands_data = []
 		self.hands_found = False
+
+		self.id = 0
    
 
 	def running(self):
-		if self.timer.is_time_passed(5):
-			self.find_objects()
-			self.find_objects()
-			self.find_objects()
+		self.neuron_vision()
+
+	
+	def forget(self):
+		self.objects_all = []
+		self.memory_objects = []
+		self.objects = []
+	
+
+	def neuron_vision(self):
+		if self.interface != None:
+			self.id = 0
+			data = []
+
+			self.camera.running()
+			
+			self.camera.running()
+			tuple_obj = self.find_objects()
+			data.append(tuple_obj)
+			self.interface.running()
+
+			self.camera.running()
+			tuple_obj = self.find_objects()
+			data.append(tuple_obj)
+			self.interface.running()
+
+			self.camera.running()
+			tuple_obj = self.find_objects()
+			data.append(tuple_obj)
+			self.interface.running()
+
+			# Сортируем список по вторым элементам
+			sorted_data = sorted(data, key=lambda x: x[1])
+
+			# Находим максимальное значение среди вторых элементов
+			max_value_second = max(sorted_data, key=lambda x: x[1])[1]
+
+			# Оставляем только те кортежи, у которых второй элемент равен максимальному значению
+			filtered_data = [item for item in sorted_data if item[1] == max_value_second]
+
+			# Сортируем оставшиеся кортежи по третьим элементам
+			sorted_filtered_data = sorted(filtered_data, key=lambda x: x[2])
+
+			# Находим кортеж с максимальным третьим элементом
+			max_value_third = max(sorted_filtered_data, key=lambda x: x[2])
+
+			self.objects_filter = max_value_third[0]
+
+			self.list_coord = self.pixel_to_coord(self.objects_filter)
 
 
 	def find_objects(self):
@@ -110,6 +158,11 @@ class Neuron:
 		self.objects_filter = self.filter(objects_list)
 
 		self.list_coord = self.pixel_to_coord(self.objects_filter)
+
+		lenght = len(self.objects_filter)
+		self.id += 1
+
+		return (self.objects_filter, lenght, self.id)
 
 	
 	def detect_v5(self, image):
@@ -161,7 +214,7 @@ class Neuron:
 					yr_center = int(y1 + w * (y1 + h) / self.leen)
 					xr_center = int(x1 + w / 2)
 
-					self.perspective = (xr_center - img_width / 2) * 1 / self.factor_x
+					self.perspective = abs(xr_center - img_width / 2) * 1 / self.factor_x
 
 					print('H', h)
 
@@ -169,25 +222,30 @@ class Neuron:
 						xd = 0  
 						yd = 0
 					else:
-						xd = 10 
-						yd = 10
+						xd = 7
+						yd = 7
+
+					w1 = int(w - self.perspective)
 
 					
 					# xr_center_2 = int(x1 + w / 1.8) - self.perspective * 1.2
-
 					
 					# yr_center_2 = int((y1 + h1) - h1 * 0.3) 
 					
 					if xr_center >= self.camera.img_width / 2:
 						xr_center_2 = int((xr_center - self.perspective * 2)) - xd #+ (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
 					else:
-						xr_center_2 = int((xr_center - self.perspective * 2)) + xd #- (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
+						xr_center_2 = int((xr_center + self.perspective * 2)) + xd #- (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
 
 					
-					yr_center_2 = int(((y1 + h) - w / 2 * 0.7) + (1 - abs(self.camera.img_height - (y1 + h)) / 700)) + yd
+					yr_center_2 = int(((y1 + h) - w1 / 2 * 0.7) + (1 - abs(self.camera.img_height - (y1 + h)) / 700)) + yd
 
-					yr_center = int((y1 + w / 2 * 0.5 * (1 + h/1000)))
-					xr_center = int(xr_center + self.perspective)
+					yr_center = int((y1 + w1 / 2 * 0.5 * (1 + h/1000)))
+
+					# if xr_center >= self.camera.img_width / 2:
+					# 	xr_center = int(xr_center + self.perspective)
+					# else:
+					# 	xr_center = int(xr_center - self.perspective)
 
 					self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective, xr_center_2, yr_center_2])
 			else:
@@ -246,9 +304,6 @@ class Neuron:
 			
 			xr_center = int(xr_center + self.perspective)
 
-			# if y1 >= 300:
-
-			
 			self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective])
 			print('objects', self.objects_all)
 			
@@ -362,7 +417,10 @@ class Neuron:
 			x = xr_center_2
 			y = yr_center_2
 
-			z = h * 0.047 * (1 + (abs(self.camera.img_height - yr_center_2 - 150)/130)**3) * (1 - abs(self.camera.img_width/2 - xr_center_2)/1300)
+			#z = h * 0.047 * (1 + (abs(self.camera.img_height - yr_center_2 - 150)/130)**3) * (1 - abs(self.camera.img_width/2 - xr_center_2)/1300)
+
+			
+
 			#z = h * 0.046 * (1 + abs(self.camera.img_height - yr_center_2)/500)
 			# if z > 12:
 			# 	z += 2
@@ -395,6 +453,10 @@ class Neuron:
 
 			x = round(point[0], 1)
 			y = round(point[1], 1)
+
+
+			z = h / 19.2 * (1 + abs(15.7 - y) * 0.04)
+
 			z = round(z, 1)
 
 			

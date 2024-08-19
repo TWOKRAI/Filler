@@ -20,10 +20,16 @@ class Robot_filler(QThread):
         self.running = True
 
         self.camera = Camera()
+
         self.neuron = Neuron(self.camera)
+    
         self.interface = Interface(self.camera, self.neuron)
+        self.neuron.interface = self.interface
+
         self.pump_station = Pump_station()
+
         self.laser = Laser() 
+
         self.robot = Robot_module(self.camera, self.neuron, self.interface, self.pump_station, self.laser)
         
         self.camera_on = camera_on
@@ -77,31 +83,37 @@ class Robot_filler(QThread):
 
 
             if self.view:
-                
+                self.laser.on_off(1)
+
                 if not self.first_view:
                     self.camera.running()
                     self.neuron.find_objects()
                     self.interface.running()
                     self.first_view = True
 
-                self.laser.on_off(0)
-                
                 self.camera.running()
-                #self.neuron_vision()
-
-                #self.laser.running()
+                self.neuron.neuron_vision()
 
                 self.interface.running()
+
+                QThread.msleep(500)
  
             if self.filler:
-                self.laser.on_off(0)
+                self.laser.on_off(1)
 
                 self.camera.running()
-                self.neuron_vision()
+                find_tuple = self.neuron.find_objects()
 
-                self.laser.running()
+                if find_tuple[1] > 0:
+                    self.laser.running()
+                    self.laser.on_off(0)
+
+                    self.camera.running()
+                    self.neuron.neuron_vision()
 
                 self.interface.running()
+                
+                self.laser.on_off(1)
                 self.robot.running()
 
                 #QThread.msleep(1500)
@@ -278,5 +290,6 @@ class Robot_filler(QThread):
         self.robot.no_stop_motors()
 
         self.button_error = False
+        
 
         self.calibration_stop()

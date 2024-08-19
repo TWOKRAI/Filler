@@ -41,33 +41,34 @@ class Perspective:
         self.intersection_point4 = self.line_intersection([(0, self.img_height),(self.img_width, self.img_height)], [self.point3, self.point4])
         self.intersection_point5 = (0, 0)
 
-        self.a = 0.762
-        self.b = 0.00567
-
+        self.a = 0
+        self.b = 0
 
         # Измеренные координаты
-        points1 = np.array([
-            (0, 13.0),
-            (0, 18.1),
-            (0, 22.3),
-            (0, 25.5),
-            (0, 28.4),
-            (0, 30.4),
-            (0, 32.5),
-            (0, 34),
+        self.points_in_polynom = np.array([
+            (0, 12.5),
+            (0, 17.4),
+            (0, 21.6),
+            (0, 24.8),
+            (0, 27.7),
+            (0, 29.9),
+            (0, 32.0),
+            (0, 33.5),
         ])
 
         # Реальные координаты
-        points2 = np.array([
-            (0, 13),
-            (0, 16),
-            (0, 19),
-            (0, 22),
-            (0, 25),
-            (0, 28),
-            (0, 31),
-            (0, 34),
+        self.points_out_polynom = np.array([
+            (0, 12.5),
+            (0, 15.5),
+            (0, 18.5),
+            (0, 21.5),
+            (0, 24.5),
+            (0, 27.5),
+            (0, 30.5),
+            (0, 33.5),
         ])
+
+        self.create_polynom(self.points_in_polynom, self.points_out_polynom)
             
 
     def write_point(self, point_img):
@@ -191,11 +192,11 @@ class Perspective:
         # Корректировка y по перспективе
         # Пример квадратичного преобразования
         # print('YYYYYY', y, self.a, self.b)
-        y_corrected = self.a * y + self.b * y**2
+        # y_corrected = self.a * y + self.b * y**2
+        
+        y_corrected = self.polynom(y)
 
-        # y_corrected = y
-
-        y_corrected = y*(1 - 1/y * 2.2)
+        # y_corrected = y*(1 - 1/y * 2.2)
 
         x = round(x, 1)
         y_corrected = round(y_corrected, 1)
@@ -251,11 +252,11 @@ class Perspective:
         return image
 
 
-    def polynom(self):
+    def create_polynom(self, points_in, points_out):
         # Извлекаем y-координаты
-        y_measured = self.points_pixel[:, 1]
-        y_real = self.points_real[:, 1]
+        y_measured = points_in[:, 1]
+        y_real = points_out[:, 1]
 
         # Полиномиальная регрессия (например, степень 2)
         degree = 2
-        self.p = Polynomial.fit(y_measured, y_real, degree)
+        self.polynom = Polynomial.fit(y_measured, y_real, degree)
