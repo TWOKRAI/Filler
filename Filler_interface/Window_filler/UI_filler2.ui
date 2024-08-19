@@ -38,7 +38,7 @@
       <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
-        <height>1</height>
+        <height>7</height>
        </size>
       </property>
      </spacer>
@@ -308,22 +308,6 @@
               </property>
              </widget>
             </item>
-            <item>
-             <spacer name="verticalSpacer_6">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>13</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
            </layout>
           </item>
           <item>
@@ -570,22 +554,6 @@
                <set>Qt::AlignCenter</set>
               </property>
              </widget>
-            </item>
-            <item>
-             <spacer name="verticalSpacer_8">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>13</height>
-               </size>
-              </property>
-             </spacer>
             </item>
            </layout>
           </item>
