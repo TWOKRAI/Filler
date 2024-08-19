@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>740</width>
-    <height>840</height>
+    <height>803</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -409,7 +409,7 @@
                </font>
               </property>
               <property name="text">
-               <string>55</string>
+               <string>1: 55</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -436,22 +436,6 @@
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <spacer name="verticalSpacer_16">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>100</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
             <item>
              <widget class="QLabel" name="value_mini">
               <property name="sizePolicy">
@@ -724,22 +708,6 @@
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_6">
-            <item>
-             <spacer name="verticalSpacer_18">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>100</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
             <item>
              <widget class="QLabel" name="value_mini_2">
               <property name="font">
