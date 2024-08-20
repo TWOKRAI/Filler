@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>830</width>
-    <height>758</height>
+    <width>928</width>
+    <height>904</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -65,6 +65,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QPushButton" name="button_menu">
             <property name="minimumSize">
@@ -133,7 +136,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="button_view">
+           <widget class="QPushButton" name="button_start">
             <property name="minimumSize">
              <size>
               <width>120</width>
@@ -194,7 +197,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="button_start">
+           <widget class="QPushButton" name="button_view">
             <property name="minimumSize">
              <size>
               <width>120</width>
@@ -254,7 +257,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>13</height>
+            <height>17</height>
            </size>
           </property>
          </spacer>
@@ -643,7 +646,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>830</width>
+     <width>928</width>
      <height>26</height>
     </rect>
    </property>
