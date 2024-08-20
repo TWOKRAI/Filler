@@ -16,7 +16,7 @@ class Control(Control):
         
         self.window_name = 'settings1'
 
-        icon_size = QSize(70, 70)
+        icon_size = QSize(60, 60)
         button_size = QSize(140, 130)
 
         self.font_text = QFont()
@@ -45,7 +45,6 @@ class Control(Control):
 
 
         self.button_start.setMinimumSize(button_size)
-        self.button_start.setIconSize(QSize(105, 105))
         
 
         self.timer_left_pressed = QTimer(self)

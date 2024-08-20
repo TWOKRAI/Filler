@@ -27,7 +27,7 @@ class Prepare_control(QMainWindow):
 
         self.window_name = 'prepare'
 
-        icon_size = QSize(70, 70)
+        icon_size = QSize(60, 60)
         button_size_1 = QSize(140, 130)
         button_size_2 = QSize(210, 130)
 

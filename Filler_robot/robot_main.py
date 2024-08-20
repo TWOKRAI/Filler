@@ -55,8 +55,6 @@ class Robot_filler(QThread):
 
         self.robot.motor_z.enable_on(True)
 
-        self.calibration_only = True
-
         self.laser.on_off(0)
 
 
@@ -134,6 +132,8 @@ class Robot_filler(QThread):
 
             if self.calibration_only:
                 self.robot.calibration()
+
+                self.laser.first_start()
                 self.calibration_only = False
 
             if self.cip_move:
@@ -170,20 +170,8 @@ class Robot_filler(QThread):
         self.camera.stop()
 
 
-    def neuron_vision(self):
-        self.camera.running()
-        
-        self.camera.running()
-        self.neuron.find_objects()
-        self.interface.running()
-
-        self.camera.running()
-        self.neuron.find_objects()
-        self.interface.running()
-
-        self.camera.running()
-        self.neuron.find_objects()
-        self.interface.running()
+    def starting(self):
+        self.calibration_only_run()
 
 
     def view_run(self):

@@ -23,6 +23,8 @@ class Thread():
                 self.input_request = Input_request()
 
             if app.ready == True:
+                self.input_request.starting.connect(self.robot_filler.starting)
+
                 self.input_request.show_error.connect(app.window_error.show)
                 # self.input_request.error.connect(self.stop_robot_thread)
                 # self.input_request.error.connect(self.stop_pumps_thread)

@@ -15,7 +15,7 @@ class Window_robot(Control):
         self.window_name = 'setting2'
 
         icon_size = QSize(60, 60)
-        button_size = QSize(130, 120)
+        button_size = QSize(140, 130)
 
         self.font_text = QFont()
         self.font_text.setFamily(app.font_family)
@@ -105,9 +105,9 @@ class Window_robot(Control):
         self.button_reset.released.connect(self.button_reset_released)
 
         
-        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Window_settings2', 'Data')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Window_robot', 'Data')
         self.memory = Memory(db_path = file_path, db_file = 'memory_db')
-        
+
         self.param_list = self.get_parametrs()
         self.param_list = self.memory_read(self.param_list)
         self.put_parametrs()
@@ -115,6 +115,19 @@ class Window_robot(Control):
 
         self.update()
         self.enable_control()
+
+
+    def show_popup(self):
+        app.window_pop_up.hide()
+        app.window_pop_up.show(self.reset)
+
+        pop_show_text = {
+            0: 'Вы хотите сделать параметры по умолчанию?',
+            1: 'Do you want to make the settings default?',
+            2: 'Möchten Sie Standardeinstellungen vornehmen?',
+        }
+
+        app.window_pop_up.label_2.setText(pop_show_text[self.lang])
 
 
     def update(self):
@@ -150,17 +163,14 @@ class Window_robot(Control):
 
 
     def get_parametrs(self): 
+        self.speed_robot = 5
+        self.time_robot = 5
+        self.laser_mode = 2
+
         self.param_list = {
-            1: app.lang_num,
-            2: app.styling.r_border,
-            3: app.styling.g_border,
-            4: app.styling.b_border,
-            5: app.styling.r_icons_text,
-            6: app.styling.g_icons_text,
-            7: app.styling.b_icons_text,
-            8: app.styling.r_text,
-            9: app.styling.g_text,
-            10: app.styling.b_text,
+            1: self.speed_robot,
+            2: self.time_robot,
+            3: self.laser_mode,
         }
     
         return self.param_list
@@ -173,16 +183,9 @@ class Window_robot(Control):
 
 
     def put_parametrs(self):
-        app.lang_num = self.param_list[1]
-        app.styling.r_border = self.param_list[2]
-        app.styling.g_border = self.param_list[3]
-        app.styling.b_border = self.param_list[4]
-        app.styling.r_icons_text = self.param_list[5]
-        app.styling.g_icons_text = self.param_list[6]
-        app.styling.b_icons_text = self.param_list[7]
-        app.styling.r_text = self.param_list[8]
-        app.styling.g_text = self.param_list[9]
-        app.styling.b_text = self.param_list[10]
+        self.speed_robot = self.param_list[1]
+        self.time_robot = self.param_list[2]
+        self.laser_mode = self.param_list[3]
 
 
     def memory_write(self, data):
@@ -190,16 +193,9 @@ class Window_robot(Control):
 
     
     def default_parametrs(self):
-        app.lang_num = 0
-        app.styling.r_border = 108
-        app.styling.g_border = 170
-        app.styling.b_border = 210
-        app.styling.r_icons_text = 108
-        app.styling.g_icons_text = 178
-        app.styling.b_icons_text = 149
-        app.styling.r_text = 108
-        app.styling.g_text = 161
-        app.styling.b_text = 141
+        self.speed_robot = 5
+        self.time_robot = 5
+        self.laser_mode = 2
 
         self.param_list = self.get_parametrs()
         self.memory_write(self.param_list)
@@ -213,76 +209,37 @@ class Window_robot(Control):
         match self.param_num:
             case 1:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
+                    0: 'НАСТРОЙКИ РОБОТА', 
+                    1: 'ROBOT SETTINGS',
+                    2: 'ROBOTEREINSTELLUNGEN',
                 }
 
-                size_text = 21
+                size_text = 25
             case 2:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
+                    0: 'НАСТРОЙКИ РОБОТА', 
+                    1: 'ROBOT SETTINGS',
+                    2: 'ROBOTEREINSTELLUNGEN',
                 }
 
-                size_text = 21
+                size_text = 25
             case 3:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
+                    0: 'НАСТРОЙКИ РОБОТА', 
+                    1: 'ROBOT SETTINGS',
+                    2: 'ROBOTEREINSTELLUNGEN',
                 }
 
-                size_text = 21
-            case 4:
-                text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
+                size_text = 25
 
-                size_text = 21
-            case 5:
-                text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
-            case 6:
-                text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
-            case 7:
-                text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
-                }
-
-                size_text = 21
             case _:
                 text = {
-                    0: 'НАСТРОЙКИ СИСТЕМЫ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
+                    0: 'НАСТРОЙКИ РОБОТА', 
+                    1: 'ROBOT SETTINGS',
+                    2: 'ROBOTEREINSTELLUNGEN',
                 }
 
-                size_text = 21
+                size_text = 25
         
         text = text[self.lang]
         self.label_window.setText(str(text))
@@ -296,7 +253,7 @@ class Window_robot(Control):
 
 
     def coll_params_update(self):
-        size_text = 21
+        size_text = 25
         
         text = f'{self.param_num} / {len(self.param_list)}'
         self.coll_params.setText(str(text))
@@ -314,65 +271,23 @@ class Window_robot(Control):
 
         match self.param_num:
             case 1:
-        
-                value_text = {0: 'Русский', 
-                              1: 'English', 
-                              2: 'Deutsch', 
-                              3: '中国人',
-                              }
+                value = value
 
-                value = value_text[int(value)]
-
-                size_text = 60
+                size_text = 90
             case 2:
 
-                value = f"R:{value}"
+                value = value
 
-                size_text = 60
+                size_text = 90
             case 3:
+                value = value
 
-                value = f"G:{value}"
-
-                size_text = 60
-            case 4:
- 
-                value = f"B:{value}"
-
-                size_text = 60
-            case 5:
-
-                value = f"R:{value}"
-
-                size_text = 60
-            case 6:
-
-                value = f"G:{value}"
-
-                size_text = 60
-            case 7:
-
-                value = f"B:{value}"
-
-                size_text = 60
-            case 8:
-
-                value = f"R:{value}"
-
-                size_text = 60
-            case 9:
-
-                value = f"G:{value}"
-
-                size_text = 60
-            case 10:
-
-                value = f"B:{value}"
-
-                size_text = 60
+                size_text = 90
+          
             case _:
                 value = None
 
-                size_text = 60
+                size_text = 90
         
         self.value.setText(str(value))
 
@@ -391,64 +306,25 @@ class Window_robot(Control):
                     0: '',
                     1: '',
                     2: '',
-                    3: '',
                 }
 
-                size_text = 30
+                size_text = 35
             case 2:
                 text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
+                    0: 'сек.',
+                    1: 'sec.',
+                    2: 'sek.',
                 }
 
-                size_text = 30
+                size_text = 35
             case 3:
                 text = {
                     0: '',
                     1: '',
                     2: '',
-                    3: '',
                 }
 
-                size_text = 30
-            case 4:
-                text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 5:
-                text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 6:
-                text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 7:
-                text = {
-                    0: '',
-                    1: '',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
+                size_text = 35
             case _:
                 text = {
                     0: '',
@@ -457,7 +333,7 @@ class Window_robot(Control):
                     3: '',
                 }
 
-                size_text = 30
+                size_text = 35
         
         text = text[self.lang]
         self.value_mini.setText(str(text))
@@ -474,95 +350,30 @@ class Window_robot(Control):
         match self.param_num:
             case 1:
                 text = {
-                    0: 'Язык',
-                    1: 'language',
-                    2: 'Sprache',
-                    3: '語言',
+                    0: 'Робот: скорость',
+                    1: 'Robot: speed',
+                    2: 'Roboter: Geschwindigkeit',
                 }
 
-                size_text = 30
+                size_text = 35
             case 2:
                 text = {
-                    0: 'Цвет 1 (Контур)',
-                    1: 'Цвет 12 (Контур)',
-                    2: '',
-                    3: '',
+                    0: 'Время ожидания после налива',
+                    1: 'Waiting time after pouring',
+                    2: 'Wartezeit nach dem Befüllen',
                 }
 
-                size_text = 30
+                size_text = 35
             case 3:
                 text = {
-                    0: 'Цвет 1 (Контур)',
-                    1: 'Цвет 12 (Контур)',
-                    2: '',
+                    0: 'Режим лазера',
+                    1: 'Laser mode',
+                    2: 'Lasermodus',
                     3: '',
                 }
 
-                size_text = 30
-            case 4:
-                text = {
-                    0: 'Цвет 1 (Контур)',
-                    1: 'Цвет 12 (Контур)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 5:
-                text = {
-                    0: 'Цвет 2 (Иконка)',
-                    1: 'Цвет 21 (Иконка)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 6:
-                text = {
-                    0: 'Цвет 2 (Иконка)',
-                    1: 'Цвет 21 (Иконка)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 7:
-                text = {
-                    0: 'Цвет 2 (Иконка)',
-                    1: 'Цвет 21 (Иконка)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-
-            case 8:
-                text = {
-                    0: 'Цвет 3 (Текст)',
-                    1: 'Цвет 31 (Текст)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 9:
-                text = {
-                    0: 'Цвет 3 (Текст)',
-                    1: 'Цвет 31 (Текст)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
-            case 10:
-                text = {
-                    0: 'Цвет 3 (Текст)',
-                    1: 'Цвет 31 (Текст)',
-                    2: '',
-                    3: '',
-                }
-
-                size_text = 30
+                size_text = 35
+          
             case _:
                 text = {
                     0: '',
@@ -571,7 +382,7 @@ class Window_robot(Control):
                     3: '',
                 }
 
-                size_text = 30
+                size_text = 35
         
         text = text[self.lang]
         self.name_params.setText(str(text))
@@ -582,6 +393,7 @@ class Window_robot(Control):
         font.setBold(False)
         font.setWeight(50)
         self.name_params.setFont(font)
+        self.name_params.setWordWrap(True)
 
 
     def minus(self):
@@ -608,48 +420,6 @@ class Window_robot(Control):
                 
                 self.put_parametrs()
                 app.recolor()
-            case 4:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-                
-                self.put_parametrs()
-                app.recolor()
-            case 5:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
-            case 6:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
-            case 7:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
-            case 8:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
-            case 9:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
-            case 10:
-                if self.param_list[self.param_num] > 0:
-                    self.param_list[self.param_num] -= 1
-
-                self.put_parametrs()
-                app.recolor()
 
         self.update()
         self.enable_control()
@@ -663,40 +433,10 @@ class Window_robot(Control):
                 pass
 
             case 2:
-                app.icons_recolor()
-                app.recolor()
+                pass
 
             case 3:
-                app.icons_recolor()
-                app.recolor()
-
-            case 4:
-                app.icons_recolor()
-                app.recolor()
-
-            case 5:
-                app.icons_recolor()
-                app.recolor()
-
-            case 6:
-                app.icons_recolor()
-                app.recolor()
-
-            case 7:
-                app.icons_recolor()
-                app.recolor()
-
-            case 8:
-                app.icons_recolor()
-                app.recolor()
-
-            case 9:
-                app.icons_recolor()
-                app.recolor()
-
-            case 10:
-                app.icons_recolor()
-                app.recolor()
+                pass
 
         self.update()
 
@@ -723,48 +463,6 @@ class Window_robot(Control):
                 else:
                     self.button_minus.setEnabled(True)
 
-            case 4:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 5:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 6:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 7:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 8:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 9:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
-            case 10:
-                if self.param_list[self.param_num] <= 0:
-                    self.button_minus.setEnabled(False)
-                else:
-                    self.button_minus.setEnabled(True)
-
 
     def plus(self):
         super().plus()
@@ -773,65 +471,20 @@ class Window_robot(Control):
 
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] < 4:
+                if self.param_list[self.param_num] < 5:
                     self.param_list[self.param_num] += 1
                 
                 self.put_parametrs()
-                app.language()
             case 2:
-                if self.param_list[self.param_num] < 255:
+                if self.param_list[self.param_num] < 10:
                     self.param_list[self.param_num] += 1
                     
                 self.put_parametrs()
-                app.recolor()
             case 3:
-                if self.param_list[self.param_num] < 255:
+                if self.param_list[self.param_num] < 2:
                     self.param_list[self.param_num] += 1
 
                 self.put_parametrs()
-                app.recolor()
-            case 4:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-                app.recolor()
-            case 5:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-                app.recolor()
-            case 6:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-                app.recolor()
-            case 7:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-                app.recolor()
-            case 8:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-                app.recolor()
-            case 9:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-                app.recolor()
-            case 10:
-                if self.param_list[self.param_num] < 255:
-                    self.param_list[self.param_num] += 1
-                
-                self.put_parametrs()
-                app.recolor()
 
         self.update()
         self.enable_control()
@@ -847,40 +500,10 @@ class Window_robot(Control):
                 pass
 
             case 2:
-                app.icons_recolor()
-                app.recolor()
+                pass
 
             case 3:
-                app.icons_recolor()
-                app.recolor()
-
-            case 4:
-                app.icons_recolor()
-                app.recolor()
-
-            case 5:
-                app.icons_recolor()
-                app.recolor()
-
-            case 6:
-                app.icons_recolor()
-                app.recolor()
-
-            case 7:
-                app.icons_recolor()
-                app.recolor()
-
-            case 8:
-                app.icons_recolor()
-                app.recolor()
-
-            case 9:
-                app.icons_recolor()
-                app.recolor()
-
-            case 10:
-                app.icons_recolor()
-                app.recolor()
+                pass
 
         self.update()
 
@@ -891,61 +514,19 @@ class Window_robot(Control):
     def plus_enable(self):
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] >= 3:
+                if self.param_list[self.param_num] >= 5:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
             case 2:
-                if self.param_list[self.param_num] >= 255:
+                if self.param_list[self.param_num] >= 10:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
 
             case 3:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 4:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 5:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 6:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 7:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 8:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 9:
-                if self.param_list[self.param_num] >= 255:
-                    self.button_plus.setEnabled(False)
-                else:
-                    self.button_plus.setEnabled(True)
-
-            case 10:
-                if self.param_list[self.param_num] >= 255:
+                if self.param_list[self.param_num] >= 2:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
@@ -985,6 +566,3 @@ class Window_robot(Control):
             self.button_right.setEnabled(False)
         else:
             self.button_right.setEnabled(True)
-
-
-window_setting2 = Control()

@@ -117,6 +117,19 @@ class Control(Control):
         self.enable_control()
 
 
+    def show_popup(self):
+        app.window_pop_up.hide()
+        app.window_pop_up.show(self.reset)
+
+        pop_show_text = {
+            0: 'Вы хотите сделать параметры по умолчанию?',
+            1: 'Do you want to make the settings default?',
+            2: 'Möchten Sie Standardeinstellungen vornehmen?',
+        }
+
+        app.window_pop_up.label_2.setText(pop_show_text[self.lang])
+
+
     def update(self):
         self.label_window_update()
         self.coll_params_update()

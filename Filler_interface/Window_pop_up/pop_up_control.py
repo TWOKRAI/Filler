@@ -27,7 +27,7 @@ class Pop_up_control(QMainWindow):
 
         font_1 = QFont()
         font_1.setFamily(app.font_family)
-        font_1.setPointSize(22)
+        font_1.setPointSize(25)
         font_1.setBold(False)
         font_1.setWeight(50)
 

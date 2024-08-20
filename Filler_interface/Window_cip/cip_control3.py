@@ -22,7 +22,7 @@ class Cip_control(Control):
         
         self.window_name = 'cip'
 
-        icon_size = QSize(70, 70)
+        icon_size = QSize(60, 60)
         button_size = QSize(140, 130)
 
         self.font_text = QFont()
@@ -150,6 +150,19 @@ class Cip_control(Control):
         ]
 
         app.window_pop_up.show(self.move_cip)
+
+
+    def show_popup(self):
+        app.window_pop_up.hide()
+        app.window_pop_up.show(self.reset)
+
+        pop_show_text = {
+            0: 'Вы хотите сделать параметры по умолчанию?',
+            1: 'Do you want to make the settings default?',
+            2: 'Möchten Sie Standardeinstellungen vornehmen?',
+        }
+
+        app.window_pop_up.label_2.setText(pop_show_text[self.lang])
 
         
     def move_cip(self):
