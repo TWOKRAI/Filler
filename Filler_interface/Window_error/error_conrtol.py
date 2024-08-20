@@ -58,6 +58,8 @@ class Error_control(QMainWindow):
         self.lang = 0
         self.code = 0
 
+        self.update()
+
 
     def timing(self):
         self.timer.stop()
@@ -93,8 +95,9 @@ class Error_control(QMainWindow):
         match self.code:
             case 0:
                 label_name = {
-                    0: 'Нажата аварийная кнопка',
-                    1: 'Error',
+                    0: 'Нажата авайрийная кнопка',
+                    1: 'Emergency button pressed',
+                    2: 'Not-Aus-Taste gedrückt',
                 }
             case _:
                 label_name = {
@@ -108,7 +111,7 @@ class Error_control(QMainWindow):
         font.setBold(False)
         font.setWeight(50)
         self.label_warning.setFont(font)
-        self.label_warning.setWordWrap(True)
+        self.label_warning.setWordWrap(False)
 
         self.label_warning.setText(label_name[self.lang])
 

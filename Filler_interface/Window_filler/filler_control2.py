@@ -16,8 +16,8 @@ class Control(Control):
         
         self.window_name = 'settings1'
 
-        icon_size = QSize(60, 60)
-        button_size = QSize(130, 120)
+        icon_size = QSize(70, 70)
+        button_size = QSize(140, 130)
 
         self.font_text = QFont()
         self.font_text.setFamily(app.font_family)
@@ -39,13 +39,13 @@ class Control(Control):
         self.button_menu.released.connect(self.button_menu_released)
 
         self.button_view.setMinimumSize(button_size)
-        self.button_view.setIconSize(icon_size)
+        self.button_view.setIconSize(QSize(85, 85))
 
         self.button_view.clicked.connect(self.view)
 
 
         self.button_start.setMinimumSize(button_size)
-        self.button_start.setIconSize(icon_size)
+        self.button_start.setIconSize(QSize(105, 105))
         
 
         self.timer_left_pressed = QTimer(self)
@@ -118,7 +118,7 @@ class Control(Control):
         self.memory = Memory(db_path = file_path, db_file = 'memory_db')
 
         self.pump_value_1 = 50
-        self.pump_value_2 = 100 
+        self.pump_value_2 = 50 
         
         self.param_list = self.get_parametrs()
         self.param_list = self.memory_read(self.param_list)
@@ -133,6 +133,11 @@ class Control(Control):
     def show(self):
         super().show()
         self.play = False
+
+        self.button_left.setEnabled(True)
+        self.button_right.setEnabled(True)
+        self.button_minus.setEnabled(True)
+        self.button_plus.setEnabled(True)
 
 
     def update(self):
@@ -264,9 +269,19 @@ class Control(Control):
         self.value_pump_1 = self.param_list[1]
         self.value_pump_2 = self.param_list[2]
 
+        self.button_left.setEnabled(False)
+        self.button_right.setEnabled(False)
+        self.button_minus.setEnabled(False)
+        self.button_plus.setEnabled(False)
+
 
     def stop_pump(self): 
         self.value_update()
+
+        self.button_left.setEnabled(True)
+        self.button_right.setEnabled(True)
+        self.button_minus.setEnabled(True)
+        self.button_plus.setEnabled(True)
 
 
     def value_update_pump_1(self):
@@ -302,7 +317,6 @@ class Control(Control):
                     0: 'мл',
                     1: 'ml',
                     2: 'ml',
-                    3: '毫升',
                 }
 
                 size_text = 30
@@ -311,7 +325,6 @@ class Control(Control):
                     0: 'мл',
                     1: 'ml',
                     2: 'ml',
-                    3: '毫升',
                 }
 
                 size_text = 30
@@ -320,7 +333,6 @@ class Control(Control):
                     0: 'мл',
                     1: 'ml',
                     2: 'ml',
-                    3: '毫升',
                 }
 
                 size_text = 30
@@ -329,7 +341,6 @@ class Control(Control):
                     0: 'мл',
                     1: 'ml',
                     2: 'ml',
-                    3: '毫升',
                 }
 
                 size_text = 30
@@ -338,7 +349,7 @@ class Control(Control):
                     0: '',
                     1: '',
                     2: '',
-                    3: '',
+ 
                 }
 
                 size_text = 30
@@ -347,7 +358,6 @@ class Control(Control):
                     0: '',
                     1: '',
                     2: '',
-                    3: '',
                 }
 
                 size_text = 30

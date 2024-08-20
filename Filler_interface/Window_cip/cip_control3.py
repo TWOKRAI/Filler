@@ -22,8 +22,8 @@ class Cip_control(Control):
         
         self.window_name = 'cip'
 
-        icon_size = QSize(60, 60)
-        button_size = QSize(130, 120)
+        icon_size = QSize(70, 70)
+        button_size = QSize(140, 130)
 
         self.font_text = QFont()
         self.font_text.setFamily(app.font_family)
@@ -123,12 +123,14 @@ class Cip_control(Control):
 
         file_path = os.path.join('Filler_interface', 'Window_cip', 'Data')
         self.memory = Memory(db_path = file_path, db_file = 'memory_db')
+
+        self.pumps_speed = 10
+        self.pumps_state = 0
         
         self.param_list = self.get_parametrs()
         self.param_list = self.memory_read(self.param_list)
         self.put_parametrs()
         
-
         self.update()
         self.enable_control()
 
@@ -142,10 +144,9 @@ class Cip_control(Control):
     def pop_up_cip(self):
         app.window_pop_up.hide()
         app.window_pop_up.text = [
-            'Вы хотите начать очистку? Подтверждая робот выйдет в робочую зону!', 
-            'Volume1 /ml',
-            'Volumen 1 /ml', 
-            '體積 1 /毫升',
+            'Подтверждая, робот выйдет из нулевой позиции!', 
+            'By confirming, the robot will leave the zero position!',
+            'Durch Bestätigen verlässt der Roboter die Nullposition!', 
         ]
 
         app.window_pop_up.show(self.move_cip)
@@ -193,8 +194,8 @@ class Cip_control(Control):
 
     def get_parametrs(self): 
         self.param_list = {
-            1: filler.param11,
-            2: filler.param21,
+            1: self.pumps_speed,
+            2: self.pumps_state,
         }
     
         return self.param_list
@@ -207,14 +208,10 @@ class Cip_control(Control):
 
 
     def put_parametrs(self):
-        filler.param11 = self.param_list[1]
-        filler.param21 = self.param_list[2]
-        # filler.param31 = self.param_list[3]
-        # filler.param41 = self.param_list[4]
-        # filler.param41 = self.param_list[5]
+        self.pumps_speed = self.param_list[1]
+        self.pumps_state = self.param_list[2]
 
-
-        print(filler.param11, filler.param21, filler.param31, filler.param41)
+        print(self.pumps_speed, self.pumps_state)
 
 
     def memory_write(self, data):
@@ -222,8 +219,8 @@ class Cip_control(Control):
 
     
     def default_parametrs(self):
-        filler.param11 = 8
-        filler.param21 = 0
+        self.pumps_speed =8
+        self.pumps_state = 0
         # filler.param31 = 8
         # filler.param41 = 0
         # filler.param41 = 0
@@ -236,32 +233,29 @@ class Cip_control(Control):
         match self.param_num:
             case 1:
                 text = {
-                    0: 'НАСТРОЙКА ОЧИСТКИ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
+                    0: 'НАСТРОЙКА ПРОМЫВКИ', 
+                    1: 'WASHING SETUP',
+                    2: 'SPÜLEINSTELLUNG',
                 }
 
-                size_text = 21
+                size_text = 25
             case 2:
                 text = {
-                    0: 'НАСТРОЙКА ОЧИСТКИ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
+                    0: 'НАСТРОЙКА ПРОМЫВКИ', 
+                    1: 'WASHING SETUP',
+                    2: 'SPÜLEINSTELLUNG',
                 }
 
-                size_text = 21
+                size_text = 25
   
             case _:
                 text = {
-                    0: 'НАСТРОЙКА ОЧИСТКИ', 
-                    1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN',
-                    3: '系統設定',
+                    0: 'НАСТРОЙКА ПРОМЫВКИ', 
+                    1: 'WASHING SETUP',
+                    2: 'SPÜLEINSTELLUNG',
                 }
 
-                size_text = 21
+                size_text = 25
         
         text = text[self.lang]
         self.label_window.setText(str(text))
@@ -275,7 +269,7 @@ class Cip_control(Control):
 
 
     def coll_params_update(self):
-        size_text = 21
+        size_text = 23
         
         text = f'{self.param_num} / {len(self.param_list)}'
         self.coll_params.setText(str(text))
@@ -297,8 +291,8 @@ class Cip_control(Control):
                 value = self.param_list[self.param_num]
 
                 value_text = [
-                    ['Выкл', 'Off'],
-                    ['Вкл', 'On'],
+                    ['Выкл', 'Off', 'Aus'],
+                    ['Вкл', 'On', 'An'],
                     ]
 
                 value = value_text[value]
@@ -366,18 +360,16 @@ class Cip_control(Control):
             case 1:
                 text = {
                     0: 'Насоы: Скорость',
-                    1: 'Volume 1 /ml',
-                    2: 'Sprache',
-                    3: '語言',
+                    1: 'Pumps: Speed',
+                    2: 'Pumpen: Geschwindigkeit',
                 }
 
                 size_text = 30
             case 2:
                 text = {
                     0: 'Насосы: Состояние',
-                    1: 'Volume2 /ml',
-                    2: '',
-                    3: '',
+                    1: 'Pumps: Condition',
+                    2: 'Pumpen: Zustand',
                 }
 
                 size_text = 30
@@ -386,7 +378,6 @@ class Cip_control(Control):
                     0: '',
                     1: '',
                     2: '',
-                    3: '',
                 }
 
                 size_text = 30
@@ -400,6 +391,7 @@ class Cip_control(Control):
         font.setBold(False)
         font.setWeight(50)
         self.name_params.setFont(font)
+        self.name_params.setWordWrap(True)
 
 
     def minus(self):
@@ -453,8 +445,7 @@ class Cip_control(Control):
                 pass
             case 7:
                 pass
- 
-            
+  
         self.update()
 
         self.memory_write(self.param_list)

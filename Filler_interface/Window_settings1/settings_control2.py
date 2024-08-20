@@ -16,8 +16,8 @@ class Control(Control):
         
         self.window_name = 'settings1'
 
-        icon_size = QSize(60, 60)
-        button_size = QSize(130, 120)
+        icon_size = QSize(70, 70)
+        button_size = QSize(140, 130)
 
         self.font_text = QFont()
         self.font_text.setFamily(app.font_family)

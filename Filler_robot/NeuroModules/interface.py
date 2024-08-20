@@ -30,8 +30,10 @@ class Interface(QObject):
 		self.img_monitor = None
 
 		self.point_calibr = [(), (), (), ()]
+
+		self.mode = 1
 		
-		self.create_window()
+		self.create_trackbar = False
 
 
 	def _visual_line(func):
@@ -46,7 +48,7 @@ class Interface(QObject):
 	
 	# @_timing(True)	
 	def running(self):
-		self.save_image(1)
+		self.save_image()
 		# self.get_trackbar()
 
 	
@@ -71,6 +73,8 @@ class Interface(QObject):
 		cv2.createTrackbar("b", "Detect" , int(abs(self.camera.perspective.b) * 100000), 9999, nothing)
 
 		self.get_trackbar()
+
+		self.create_trackbar = True
 
   		
 	def get_trackbar(self):
@@ -124,31 +128,19 @@ class Interface(QObject):
 		cv2.destroyAllWindows()
 
 	
-	def save_image(self, interface = 0):
+	def save_image(self):
 		if isinstance(self.camera.image_out, np.ndarray):
 
-			match interface:
+			match self.mode:
 				case 0:
 					pixmap = self.camera.image_out
 
 				case 1: 
-					self.get_trackbar()
+					# self.get_trackbar()
 
 					image_draw = self.draw_box(self.camera.image_out, self.neuron.objects_filter)
 
 					# self.draw_box_all(image_draw)
-
-					# image_draw = self.draw_sight(image_draw)
-					# image_draw = self.line_h(image_draw, 40)
-
-					# point = (self.x, self.y)
-					# point = self.camera.perspective.transform_coord(point)
-
-					# point = self.camera.perspective.scale(point)
-
-					# image_draw = self.camera.perspective.draw(image_draw)
-
-
 
 					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 200, (255, 0, 255), 2)
 					# cv2.circle(image_draw, (int(self.camera.img_width/2), int(self.camera.img_height/2)), 600, (255, 0, 255), 2)
@@ -174,6 +166,23 @@ class Interface(QObject):
 					
 					# cv2.ellipse(image_draw, center1, axes1, angle1, startAngle1, endAngle1, color1, thickness1)
 
+
+					pixmap = image_draw
+				
+				case 2:
+					if not self.create_trackbar:
+						self.create_window()
+
+					self.get_trackbar()
+
+					image_draw = self.draw_box(self.camera.image_out, self.neuron.objects_filter)
+
+					point = (self.x, self.y)
+					point = self.camera.perspective.transform_coord(point)
+
+					point = self.camera.perspective.scale(point)
+
+					image_draw = self.camera.perspective.draw(image_draw)
 
 					pixmap = image_draw
 

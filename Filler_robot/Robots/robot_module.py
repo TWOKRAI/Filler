@@ -128,8 +128,10 @@ class Robot_module():
 		self.distance_z = 0
 
 		self.axis_x = Axis('motor_x', self.motor_x)
+
+		k = 0
 		
-		self.axis_x.motor.speed_def = 0.0001
+		self.axis_x.motor.speed_def = 0.0001 - k
 		self.axis_x.motor.direction = False
 		self.axis_x.step_angle = 0.04
 		self.axis_x.angle_0 = 0
@@ -140,7 +142,7 @@ class Robot_module():
 
 		self.axis_y = Axis('motor_y', self.motor_y)
 		self.axis_y.motor.enable_on(False)
-		self.axis_y.motor.speed_def = 0.0001
+		self.axis_y.motor.speed_def = 0.0001 - k
 		self.axis_y.motor.direction = False
 		self.axis_y.step_angle = 0.123
 		self.axis_y.arm_lenght = 12
@@ -154,7 +156,7 @@ class Robot_module():
 
 		self.axis_z = Axis('motor_z', self.motor_z)
 		self.axis_z.motor.enable_on(False)
-		self.axis_z.motor.speed_def = 0.0009
+		self.axis_z.motor.speed_def = 0.0009 - k
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
 		self.axis_z.direction_distance = False
@@ -588,7 +590,7 @@ class Robot_module():
 		if not switch_y:
 			self.calibration()
 
-		self.enable_motors(True)
+		
 		
 		list_objects = self.neuron.objects_filter
 		list_coord = self.neuron.list_coord
@@ -604,6 +606,8 @@ class Robot_module():
 		completed = False
 
 		for coord in list_coord:
+			self.enable_motors(True)
+			
 			x, y, z = coord
 
 			# if z > 12:
@@ -642,7 +646,7 @@ class Robot_module():
 					completed = True
 					list_objects[i][0] = True
 					self.neuron.memory_objects = list_objects
-					self.interface.save_image(interface = 1)
+					self.interface.save_image()
 
 					if not self.pumping_find:
 						self.go_home()
@@ -738,14 +742,14 @@ class Robot_module():
 		if self.distance_y_end <= 750:
 			self.time_start_y = 0.5
 
-		self.move(-self.distance_x_end, -self.distance_y_end - 500, -self.distance_z_end, detect = True)
 		self.axis_z.motor.enable_on(False)
+		self.move(-self.distance_x_end, -self.distance_y_end - 500, -self.distance_z_end, detect = True)
+
+		self.enable_motors(False)
 
 		self.home = True
 
 		self.null_value()
-
-		self.enable_motors(False)
 
 		print('go home')
 
@@ -757,10 +761,14 @@ class Robot_module():
 
 		switch_y = pins.switch_y.get_value()
 		if switch_y:
-			self.move(0, 800, 0)
+			self.move(0, 870, 0)
 		else:
 			self.move(0, -1000, 0, detect = True)
-			self.move(0, 800, 0)
+			self.move(0, 870, 0)
+
+		self.axis_x.motor.enable_on(False)
+		self.axis_y.motor.enable_on(False)
+		self.axis_z.motor.enable_on(False)
 
 
 if __name__ == '__main__':

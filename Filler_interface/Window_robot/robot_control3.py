@@ -8,14 +8,14 @@ from Filler_interface.app import app
 from Filler_interface.Window_settings1.settings_template import Control
 
 
-class Control(Control):
+class Window_robot(Control):
     def __init__(self):
         super().__init__()
 
         self.window_name = 'setting2'
 
         icon_size = QSize(60, 60)
-        button_size = QSize(140, 130)
+        button_size = QSize(130, 120)
 
         self.font_text = QFont()
         self.font_text.setFamily(app.font_family)
@@ -216,65 +216,73 @@ class Control(Control):
                     0: 'НАСТРОЙКИ СИСТЕМЫ', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
+                    3: '系統設定',
                 }
 
-                size_text = 25
+                size_text = 21
             case 2:
                 text = {
                     0: 'НАСТРОЙКИ СИСТЕМЫ', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
+                    3: '系統設定',
                 }
 
-                size_text = 25
+                size_text = 21
             case 3:
                 text = {
                     0: 'НАСТРОЙКИ СИСТЕМЫ', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
+                    3: '系統設定',
                 }
 
-                size_text = 25
+                size_text = 21
             case 4:
                 text = {
                     0: 'НАСТРОЙКИ СИСТЕМЫ', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
+                    3: '系統設定',
                 }
 
-                size_text = 25
+                size_text = 21
             case 5:
                 text = {
                     0: 'НАСТРОЙКИ СИСТЕМЫ', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
+                    3: '系統設定',
                 }
 
-                size_text = 25
+                size_text = 21
             case 6:
                 text = {
                     0: 'НАСТРОЙКИ СИСТЕМЫ', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
+                    3: '系統設定',
                 }
 
-                size_text = 25
+                size_text = 21
             case 7:
                 text = {
                     0: 'НАСТРОЙКИ СИСТЕМЫ', 
                     1: 'SYSTEM SETTINGS',
                     2: 'SYSTEMEINSTELLUNGEN',
+                    3: '系統設定',
                 }
 
-                size_text = 25
+                size_text = 21
             case _:
                 text = {
                     0: 'НАСТРОЙКИ СИСТЕМЫ', 
                     1: 'SYSTEM SETTINGS',
-                    2: 'SYSTEMEINSTELLUNGEN'
+                    2: 'SYSTEMEINSTELLUNGEN',
+                    3: '系統設定',
                 }
 
-                size_text = 25
+                size_text = 21
         
         text = text[self.lang]
         self.label_window.setText(str(text))
@@ -288,7 +296,7 @@ class Control(Control):
 
 
     def coll_params_update(self):
-        size_text = 23
+        size_text = 21
         
         text = f'{self.param_num} / {len(self.param_list)}'
         self.coll_params.setText(str(text))
@@ -310,6 +318,7 @@ class Control(Control):
                 value_text = {0: 'Русский', 
                               1: 'English', 
                               2: 'Deutsch', 
+                              3: '中国人',
                               }
 
                 value = value_text[int(value)]
@@ -468,57 +477,64 @@ class Control(Control):
                     0: 'Язык',
                     1: 'language',
                     2: 'Sprache',
+                    3: '語言',
                 }
 
-                size_text = 35
+                size_text = 30
             case 2:
                 text = {
-                    0: 'Цвет контура',
-                    1: 'Outline color',
-                    2: 'Umrissfarbe'
+                    0: 'Цвет 1 (Контур)',
+                    1: 'Цвет 12 (Контур)',
+                    2: '',
+                    3: '',
                 }
 
-                size_text = 35
+                size_text = 30
             case 3:
                 text = {
-                    0: 'Цвет контура',
-                    1: 'Outline color',
-                    2: 'Umrissfarbe'
+                    0: 'Цвет 1 (Контур)',
+                    1: 'Цвет 12 (Контур)',
+                    2: '',
+                    3: '',
                 }
 
-                size_text = 35
+                size_text = 30
             case 4:
                 text = {
-                    0: 'Цвет контура',
-                    1: 'Outline color',
-                    2: 'Umrissfarbe'
+                    0: 'Цвет 1 (Контур)',
+                    1: 'Цвет 12 (Контур)',
+                    2: '',
+                    3: '',
                 }
 
-                size_text = 35
+                size_text = 30
             case 5:
                 text = {
-                    0: 'Цвет иконок',
-                    1: 'Color of icons',
-                    2: 'Farbe der Symbole',
+                    0: 'Цвет 2 (Иконка)',
+                    1: 'Цвет 21 (Иконка)',
+                    2: '',
+                    3: '',
                 }
 
-                size_text = 35
+                size_text = 30
             case 6:
                 text = {
-                    0: 'Цвет иконок',
-                    1: 'Color of icons',
-                    2: 'Farbe der Symbole',
+                    0: 'Цвет 2 (Иконка)',
+                    1: 'Цвет 21 (Иконка)',
+                    2: '',
+                    3: '',
                 }
 
-                size_text = 35
+                size_text = 30
             case 7:
                 text = {
-                    0: 'Цвет иконок',
-                    1: 'Color of icons',
-                    2: 'Farbe der Symbole',
+                    0: 'Цвет 2 (Иконка)',
+                    1: 'Цвет 21 (Иконка)',
+                    2: '',
+                    3: '',
                 }
 
-                size_text = 35
+                size_text = 30
 
             case 8:
                 text = {
@@ -528,7 +544,7 @@ class Control(Control):
                     3: '',
                 }
 
-                size_text = 35
+                size_text = 30
             case 9:
                 text = {
                     0: 'Цвет 3 (Текст)',
@@ -537,7 +553,7 @@ class Control(Control):
                     3: '',
                 }
 
-                size_text = 35
+                size_text = 30
             case 10:
                 text = {
                     0: 'Цвет 3 (Текст)',
@@ -546,7 +562,7 @@ class Control(Control):
                     3: '',
                 }
 
-                size_text = 35
+                size_text = 30
             case _:
                 text = {
                     0: '',
@@ -555,7 +571,7 @@ class Control(Control):
                     3: '',
                 }
 
-                size_text = 35
+                size_text = 30
         
         text = text[self.lang]
         self.name_params.setText(str(text))
@@ -757,7 +773,7 @@ class Control(Control):
 
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] < 3:
+                if self.param_list[self.param_num] < 4:
                     self.param_list[self.param_num] += 1
                 
                 self.put_parametrs()
@@ -875,7 +891,7 @@ class Control(Control):
     def plus_enable(self):
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] >= 2:
+                if self.param_list[self.param_num] >= 3:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)

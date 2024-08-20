@@ -256,7 +256,6 @@ class Control(QMainWindow):
         self.pressed_plus.stop()
         self.timer_plus_pressed.start()
         print('preeeesed minus')
-        
 
 
     def plus_released(self):

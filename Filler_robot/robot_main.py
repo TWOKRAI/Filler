@@ -51,10 +51,13 @@ class Robot_filler(QThread):
         clear_file('log_temp.txt')
 
         self.i = 0
+        self.time = 0
+
+        self.robot.motor_z.enable_on(True)
 
         self.calibration_only = True
 
-        self.laser.on_off(1)
+        self.laser.on_off(0)
 
 
     def stop(self):
@@ -74,16 +77,6 @@ class Robot_filler(QThread):
         print('self.running', self.running)
 
         while self.running:
-            # self.i += 1
-            # print(self.i)
-
-            # temp = check_temperature()
-            # write_to_file(temp, 'log_temp.txt')
-
-            if not self.view and not self.filler:
-                self.laser.on_off(1)
-
-
             if self.view:
                 self.laser.on_off(1)
 
@@ -107,14 +100,19 @@ class Robot_filler(QThread):
                 find_tuple = self.neuron.find_objects()
 
                 if find_tuple[1] > 0:
+                    if self.robot.calibration_ready == False:
+                        self.robot.calibration()
+
                     self.laser.running()
                     self.laser.on_off(0)
 
                     self.camera.running()
                     self.neuron.neuron_vision()
 
+                    self.time = 0
+
                 self.interface.running()
-                
+
                 self.robot.running()
 
                 #QThread.msleep(1500)
@@ -132,7 +130,6 @@ class Robot_filler(QThread):
 
             if self.cip:
                 self.pump_station.cip()
-
                 self.cip_stop()
 
             if self.calibration_only:
@@ -143,8 +140,32 @@ class Robot_filler(QThread):
                 self.robot.move_cip()
 
                 self.cip_move_stop()
+
             
+            if not self.filler and not self.view:
+                self.laser.on_off(0)
+
+
+            if self.time > 100:
+                self.robot.enable_motors(False)
+                self.pump_station.enable_motors(False)
+
+                temp = check_temperature()
+                write_to_file(temp, 'log_temp.txt')
+
+                print('OFF TIMER')
+
+                self.robot.calibration_ready = False 
+
+                self.time = 0
+                
+                
             QThread.msleep(100)
+
+            if self.filler:
+                self.time += 1
+            else:
+                self.time += 0.1
 
         self.camera.stop()
 
@@ -184,6 +205,8 @@ class Robot_filler(QThread):
         self.cip = False
         self.cip_move = False
 
+        self.time = 0
+
 
     def filler_stop(self):
         self.filler = False
@@ -195,6 +218,8 @@ class Robot_filler(QThread):
         self.calibration_func = True
         self.cip = False
         self.cip_move = False
+
+        self.time = 0
 
 
     def calibration_stop(self):
@@ -251,9 +276,9 @@ class Robot_filler(QThread):
         
         self.robot_on = True
 
-        while not self.robot.find and self.calibration_func:
-            self.laser.on_off(1)
+        self.laser.on_off(1)
 
+        while not self.robot.find and self.calibration_func:
             self.camera.running()
             find_tuple = self.neuron.find_objects()
     

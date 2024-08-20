@@ -21,7 +21,7 @@ class Main_filler_control(QMainWindow):
         self.setFixedSize(app.window_size)
 
         icon_size = QSize(50, 50)
-        button_size = QSize(200, 120)
+        button_size = QSize(210, 130)
 
         font = QFont()
         font.setFamily(app.font_family)
@@ -30,10 +30,10 @@ class Main_filler_control(QMainWindow):
         font.setWeight(50)
         
 
-        self.start_text = ['НАЧАТЬ', 'Start', 'Beginnen', ' 開始']
-        self.button_start.setMinimumSize(QSize(200, 120))
-        self.button_start.setMaximumSize(QSize(200, 120))
-        self.button_start.setIconSize(QSize(60, 60))
+        self.start_text = ['НАЧАТЬ', 'START', 'BEGINNEN']
+        self.button_start.setMinimumSize(button_size)
+        self.button_start.setMaximumSize(button_size)
+        self.button_start.setIconSize(icon_size)
         
         font1 = QFont()
         font1.setFamily(app.font_family)
@@ -45,7 +45,7 @@ class Main_filler_control(QMainWindow):
         self.button_start.clicked.connect(self.start)
         
 
-        self.game_text = [' РОБОТ', ' Robots', ' Spiele', ' 遊戲']
+        self.game_text = [' РОБОТ', ' ROBOT', ' ROBOTER']
         self.button_robot.setMinimumSize(button_size)
         self.button_robot.setMaximumSize(button_size)
         self.button_robot.setIconSize(icon_size)
@@ -54,7 +54,7 @@ class Main_filler_control(QMainWindow):
         self.button_robot.clicked.connect(self.robot)
 
 
-        self.settings_text = [' НАСТРОЙКИ', ' Settings', ' Einstellungen', ' 設定']
+        self.settings_text = [' НАСТРОЙКИ', ' SETTINGS', 'EINSTELLUNGEN']
         self.button_settings.setMinimumSize(button_size)
         self.button_settings.setMaximumSize(button_size)
         self.button_settings.setIconSize(icon_size)
@@ -63,7 +63,7 @@ class Main_filler_control(QMainWindow):
         self.button_settings.clicked.connect(self.settings)
 
 
-        self.view_text = [' ВИД', ' View', ' Sicht', ' 看法']
+        self.view_text = [' ВИД', ' VISION', ' VISION']
         self.button_view.setMinimumSize(button_size)
         self.button_view.setMaximumSize(button_size)
         self.button_view.setIconSize(icon_size)
@@ -72,7 +72,7 @@ class Main_filler_control(QMainWindow):
         self.button_view.clicked.connect(self.view)
 
 
-        self.statistics_text = [' ПРОМЫВКА', ' Statistics', ' Statistiken', ' 統計數據']
+        self.statistics_text = [' ПРОМЫВКА', ' RINSE', ' SPÜLEN']
         self.button_cip.setMinimumSize(button_size)
         self.button_cip.setIconSize(icon_size)
         self.button_cip.setFont(font)

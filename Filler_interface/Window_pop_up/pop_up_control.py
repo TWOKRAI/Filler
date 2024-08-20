@@ -33,7 +33,7 @@ class Pop_up_control(QMainWindow):
 
         font_2 = QFont()
         font_2.setFamily(app.font_family)
-        font_2.setPointSize(14)
+        font_2.setPointSize(18)
         font_2.setBold(False)
         font_2.setWeight(50)
 
@@ -86,23 +86,20 @@ class Pop_up_control(QMainWindow):
 
         self.text = [
             'Вы хотите сделать сброс параметров?', 
-            'Volume1 /ml',
-            'Volumen 1 /ml', 
-            '體積 1 /毫升',
+            'Do you want to reset the parameters?',
+            'Möchten Sie Ihre Einstellungen zurücksetzen?', 
         ]
 
         self.text_button_ok = [
             'ПОДТВЕРДИТЬ', 
-            'Volume1 /ml',
-            'Volumen 1 /ml', 
-            '體積 1 /毫升',
+            'CONFIRM',
+            'BESTÄTIGEN', 
         ]
 
         self.text_button_cancel = [
             'ОТМЕНИТЬ', 
-            'Volume1 /ml',
-            'Volumen 1 /ml', 
-            '體積 1 /毫升',
+            'CANCEL',
+            'STORNIEREN', 
         ]
 
         self.font_size = [

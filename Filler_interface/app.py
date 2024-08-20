@@ -109,7 +109,6 @@ class App(QApplication):
         self.window_main_filler.language(lang_num)
         self.window_list1.language(lang_num)
         self.window_statistic.language(lang_num)
-        self.window_settings1.language(lang_num)
         self.window_settings2.language(lang_num)
         self.window_prepare.language(lang_num)
         self.window_filler.language(lang_num)
@@ -293,8 +292,8 @@ app.window_error = window_error
 from Filler_interface.Window_cip.cip_control3 import window_cip
 app.window_cip = window_cip
 
-from Filler_interface.Window_robot.robot_control import window_robot
-app.window_robot = window_robot
+from Filler_interface.Window_robot.robot_control3 import Window_robot
+app.window_robot = Window_robot()
 
 from Filler_interface.Window_filler.filler_control2 import window_filler
 app.window_filler = window_filler

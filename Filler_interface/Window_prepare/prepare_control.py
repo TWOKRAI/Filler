@@ -27,9 +27,9 @@ class Prepare_control(QMainWindow):
 
         self.window_name = 'prepare'
 
-        icon_size = QSize(60, 60)
-        button_size_1 = QSize(130, 120)
-        button_size_2 = QSize(200, 120)
+        icon_size = QSize(70, 70)
+        button_size_1 = QSize(140, 130)
+        button_size_2 = QSize(210, 130)
 
         font_1 = QFont()
         font_1.setFamily(app.font_family)
@@ -46,6 +46,8 @@ class Prepare_control(QMainWindow):
         self.label.setFont(font_1)
         self.label.setWordWrap(True)
 
+        self.button_menu.setIconSize(icon_size)
+        self.button_menu.setFixedSize(button_size_1)
         self.button_reset.setIconSize(icon_size)
         self.button_reset.setFixedSize(button_size_1)
 
@@ -120,7 +122,8 @@ class Prepare_control(QMainWindow):
 
         pop_show_text = {
             0: 'Вы хотите начать калибровку заново?',
-            1: 'UUEOFERGPRPV{RVB{RB{BR}}}',
+            1: 'Do you want to start calibration again?',
+            2: 'Möchten Sie die Kalibrierung erneut starten?',
         }
 
         app.window_pop_up.label_2.setText(pop_show_text[self.lang])
@@ -146,10 +149,10 @@ class Prepare_control(QMainWindow):
         
 
     def button_menu_update(self):
-        icon_size = QSize(60, 60)
+        icon_size = QSize(70, 70)
         self.button_menu.setIconSize(icon_size)
 
-        button_size = QSize(130, 120)
+        button_size = QSize(140, 130)
         self.button_menu.setFixedSize(button_size)
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
@@ -182,55 +185,62 @@ class Prepare_control(QMainWindow):
             case 0:
                 name_button = {
                     0: 'КАЛИБРОВКА',
-                    1: 'Start1',
+                    1: 'CALIBRATION',
+                    2: 'KALIBRIERUNG',
                 }
 
             case 1:
                 name_button = {
                     0: 'ПОДОЖДИТЕ',
-                    1: '',
+                    1: 'WAIT',
+                    2: 'WARTEN'
                 }
 
 
             case 2:
                 name_button = {
                     0: 'ПОДОЖДИТЕ',
-                    1: 'Start2',
+                    1: 'WAIT',
+                    2: 'WARTEN'
                 }
 
 
             case 3:
                 name_button = {
                     0: 'ПОДОЖДИТЕ',
-                    1: 'Start2',
+                    1: 'WAIT',
+                    2: 'WARTEN'
                 }
 
   
             case 4:
                 name_button = {
                     0: 'ПОДОЖДИТЕ',
-                    1: 'Start2',
+                    1: 'WAIT',
+                    2: 'WARTEN'
                 }
 
 
             case 6:
                 name_button = {
-                    0: 'Начать',
-                    1: 'Start2',
+                    0: 'НАЧАТЬ',
+                    1: 'START',
+                    2: 'STARTEN',
                 }
 
 
             case _:
                 name_button = {
-                    0: 'Начать',
-                    1: 'Start0',
+                    0: 'НАЧАТЬ',
+                    1: 'START',
+                    2: 'STARTEN',
                 }
         
         self.button_calibr.setText(name_button[self.lang])
 
         font = QFont()
         font.setFamily(app.font_family)
-        font.setPointSize(18)
+        font.setPointSize(21)
         font.setBold(False)
         font.setWeight(50)
         self.button_calibr.setFont(font)
@@ -306,25 +316,24 @@ class Prepare_control(QMainWindow):
         match self.param_num:
             case 0:
                 label_name = {
-                    0: 'Поставьте стакан перед роботом и нажмите "Калибровка"',
-                    1: 'Выставте ttttку робота в нулевую позицию и нажмите продолжить',
+                    0: 'Поставьте стакан перед роботом и нажмите "КАЛИБРОВКА"',
+                    1: 'Place the glass in front of the robot and press "CALIBRATION"',
+                    2: 'Platzieren Sie das Glas vor dem Roboter und drücken Sie „KALIBRIEREN“.'
                 }
-
-
 
             case 1:
                 label_name = {
                     0: 'Началась калибровка робота',
-                    1: 'Началась rrrr калибровка робота ',
+                    1: 'Robot calibration has begun',
+                    2: 'Die Roboterkalibrierung hat begonnen',
                 }
-
-      
 
 
             case 2:
                 label_name = {
                     0: 'Поставьте стакан в рабочую зону для прокачки системы',
-                    1: 'Поставьте стакан в рабочую зону для прокачки системы',
+                    1: 'Place the glass in the work area to bleed the system',
+                    2: 'Stellen Sie ein Glas in den Arbeitsbereich, um das System zu entlüften',
                 }
                                 
    
@@ -332,14 +341,16 @@ class Prepare_control(QMainWindow):
             case 3:
                 label_name = {
                     0: 'Стакан обнаружен, началась прокачка системы',
-                    1: 'Началась rrrr калибровка робота (Подождите)',
+                    1: 'Glass detected, system bleeding started',
+                    2: 'Das Glas wurde erkannt, das System hat mit dem Pumpen begonnen'
                 }
 
 
             case 4:
                 label_name = {
                     0: 'Прокачка системы закончена',
-                    1: 'Поставьте rrrr стакан для розлива и нажмите стоп когда пойдет вода',
+                    1: 'System pumping is complete',
+                    2: 'Die Systementlüftung ist abgeschlossen'
                 }
                                 
 
@@ -348,7 +359,8 @@ class Prepare_control(QMainWindow):
             case 5:
                 label_name = {
                     0: 'Система готова',
-                    1: 'Началась rrrr калибровка робота (Подождите)',
+                    1: 'The system is ready',
+                    2: 'System bereit'
                 }
 
                 self.label.setText(label_name[self.lang])
@@ -360,67 +372,84 @@ class Prepare_control(QMainWindow):
             case 6:
                 label_name = {
                     0: 'Система готова',
-                    1: '',
+                    1: 'The system is ready',
+                    2: 'System bereit'
                 }
+
+                self.label.setText(label_name[self.lang])
+                self.button_calibr.setEnabled(True)
+
+                self.label.setText(label_name[self.lang])
+
+                self.value = 100
+
             case 7:
                 label_name = {
                     0: 'Система готова',
-                    1: '',
+                    1: 'The system is ready',
+                    2: 'System bereit'
                 }
+
+                self.label.setText(label_name[self.lang])
+                self.button_calibr.setEnabled(True)
+
+                self.label.setText(label_name[self.lang])
+
+                self.value = 100
 
 
         self.label.setText(label_name[self.lang])
         
 
-    def update_prepare(self, id):
-        print('id', id)
+    # def update_prepare(self, id):
+    #     print('id', id)
 
-        match id:
-            case 0:
-                label_name = {
-                    0: 'Калибровка готова (Нажмите продолжить)',
-                    1: 'Началась rrrr калибровка робота (Подождите)',
-                }
+    #     match id:
+    #         case 0:
+    #             label_name = {
+    #                 0: 'Калибровка готова (Нажмите продолжить)',
+    #                 1: 'Началась rrrr калибровка робота (Подождите)',
+    #             }
 
-                self.label.setText(label_name[self.lang])
-                self.button_calibr.setEnabled(True)
+    #             self.label.setText(label_name[self.lang])
+    #             self.button_calibr.setEnabled(True)
 
-                self.value = 40
+    #             self.value = 40
 
-                self.myprogressBar.setValue(self.value)
+    #             self.myprogressBar.setValue(self.value)
 
-                print(self.value)
+    #             print(self.value)
 
 
-            case 1:
-                label_name = {
-                    0: 'Стакан обнаружен (Нажмите Прокачка)',
-                    1: 'Началась rrrr калибровка робота (Подождите)',
-                }
+    #         case 1:
+    #             label_name = {
+    #                 0: 'Стакан обнаружен (Нажмите Прокачка)',
+    #                 1: 'Началась rrrr калибровка робота (Подождите)',
+    #             }
 
-                self.label.setText(label_name[self.lang])
-                self.button_calibr.setEnabled(True)
+    #             self.label.setText(label_name[self.lang])
+    #             self.button_calibr.setEnabled(True)
 
-                self.value = 65
+    #             self.value = 65
 
-                self.myprogressBar.setValue(self.value)
+    #             self.myprogressBar.setValue(self.value)
 
-                print(self.value)
+    #             print(self.value)
                 
-            case 2:
-                label_name = {
-                    0: 'Система готова (Нажмите Начать)',
-                    1: 'Началась rrrr калибровка робота (Подождите)',
-                }
+    #         case 2:
+    #             label_name = {
+    #                 0: 'Система готова (Нажмите Начать)',
+    #                 1: 'Началась rrrr калибровка робота (Подождите)',
+    #             }
 
-                self.label.setText(label_name[self.lang])
-                self.button_calibr.setEnabled(True)
+    #             self.label.setText(label_name[self.lang])
+    #             self.button_calibr.setEnabled(True)
 
-                self.value = 100
+    #             self.value = 100
 
-                self.myprogressBar.setValue(self.value)
+    #             self.myprogressBar.setValue(self.value)
 
-                print(self.value)
+    #             print(self.value)
             
         
 

@@ -1,11 +1,11 @@
 import asyncio
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtCore import QObject, pyqtSignal, QThread
 
 from Filler_robot.MotorModules.motor import Motor
 from Raspberry.pins_table import pins
 
 
-class Motor_monitor(QObject):
+class Motor_monitor(QThread):
     on_signal = pyqtSignal() 
     off_signal = pyqtSignal() 
     button_signal = pyqtSignal() 
@@ -65,6 +65,8 @@ class Motor_monitor(QObject):
 
         asyncio.run(self._move_async(distance, detect = True))
         self.direction = not self.direction
+
+        self.motor.enable_on(True)
         
 
     async def _detect_sensor(self):
