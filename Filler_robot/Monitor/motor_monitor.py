@@ -67,6 +67,20 @@ class Motor_monitor(QThread):
         self.direction = not self.direction
 
         self.motor.enable_on(True)
+
+    
+    def down(self):
+        switch_in = pins.switch_in.get_value()
+        
+        if switch_in == 0:
+            print('switch_in', switch_in)
+            self.motor.enable_on(False)
+
+            distance = self.distance
+            asyncio.run(self._move_async(distance, detect = True))
+
+            self.motor.enable_on(True)
+
         
 
     async def _detect_sensor(self):

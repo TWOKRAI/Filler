@@ -25,6 +25,9 @@ class Thread():
             if app.ready == True:
                 self.input_request.starting.connect(self.robot_filler.starting)
 
+                self.input_request.button_monitor.connect(self.robot_filler.all_stop)
+
+
                 self.input_request.show_error.connect(app.window_error.show)
                 # self.input_request.error.connect(self.stop_robot_thread)
                 # self.input_request.error.connect(self.stop_pumps_thread)
@@ -78,6 +81,9 @@ class Thread():
                 self.robot_filler.pump_station.bottle_2.connect(app.window_filler.value_update_pump_2)
                 self.robot_filler.pump_station.start_pump.connect(app.window_filler.start_pump)
                 self.robot_filler.pump_station.stop_pump.connect(app.window_filler.stop_pump)
+
+                self.robot_filler.pump_station.pump_1.stop_pump.connect(app.window_filler.stop_pump_1)
+                self.robot_filler.pump_station.pump_2.stop_pump.connect(app.window_filler.stop_pump_2)
 
                 # app.window_prepare.stop_pumping.connect(self.robot_filler.robot.pump_station.stop_pumps2)
                 # app.window_prepare.start_filler.connect(self.robot_filler.run2)

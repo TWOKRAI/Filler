@@ -40,7 +40,7 @@ class Control(Control):
         self.button_reset.clicked.connect(self.show_popup)
 
         self.timer_left_pressed = QTimer(self)
-        self.timer_left_pressed.setInterval(int(300))
+        self.timer_left_pressed.setInterval(int(500))
         self.timer_left_pressed.timeout.connect(self.left)
 
         self.button_left.setMinimumSize(button_size)
@@ -51,7 +51,7 @@ class Control(Control):
         self.button_left.released.connect(self.left_released)
 
         self.timer_right_pressed = QTimer(self)
-        self.timer_right_pressed.setInterval(int(300))
+        self.timer_right_pressed.setInterval(int(500))
         self.timer_right_pressed.timeout.connect(self.right)
         
         self.button_right.setMinimumSize(button_size)
@@ -64,7 +64,7 @@ class Control(Control):
         self.step_button = 1
 
         self.timer_minus_pressed = QTimer(self)
-        self.timer_minus_pressed.setInterval(int(200/self.step_button))
+        self.timer_minus_pressed.setInterval(int(300/self.step_button))
         self.timer_minus_pressed.timeout.connect(self.minus)
 
         self.button_minus.setMinimumSize(button_size)
@@ -75,7 +75,7 @@ class Control(Control):
         self.button_minus.released.connect(self.minus_released)
 
         self.timer_plus_pressed = QTimer(self)
-        self.timer_plus_pressed.setInterval(int(200/self.step_button))
+        self.timer_plus_pressed.setInterval(int(300/self.step_button))
         self.timer_plus_pressed.timeout.connect(self.plus)
 
         self.button_plus.setMinimumSize(button_size)
@@ -203,6 +203,8 @@ class Control(Control):
 
     
     def default_parametrs(self):
+        self.memory.recreate_database()
+
         app.lang_num = 0
         app.styling.r_border = 108
         app.styling.g_border = 170

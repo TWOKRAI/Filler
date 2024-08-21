@@ -12,7 +12,7 @@ class Window_robot(Control):
     def __init__(self):
         super().__init__()
 
-        self.window_name = 'setting2'
+        self.window_name = 'robot'
 
         icon_size = QSize(65, 65)
         button_size = QSize(140, 130)
@@ -193,6 +193,8 @@ class Window_robot(Control):
 
     
     def default_parametrs(self):
+        self.memory.recreate_database()
+
         self.speed_robot = 5
         self.time_robot = 5
         self.laser_mode = 2

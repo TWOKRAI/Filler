@@ -72,7 +72,7 @@ class Cip_control(Control):
         self.step_button = 1
 
         self.timer_minus_pressed = QTimer(self)
-        self.timer_minus_pressed.setInterval(int(200/self.step_button))
+        self.timer_minus_pressed.setInterval(int(300/self.step_button))
         self.timer_minus_pressed.timeout.connect(self.minus)
 
         self.button_minus.setMinimumSize(button_size)
@@ -232,11 +232,10 @@ class Cip_control(Control):
 
     
     def default_parametrs(self):
-        self.pumps_speed =8
+        self.memory.recreate_database()
+
+        self.pumps_speed = 8
         self.pumps_state = 0
-        # filler.param31 = 8
-        # filler.param41 = 0
-        # filler.param41 = 0
 
         self.param_list = self.get_parametrs()
         self.memory_write(self.param_list)

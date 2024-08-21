@@ -235,7 +235,7 @@ class Perspective:
             cv2.circle(image, (self.point[0], int((self.a * (self.point[1] - i*20) + self.b * (self.point[1] - i*20)**2))), 5, (0, 90, 255),-1)
 
         cv2.circle(image, (self.new_point[0], self.new_point[1]), 7, (0, 90, 255), -1)
-        cv2.putText(image, f"{self.scale_point[0]}, {self.scale_point[1]}", (self.new_point[0] - 20, self.new_point[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(image, f"{self.scale_point[0]}, {self.scale_point[1]}, {self.new_point[0]}, {self.new_point[1]}", (self.new_point[0] - 20, self.new_point[1] - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
         cv2.putText(image, f"1", (self.point1[0] + 5, self.point1[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         cv2.putText(image, f"2", (self.point2[0] + 5, self.point2[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
@@ -245,9 +245,9 @@ class Perspective:
         # Вычисление высоты в точке пересечения
         height = self.img_height - self.intersection_point[1]
 
-        cv2.putText(image, f"Height: {height} {self.intersection_point[1]}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-        cv2.putText(image, f"Angle: {self.angle_perspective} ", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-        cv2.putText(image, f"Angle2: {self.angle} ", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        # cv2.putText(image, f"Height: {height} {self.intersection_point[1]}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        # cv2.putText(image, f"Angle: {self.angle_perspective} ", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        # cv2.putText(image, f"Angle2: {self.angle} ", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
         return image
 

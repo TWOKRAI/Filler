@@ -33,7 +33,7 @@ class Main_filler_control(QMainWindow):
         self.start_text = ['НАЧАТЬ', 'START', 'BEGINNEN']
         self.button_start.setMinimumSize(button_size)
         self.button_start.setMaximumSize(button_size)
-        self.button_start.setIconSize(icon_size)
+        self.button_start.setIconSize(QSize(55, 55))
         
         font1 = QFont()
         font1.setFamily(app.font_family)

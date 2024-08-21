@@ -588,9 +588,9 @@ class Robot_module():
 		switch_y = pins.switch_y.get_value()
 
 		if not switch_y:
+			print('Не на свитче Y')
 			self.calibration()
 
-		
 		
 		list_objects = self.neuron.objects_filter
 		list_coord = self.neuron.list_coord
@@ -733,6 +733,7 @@ class Robot_module():
 			
 
 		asyncio.run(self._calibration_y_async())
+		self.move(0, -3, 0)
 
 		asyncio.run(self._calibration_x_async())
 		self.move(790, 0, 0)

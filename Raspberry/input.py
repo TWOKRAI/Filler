@@ -14,6 +14,8 @@ class Input_request(QThread):
 
     starting = pyqtSignal()
 
+    button_monitor = pyqtSignal()
+
 
     def __init__(self) -> None:
         super().__init__()
@@ -25,8 +27,10 @@ class Input_request(QThread):
         self.button_error = False
 
         self.motor_monitor = Motor_monitor()
+        
 
         self.button = False
+        self.first = False
 
 
     def run(self):
@@ -41,6 +45,11 @@ class Input_request(QThread):
 
     def request(self):
         while self.running:
+
+            if not self.first:
+                self.motor_monitor.down()
+                self.first = True
+
             try:
                 if pins.button_stop.get_value():
                     self.button_error = True
@@ -54,8 +63,10 @@ class Input_request(QThread):
                     self.button_error = False
                 
                 if pins.button.get_value():
+                    self.button_monitor.emit()
                     self.motor_monitor.start()
                     self.starting.emit()
+                    
                     QThread.msleep(100)
 
         

@@ -16,7 +16,7 @@ class Control(Control):
         
         self.window_name = 'settings1'
 
-        icon_size = QSize(60, 60)
+        icon_size = QSize(65, 65)
         button_size = QSize(140, 130)
 
         self.font_text = QFont()
@@ -39,7 +39,7 @@ class Control(Control):
         self.button_menu.released.connect(self.button_menu_released)
 
         self.button_view.setMinimumSize(button_size)
-        self.button_view.setIconSize(QSize(85, 85))
+        self.button_view.setIconSize(QSize(80, 80))
 
         self.button_view.clicked.connect(self.view)
 
@@ -48,7 +48,7 @@ class Control(Control):
         
 
         self.timer_left_pressed = QTimer(self)
-        self.timer_left_pressed.setInterval(int(200/self.step_button))
+        self.timer_left_pressed.setInterval(int(300/self.step_button))
         self.timer_left_pressed.timeout.connect(self.left)
 
         self.button_left.setMinimumSize(button_size)
@@ -59,7 +59,7 @@ class Control(Control):
         self.button_left.released.connect(self.left_released)
 
         self.timer_right_pressed = QTimer(self)
-        self.timer_right_pressed.setInterval(int(200/self.step_button))
+        self.timer_right_pressed.setInterval(int(300/self.step_button))
         self.timer_right_pressed.timeout.connect(self.right)
         
         self.button_right.setMinimumSize(button_size)
@@ -71,7 +71,7 @@ class Control(Control):
 
         
         self.timer_minus_pressed = QTimer(self)
-        self.timer_minus_pressed.setInterval(int(200/self.step_button))
+        self.timer_minus_pressed.setInterval(int(300/self.step_button))
         self.timer_minus_pressed.timeout.connect(self.minus)
 
         self.button_minus.setMinimumSize(button_size)
@@ -82,7 +82,7 @@ class Control(Control):
         self.button_minus.released.connect(self.minus_released)
 
         self.timer_plus_pressed = QTimer(self)
-        self.timer_plus_pressed.setInterval(int(200/self.step_button))
+        self.timer_plus_pressed.setInterval(int(300/self.step_button))
         self.timer_plus_pressed.timeout.connect(self.plus)
 
         self.button_plus.setMinimumSize(button_size)
@@ -103,7 +103,6 @@ class Control(Control):
         self.value_id = 1
 
         self.param_list = []
-
         
         self.timer_exit = QTimer(self)
         self.timer_exit.setSingleShot(True)
@@ -118,6 +117,7 @@ class Control(Control):
 
         self.pump_value_1 = 50
         self.pump_value_2 = 50 
+        self.min_value = 5
         
         self.param_list = self.get_parametrs()
         self.param_list = self.memory_read(self.param_list)
@@ -128,7 +128,7 @@ class Control(Control):
         self.update()
         self.enable_control()
 
-
+        
     def show(self):
         super().show()
         self.play = False
@@ -137,6 +137,8 @@ class Control(Control):
         self.button_right.setEnabled(True)
         self.button_minus.setEnabled(True)
         self.button_plus.setEnabled(True)
+
+        self.update()
 
 
     def update(self):
@@ -161,6 +163,9 @@ class Control(Control):
 
         app.threads.robot_filler.filler_stop()
 
+        self.play = False
+
+
 
     def button_view_pressed(self):
         self.timer_exit.start()
@@ -171,7 +176,7 @@ class Control(Control):
 
 
     def on_timer_reset(self):
-        super().button_menu_clicked()
+        pass
 
 
     def get_parametrs(self): 
@@ -273,6 +278,20 @@ class Control(Control):
         self.button_minus.setEnabled(False)
         self.button_plus.setEnabled(False)
 
+    
+    def stop_pump_1(self):
+        self.min_value = 0
+        self.value_update_pump_1()
+
+        self.min_value = 5
+
+
+    def stop_pump_2(self):
+        self.min_value = 0
+        self.value_update_pump_2()
+
+        self.min_value = 5
+
 
     def stop_pump(self): 
         self.value_update()
@@ -282,29 +301,31 @@ class Control(Control):
         self.button_minus.setEnabled(True)
         self.button_plus.setEnabled(True)
 
+        self.min_value = 5
+
 
     def value_update_pump_1(self):
-        step = 1000 * 0.004
-        step = int(round(step, 0))
+        step = 1000 * 0.0035
+        #step = int(round(step, 0))
         self.value_pump_1 = self.value_pump_1 - step
 
-        value_1 = self.value_pump_1
+        value_1 = int(round(self.value_pump_1 , 0))
 
-        if value_1 <= 0: 
-            value_1 = 0 
+        if value_1 <= self.min_value: 
+            value_1 = self.min_value
 
         self.value.setText(str(f'1: {value_1}'))
 
 
     def value_update_pump_2(self):
-        step = 1000 * 0.004
-        step = int(round(step, 0))
+        step = 1000 * 0.0035
+        #step = int(round(step, 0))
         self.value_pump_2 = self.value_pump_2 - step
 
-        value_2 = self.value_pump_2
+        value_2 = int(round(self.value_pump_2 , 0))
 
-        if value_2 <= 0: 
-            value_2 = 0 
+        if value_2 <= self.min_value: 
+            value_2 = self.min_value 
 
         self.value_2.setText(str(f'2: {value_2}'))
 
@@ -421,7 +442,6 @@ class Control(Control):
                 }
 
                 size_text = 30
-
             case _:
                 text = {
                     0: '',
@@ -493,7 +513,7 @@ class Control(Control):
 
         self.enable_control()
 
-        if self.param_list[1] < 1000:
+        if self.param_list[1] < 500:
             self.param_list[1] += 10
 
         self.update()
@@ -526,7 +546,7 @@ class Control(Control):
 
 
     def plus_enable(self):
-        if self.param_list[1] >= 1000:
+        if self.param_list[1] >= 500:
             self.button_plus.setEnabled(False)
         else:
             self.button_plus.setEnabled(True)
@@ -567,7 +587,7 @@ class Control(Control):
 
         self.enable_control()
 
-        if self.param_list[2] < 1000:
+        if self.param_list[2] < 500:
             self.param_list[2] += 10
 
         self.update()
@@ -585,7 +605,7 @@ class Control(Control):
 
 
     def right_enable(self):
-        if self.param_list[1] >= 1000:
+        if self.param_list[1] >= 500:
             self.button_right.setEnabled(False)
         else:
             self.button_right.setEnabled(True)
@@ -595,7 +615,7 @@ class Control(Control):
         # button_size = QSize(130, 120)
         # self.button_start.setFixedSize(button_size)
     
-        icon_size = QSize(70, 70)
+        icon_size = QSize(75, 75)
         self.button_start.setIconSize(icon_size)
 
         print(self.play)

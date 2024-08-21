@@ -1,5 +1,6 @@
 import shelve
 import os
+import shutil
 
 class Memory():
     def __init__(self, db_path='memory_db', db_file='db'):
@@ -27,3 +28,22 @@ class Memory():
             except Exception as e:
                 print(f'Ошибка при чтении данных: {e}')
                 return default
+
+
+    def recreate_database(self):
+        try:
+            # Удаляем все файлы в директории базы данных
+            for filename in os.listdir(self.db_path):
+                file_path = os.path.join(self.db_path, filename)
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+
+            # Создаем новый файл базы данных
+            with shelve.open(self.file_path) as db:
+                pass  # Создаем пустой файл базы данных
+
+            print(f"Database '{self.file_path}' has been recreated.")
+        except Exception as e:
+            print(f"Error recreating database: {e}")

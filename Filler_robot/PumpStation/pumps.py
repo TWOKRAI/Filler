@@ -8,10 +8,10 @@ from Raspberry.pins_table import pins
 
 from Filler_interface import app
 
-from Filler_interface.filler import filler
-
 
 class Pump(QObject):
+    stop_pump = pyqtSignal()
+
     def __init__(self, name, motor):
         super().__init__()
 
@@ -67,12 +67,13 @@ class Pump(QObject):
 
         await self.motor._freq_async(speed, 1, self.turn)
 
+        self.stop_pump.emit()
+
         # QThread.sleep(1)
         
         # await self.motor._freq_async(speed, 1, 1000 * -self.dir)
         
         await self.motor._freq_async(speed, 1, -500 * self.dir, accuration = False)
-
         self.ready = True
         
 

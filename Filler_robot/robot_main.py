@@ -10,6 +10,8 @@ from Filler_robot.VisionTech.laser import Laser
 
 from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
+from Filler_interface import app
+
 
 class Robot_filler(QThread):
     prepare = pyqtSignal()
@@ -187,6 +189,15 @@ class Robot_filler(QThread):
     def starting(self):
         self.calibration_first_run()
 
+    
+    def all_stop(self):
+        if self.first:
+            self.view = False
+            self.filler = False
+            self.calibratiom_func = False
+            self.cip = False
+            self.cip_move = False
+
 
     def view_run(self):
         self.view = True
@@ -194,6 +205,7 @@ class Robot_filler(QThread):
         self.calibratiom_func = False
         self.cip = False
         self.cip_move = False
+
 
     def view_stop(self):
         self.view = False

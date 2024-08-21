@@ -133,6 +133,7 @@ class Neuron:
 			data.append(tuple_obj)
 			self.interface.running()
 
+		
 			# Сортируем список по вторым элементам
 			sorted_data = sorted(data, key=lambda x: x[1])
 
@@ -151,6 +152,9 @@ class Neuron:
 			self.objects_filter = max_value_third[0]
 
 			self.list_coord = self.pixel_to_coord(self.objects_filter)
+			
+			if len(self.list_coord) <= 0:
+				self.forget()
 
 
 	def find_objects(self):
@@ -219,10 +223,10 @@ class Neuron:
 					print('H', h)
 
 					if h <= 190:
-						xd = 0  
-						yd = 0
+						xd = -2
+						yd = -7
 					else:
-						xd = 7
+						xd = 6
 						yd = 7
 
 					w1 = int(w - self.perspective)
@@ -323,18 +327,26 @@ class Neuron:
 		for obj in objects:
 			label = obj[2]
 			
-			xr_center = obj[8]
-			yr_center = obj[9]
+			xr_center = obj[11]
+			yr_center = obj[12]
 
 			find = self.list_find.get(label, False)
 			
 			if find == True:
 				should_add = True
+
+				if xr_center < 140 or xr_center > 500:
+					print('X limit')
+					continue
+
+				if yr_center < 330 or yr_center > 480:
+					print('Y limit')
+					continue
 			
 				for prev_obj in self.memory_objects:
 					prev_status = prev_obj[0]
-					prev_xr_center = prev_obj[8]
-					prev_yr_center = prev_obj[9]
+					prev_xr_center = prev_obj[11]
+					prev_yr_center = prev_obj[12]
 
 					if abs(xr_center - prev_xr_center) <= self.region_x and abs(yr_center - prev_yr_center) <= self.region_y:
 						if prev_status == True:
