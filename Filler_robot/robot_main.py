@@ -43,6 +43,7 @@ class Robot_filler(QThread):
         self.cip = False
         self.cip_move = False
         self.calibration_only = False
+        self.calibration_first = False
 
         self.first_view = False
 
@@ -56,6 +57,8 @@ class Robot_filler(QThread):
         self.robot.motor_z.enable_on(True)
 
         self.laser.on_off(0)
+
+        self.first = False
 
 
     def stop(self):
@@ -130,11 +133,22 @@ class Robot_filler(QThread):
                 self.pump_station.cip()
                 self.cip_stop()
 
+
             if self.calibration_only:
                 self.robot.calibration()
 
-                self.laser.first_start()
                 self.calibration_only = False
+
+
+            if self.calibration_first:
+                if self.first == False:
+                    self.robot.calibration()
+                    self.calibration_only = False
+
+                    self.laser.first_start()
+
+                self.first = True
+
 
             if self.cip_move:
                 self.robot.move_cip()
@@ -171,7 +185,7 @@ class Robot_filler(QThread):
 
 
     def starting(self):
-        self.calibration_only_run()
+        self.calibration_first_run()
 
 
     def view_run(self):
@@ -245,6 +259,10 @@ class Robot_filler(QThread):
         self.cip = False
         self.cip_move = False
         self.calibration_only = True
+
+
+    def calibration_first_run(self):
+        self.calibration_first = True
 
 
     def reset_calibration(self):

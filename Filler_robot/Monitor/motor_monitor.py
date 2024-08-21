@@ -25,7 +25,7 @@ class Motor_monitor(QThread):
         self.acc_start = 20
         self.acc_end = 20
         
-        self.motor.speed_def = 0.00001
+        self.motor_speed = 2700
         
         self.motor.limit_min = -15000
         self.motor.limit_max = 15000
@@ -105,7 +105,7 @@ class Motor_monitor(QThread):
         if detect:
             tasks.append(asyncio.create_task(self._detect_sensor()))
 
-        tasks.append(asyncio.create_task(self.motor._freq_async(3000, 1, distance)))
+        tasks.append(asyncio.create_task(self.motor._freq_async(self.motor_speed, 1, distance)))
             
         try:
             await asyncio.gather(*tasks)

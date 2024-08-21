@@ -14,7 +14,7 @@ class Control(Control):
 
         self.window_name = 'setting2'
 
-        icon_size = QSize(60, 60)
+        icon_size = QSize(65, 65)
         button_size = QSize(140, 130)
 
         self.font_text = QFont()
@@ -486,31 +486,31 @@ class Control(Control):
                 size_text = 35
             case 2:
                 text = {
-                    0: 'Цвет контура',
-                    1: 'Outline color',
-                    2: 'Umrissfarbe'
+                    0: 'Цвет контура (R,G,B)',
+                    1: 'Outline color (R,G,B)',
+                    2: 'Umrissfarbe (R,G,B)'
                 }
 
                 size_text = 35
             case 3:
                 text = {
-                    0: 'Цвет контура',
-                    1: 'Outline color',
-                    2: 'Umrissfarbe'
+                    0: 'Цвет контура (R,G,B)',
+                    1: 'Outline color (R,G,B)',
+                    2: 'Umrissfarbe (R,G,B)'
                 }
 
                 size_text = 35
             case 4:
                 text = {
-                    0: 'Цвет контура',
-                    1: 'Outline color',
-                    2: 'Umrissfarbe'
+                    0: 'Цвет контура (R,G,B)',
+                    1: 'Outline color (R,G,B)',
+                    2: 'Umrissfarbe (R,G,B)'
                 }
 
                 size_text = 35
             case 5:
                 text = {
-                    0: 'Цвет иконок',
+                    0: 'Цвет иконок (R,G,B)',
                     1: 'Color of icons',
                     2: 'Farbe der Symbole',
                 }
@@ -518,17 +518,17 @@ class Control(Control):
                 size_text = 35
             case 6:
                 text = {
-                    0: 'Цвет иконок',
-                    1: 'Color of icons',
-                    2: 'Farbe der Symbole',
+                    0: 'Цвет иконок (R,G,B)',
+                    1: 'Color of icons (R,G,B)',
+                    2: 'Farbe der Symbole (R,G,B)',
                 }
 
                 size_text = 35
             case 7:
                 text = {
-                    0: 'Цвет иконок',
-                    1: 'Color of icons',
-                    2: 'Farbe der Symbole',
+                    0: 'Цвет иконок (R,G,B)',
+                    1: 'Color of icons (R,G,B)',
+                    2: 'Farbe der Symbole (R,G,B)',
                 }
 
                 size_text = 35
@@ -579,6 +579,7 @@ class Control(Control):
         font.setBold(False)
         font.setWeight(50)
         self.name_params.setFont(font)
+        self.name_params.setWordWrap(True)
 
 
     def minus(self):

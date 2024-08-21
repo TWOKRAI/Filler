@@ -727,7 +727,9 @@ class Robot_module():
 		if switch_y:
 			self.axis_y.motor.speed_def = 0.002
 			self.axis_y.motor.move(210)
+
 			self.axis_y.motor.speed_def = 0.0007
+			self.axis_z.motor.enable_on(False)
 			
 
 		asyncio.run(self._calibration_y_async())

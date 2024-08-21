@@ -27,7 +27,7 @@ class Prepare_control(QMainWindow):
 
         self.window_name = 'prepare'
 
-        icon_size = QSize(60, 60)
+        icon_size = QSize(65, 65)
         button_size_1 = QSize(140, 130)
         button_size_2 = QSize(210, 130)
 
@@ -149,7 +149,7 @@ class Prepare_control(QMainWindow):
         
 
     def button_menu_update(self):
-        icon_size = QSize(70, 70)
+        icon_size = QSize(65, 65)
         self.button_menu.setIconSize(icon_size)
 
         button_size = QSize(140, 130)

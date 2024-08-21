@@ -14,7 +14,7 @@ class Window_robot(Control):
 
         self.window_name = 'setting2'
 
-        icon_size = QSize(60, 60)
+        icon_size = QSize(65, 65)
         button_size = QSize(140, 130)
 
         self.font_text = QFont()
