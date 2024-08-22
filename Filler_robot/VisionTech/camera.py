@@ -100,7 +100,7 @@ class Camera:
         # print('Camera read')
         # print(type(image_out), self.img_width, self.img_height)
 
-        cv2.imwrite('test2.png', self.image_out)
+        # cv2.imwrite('test2.png', self.image_out)
         
         return self.image_out
     

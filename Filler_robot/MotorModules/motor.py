@@ -24,6 +24,7 @@ class Motor:
 
 		self.direction = True
 		
+		self.speed_default = 0.00005
 		self.speed_def = 0.00005
 		self.speed_min = 0
 		self.speed = 0

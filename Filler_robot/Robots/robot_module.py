@@ -7,6 +7,8 @@ from Raspberry.pins_table import pins
 
 #from Lib.Decorators.wrapper import _timing
 
+from Filler_interface.app import app
+
 
 class Axis:
 	def __init__(self, name_axis, motor):
@@ -43,7 +45,6 @@ class Axis:
 		self.z = 0
 
 		self.d1 = 0
-
 
 	
 	def angle_real(self):
@@ -113,6 +114,8 @@ class Robot_module():
 
 		self.home = False
 
+		self.move_home = False
+
 		self.error_x = False
 		self.error_y = False
 		self.error_z = False
@@ -128,10 +131,9 @@ class Robot_module():
 		self.distance_z = 0
 
 		self.axis_x = Axis('motor_x', self.motor_x)
-
-		k = 0
-		
-		self.axis_x.motor.speed_def = 0.0001 - k
+		self.axis_x.motor.enable_on(False)
+		self.axis_x.motor.speed_default = 0.0001
+		self.axis_x.motor.speed_def = 0.0001
 		self.axis_x.motor.direction = False
 		self.axis_x.step_angle = 0.04
 		self.axis_x.angle_0 = 0
@@ -142,7 +144,8 @@ class Robot_module():
 
 		self.axis_y = Axis('motor_y', self.motor_y)
 		self.axis_y.motor.enable_on(False)
-		self.axis_y.motor.speed_def = 0.0001 - k
+		self.axis_y.motor.speed_default = 0.0001
+		self.axis_y.motor.speed_def = 0.0001
 		self.axis_y.motor.direction = False
 		self.axis_y.step_angle = 0.123
 		self.axis_y.arm_lenght = 12
@@ -156,7 +159,8 @@ class Robot_module():
 
 		self.axis_z = Axis('motor_z', self.motor_z)
 		self.axis_z.motor.enable_on(False)
-		self.axis_z.motor.speed_def = 0.0009 - k
+		self.axis_z.motor.speed_default = 0.0009
+		self.axis_z.motor.speed_def = 0.0009
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
 		self.axis_z.direction_distance = False
@@ -458,6 +462,9 @@ class Robot_module():
 		if detect:
 			tasks.append(asyncio.create_task(self._detect_sensor()))
 
+		if self.move_home:
+			tasks.append(asyncio.create_task(self._no_enabel_z()))
+
 		# tasks.append(asyncio.create_task(self._limit()))
 
 		if distance_x != 0:
@@ -466,7 +473,7 @@ class Robot_module():
 		if distance_y != 0:
 			tasks.append(asyncio.create_task(self.axis_y.motor.move(distance_y, async_mode=True, time_start = self.time_start_y)))
 
-		if distance_z != 0:
+		if distance_z != 0 and self.move_home == False:
 			tasks.append(asyncio.create_task(self.axis_z.motor.move(distance_z, async_mode=True, time_start = self.time_start_z)))
 			
 		try:
@@ -482,6 +489,8 @@ class Robot_module():
 		self.time_start_y = 0
 		self.time_start_z = 0
 
+		self.move_home = False
+
 		# if detect:
 		# 	sensor_task.cancel()
 		
@@ -490,6 +499,13 @@ class Robot_module():
 
 	def move(self, distance_x, distance_y, distance_z, detect = False):
 		self.laser.on_off(0)
+		
+		speed = (10 - app.window_robot.speed_robot) / 5000
+		speed = round(speed, 6)
+
+		self.axis_x.motor.speed_def = self.axis_x.motor.speed_default + speed
+		self.axis_y.motor.speed_def = self.axis_y.motor.speed_default + speed
+		self.axis_z.motor.speed_def = self.axis_z.motor.speed_default + speed
 		
 		asyncio.run(self._move_async(distance_x, distance_y, distance_z, detect))
 
@@ -655,7 +671,8 @@ class Robot_module():
 		
 		if completed and not self.pumping_find:
 			self.laser.on_off(0)
-			QThread.msleep(3000)
+			time_wait = app.window_robot.time_robot * 1000
+			QThread.msleep(time_wait)
 
 
 	async def _detect_switch_x(self):
@@ -741,12 +758,24 @@ class Robot_module():
 		self.null_value()
 
 
+	async def _no_enabel_z(self):
+		for _ in range(4):
+			self.axis_z.motor.enable_on(False)
+			await asyncio.sleep(0.1)
+			self.axis_z.motor.enable_on(True)
+			await asyncio.sleep(0.2)
+		
+		self.axis_z.motor.enable_on(False)
+
+
 	def go_home(self):
 		if self.distance_y_end <= 750:
 			self.time_start_y = 0.5
 
-		self.axis_z.motor.enable_on(False)
+		# self.axis_z.motor.enable_on(False)
+		self.move_home = False
 		self.move(-self.distance_x_end, -self.distance_y_end - 500, -self.distance_z_end, detect = True)
+		self.move_home = False
 
 		self.enable_motors(False)
 

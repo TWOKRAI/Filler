@@ -283,7 +283,7 @@ class Robot_filler(QThread):
         self.robot.pumping_find = False
         self.robot.find = False
 
-        self.robot.enable_motors(False)
+        # self.robot.enable_motors(False)
 
         print('reset')
 

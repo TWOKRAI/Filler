@@ -1,6 +1,8 @@
 from Raspberry.pins_table import pins
 from PyQt5.QtCore import QThread
 		
+from Filler_interface.app import app
+
 
 class Laser:
     def __init__(self) -> None:
@@ -15,12 +17,14 @@ class Laser:
 
 
     def running(self):
-        if self.first:
-            self.on_off(1)
-            QThread.msleep(2100)
+        self.mode = app.window_robot.laser_mode
 
         match self.mode:
             case 0:
+                if self.first:
+                    self.on_off(1)
+                    QThread.msleep(2100)
+        
                 self.on_off(0)
             case 1:
                 self.on_off(1)
@@ -33,6 +37,8 @@ class Laser:
         
 
     def on_off(self, value):
+        self.mode = app.window_robot.laser_mode
+    
         if  self.mode != 0:
             pins.laser.set_value(value)
         else:

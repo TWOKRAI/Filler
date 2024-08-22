@@ -163,7 +163,7 @@ class Window_robot(Control):
 
 
     def get_parametrs(self): 
-        self.speed_robot = 5
+        self.speed_robot = 10
         self.time_robot = 5
         self.laser_mode = 2
 
@@ -405,13 +405,13 @@ class Window_robot(Control):
 
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] > 0:
+                if self.param_list[self.param_num] > 1:
                     self.param_list[self.param_num] -= 1
                 
                 self.put_parametrs()
                 app.language()
             case 2:
-                if self.param_list[self.param_num] > 0:
+                if self.param_list[self.param_num] > 1:
                     self.param_list[self.param_num] -= 1
                 
                 self.put_parametrs()
@@ -448,13 +448,13 @@ class Window_robot(Control):
     def minus_enable(self):
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] <= 0:
+                if self.param_list[self.param_num] <= 1:
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
 
             case 2:
-                if self.param_list[self.param_num] <= 0:
+                if self.param_list[self.param_num] <= 1:
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
@@ -473,7 +473,7 @@ class Window_robot(Control):
 
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] < 5:
+                if self.param_list[self.param_num] < 10:
                     self.param_list[self.param_num] += 1
                 
                 self.put_parametrs()
@@ -516,7 +516,7 @@ class Window_robot(Control):
     def plus_enable(self):
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] >= 5:
+                if self.param_list[self.param_num] >= 10:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)

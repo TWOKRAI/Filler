@@ -256,10 +256,13 @@ class Prepare_control(QMainWindow):
     def button_calibr_clicked(self):
         self.param_num += 1
 
+        if self.param_num >= 6:
+            self.param_num = 6
+
         print('self.param_num', self.param_num)
 
         if app.threads.robot_filler.robot.calibration_ready == True:
-            self.param_num = 5
+            self.param_num = 6
             app.threads.robot_filler.robot.calibration_ready = False
 
         match self.param_num:
