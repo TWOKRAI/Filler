@@ -153,6 +153,24 @@ class Neuron:
 
 			self.objects_filter = max_value_third[0]
 
+			lenght_1 = 0
+			for obj in self.objects_filter:
+				lenght_1 += obj[7]
+
+			lenght_2 = 0
+			for obj in self.memory_objects:
+				lenght_2 += obj[7]
+
+			print('abs(lenght_1 - lenght_2)', abs(lenght_1 - lenght_2))
+
+			if abs(lenght_1 - lenght_2) >= 50:
+				self.memory_objects = self.objects_filter
+
+			if len(self.objects_filter) <= len(self.memory_objects):
+				self.memory_objects = self.objects_filter
+
+
+
 			if len(self.objects_filter) <= len(self.memory_objects):
 				self.memory_objects = self.objects_filter
 
@@ -225,7 +243,7 @@ class Neuron:
 
 					self.perspective = abs(xr_center - img_width / 2) * 1 / self.factor_x
 
-					print('H', h)
+					# print('H', h)
 
 					if h <= 190:
 						xd = -2
@@ -285,11 +303,11 @@ class Neuron:
 		# image_1_gray = image_1
 		# image_2_gray = image_2
 
-		cropped_image_1 = image_1_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 10, x1 - 5 : x1 + w + 5]
-		cv2.imwrite('cropped_image.png', cropped_image_1)
+		cropped_image_1 = image_1_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 10, x1 + 10 : x1 + w - 10]
+		# cv2.imwrite('cropped_image.png', cropped_image_1)
 		
-		cropped_image_2 = image_2_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 10, x1 - 5 : x1 + w + 5]
-		cv2.imwrite('cropped_image_2.png', cropped_image_2)
+		cropped_image_2 = image_2_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 10, x1 + 10: x1 + w  - 10]
+		# cv2.imwrite('cropped_image_2.png', cropped_image_2)
 
 		sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.012, edgeThreshold=100)
 
@@ -300,12 +318,12 @@ class Neuron:
 		print('len(kp1)', len(kp1), len(kp2))
 
     	# Рисование ключевых точек на обрезанных изображениях
-		cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
-		cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
+		# cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
+		# cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 
 		# Сохранение изображений с нарисованными ключевыми точками
-		cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
-		cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
+		# cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
+		# cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
 
 		if len(kp2) >= len(kp1) * 0.4:
 			print('Стакан есть')
@@ -361,15 +379,15 @@ class Neuron:
 					
 			self.perspective = (xr_center - wt/2) * 1/ self.factor_x
 			
-			print('perspective', self.perspective)
+			#print('perspective', self.perspective)
 			
 			xr_center = int(xr_center + self.perspective)
 
 			self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective])
-			print('objects', self.objects_all)
+			#print('objects', self.objects_all)
 			
 
-		print('1 self.all_objects', self.objects_all)
+		#print('1 self.all_objects', self.objects_all)
 
 		return self.objects_all
 
@@ -392,11 +410,11 @@ class Neuron:
 			if find == True:
 				should_add = True
 
-				if xr_center < 140 or xr_center > 500:
+				if xr_center < 210 or xr_center > 440:
 					print('X limit')
 					continue
 
-				if yr_center < 330 or yr_center > 480:
+				if yr_center < 345 or yr_center > 460:
 					print('Y limit')
 					continue
 			
@@ -523,12 +541,12 @@ class Neuron:
 
 			dx = w / 19.2 * (1 + abs(15.7 - y) * 0.04)
 
-			print("W", dx)
+			# print("W", dx)
 
 
 			v = (3.142 * (dx / 2) ** 2 * z2) / 2 * (1 - abs(self.camera.img_width/2 - xr_center_2) / 250)
 			
-			print('VVV', v, dx, z2) 
+			# print('VVV', v, dx, z2) 
 
 			v = round(v, 1)
 			

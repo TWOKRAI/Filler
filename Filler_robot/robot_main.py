@@ -111,6 +111,8 @@ class Robot_filler(QThread):
 
                 self.laser.on_off(1)
 
+                QThread.msleep(1000)
+
                 self.camera.running()
                 find_tuple = self.neuron.find_objects()
 
@@ -130,7 +132,7 @@ class Robot_filler(QThread):
 
                 self.robot.running()
 
-                #QThread.msleep(1500)
+               
  
             if self.calibration_func:
                 print('calibration_func run')
@@ -316,10 +318,14 @@ class Robot_filler(QThread):
         self.calibration_stop()
         self.robot.calibration_ready = False
 
-        self.robot.pumping_find = False
+        # self.robot.pumping_find = False
         self.robot.find = False
 
+        self.pumping_ready = False
+
         self.robot.no_stop_motors()
+
+        self.neuron.forget()
 
         # self.robot.enable_motors(False)
 
@@ -401,6 +407,7 @@ class Robot_filler(QThread):
         self.pumping_ready = False
         self.robot.calibration_ready = False
         #self.reset_calibration()
+        self.neuron.forget()
 
     
     def no_error_button(self):

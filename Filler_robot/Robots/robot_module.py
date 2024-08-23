@@ -108,8 +108,8 @@ class Robot_module(QObject):
 		self.step_position_value = 300
 		self.step_position = 0
 
-		self.radius_min = 16
-		self.radius_max = 25
+		self.radius_min = 15
+		self.radius_max = 27
 
 		self.pumping_find = False
 		self.find = False
@@ -662,6 +662,10 @@ class Robot_module(QObject):
 				y = y * (1 - abs(14 - y) /140)
 				x = x * (1 - abs(14 - y) /140)
 
+			if z > 14:
+				y = y * 1.05
+				x = x * 0.9
+
 			# x = x * 0.9
 			# y = y * 0.9
 
@@ -687,6 +691,9 @@ class Robot_module(QObject):
 						if self.pumping_find:
 							self.find = True
 							break
+
+						if self.start == False:
+							break
 						
 						self.pump_station.cap_value = v
 						self.pump_station.filler()
@@ -699,6 +706,8 @@ class Robot_module(QObject):
 					self.go_home()
 
 			i += 1
+
+
 		
 		if completed and not self.pumping_find:
 			self.laser.on_off(0)
@@ -782,7 +791,7 @@ class Robot_module(QObject):
 				
 			
 			asyncio.run(self._calibration_y_async())
-			self.move(0, -5, 0)
+			self.move(0, -7, 0)
 
 			asyncio.run(self._calibration_x_async())
 			self.move(790, 0, 0)
@@ -790,6 +799,8 @@ class Robot_module(QObject):
 			self.null_value()
 
 			self.calibration_ready = True
+
+			self.enable_motors(False)
 
 
 	async def _no_enabel_z(self):
@@ -810,7 +821,7 @@ class Robot_module(QObject):
 		self.move_home = False
 		self.move(-self.distance_x_end, -self.distance_y_end - 500, -self.distance_z_end, detect = True)
 		self.move_home = False
-		self.move(0, -5, 0)
+		self.move(0, -7, 0)
 
 
 		self.enable_motors(False)

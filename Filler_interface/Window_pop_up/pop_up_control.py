@@ -17,8 +17,12 @@ class Pop_up_control(QMainWindow):
        
         self.statusBar().setHidden(True)
 
-        self.setWindowFlags(Qt.FramelessWindowHint) 
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+
+        # self.setWindowFlags(Qt.FramelessWindowHint) 
         self.setWindowFlag(Qt.FramelessWindowHint, True)
+
+        
 
         self.func = None
 
@@ -44,6 +48,7 @@ class Pop_up_control(QMainWindow):
         font_2.setWeight(50)
 
         self.label_2.setFont(font_1)
+        self.label_2.setFixedSize(300, 100) 
         self.label_2.setWordWrap(True)
 
         self.pushButton_ok.setFixedSize(170, 120)

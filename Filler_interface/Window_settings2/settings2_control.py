@@ -124,7 +124,7 @@ class Control(Control):
         pop_show_text = {
             0: 'Вы хотите сделать параметры по умолчанию?',
             1: 'Do you want to make the settings default?',
-            2: 'Möchten Sie Standardeinstellungen vornehmen?',
+            2: 'Möchten Sie die Einstellungen als Standard festlegen?',
         }
 
         app.window_pop_up.label_2.setText(pop_show_text[self.lang])
@@ -171,9 +171,6 @@ class Control(Control):
             5: app.styling.r_icons_text,
             6: app.styling.g_icons_text,
             7: app.styling.b_icons_text,
-            8: app.styling.r_text,
-            9: app.styling.g_text,
-            10: app.styling.b_text,
         }
     
         return self.param_list
@@ -193,9 +190,6 @@ class Control(Control):
         app.styling.r_icons_text = self.param_list[5]
         app.styling.g_icons_text = self.param_list[6]
         app.styling.b_icons_text = self.param_list[7]
-        app.styling.r_text = self.param_list[8]
-        app.styling.g_text = self.param_list[9]
-        app.styling.b_text = self.param_list[10]
 
 
     def memory_write(self, data):
@@ -205,16 +199,13 @@ class Control(Control):
     def default_parametrs(self):
         self.memory.recreate_database()
 
-        app.lang_num = 0
+        app.lang_num = 2
         app.styling.r_border = 108
         app.styling.g_border = 170
         app.styling.b_border = 210
         app.styling.r_icons_text = 108
         app.styling.g_icons_text = 178
         app.styling.b_icons_text = 149
-        app.styling.r_text = 108
-        app.styling.g_text = 161
-        app.styling.b_text = 141
 
         self.param_list = self.get_parametrs()
         self.memory_write(self.param_list)
@@ -481,7 +472,7 @@ class Control(Control):
             case 1:
                 text = {
                     0: 'Язык',
-                    1: 'language',
+                    1: 'Language',
                     2: 'Sprache',
                 }
 

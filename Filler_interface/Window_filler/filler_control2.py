@@ -98,6 +98,8 @@ class Control(Control):
 
         self.button_start.clicked.connect(self.button_start_clicked)
 
+        self.button_start_marker = False
+
         self.set_icons()
 
         self.lang = 0
@@ -112,6 +114,11 @@ class Control(Control):
         self.timer_exit.setSingleShot(True)
         self.timer_exit.setInterval(6000) 
         self.timer_exit.timeout.connect(self.on_timer_reset)
+
+        self.timer_button = QTimer(self)
+        self.timer_button.setSingleShot(False)
+        self.timer_button.setInterval(1000)
+        self.timer_button.timeout.connect(self.button_recolor)
 
         self.button_view.pressed.connect(self.button_view_pressed)
         self.button_view.released.connect(self.button_view_released)
@@ -129,6 +136,14 @@ class Control(Control):
         
         self.play = False
 
+        self.file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-pause-button-100.png')
+        self.file_path_new = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_start', 'icons8-pause-button-100.png')
+        app.styling.recolor_image(self.file_path, self.file_path_new, (230, 160, 35))
+        
+        self.file_path_2 = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
+        self.file_path_new_2 = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_start', 'icons8-circled-play-100.png')
+        app.styling.recolor_image(self.file_path_2, self.file_path_new_2, (180, 70, 42))
+
         self.update()
         self.enable_control()
 
@@ -141,6 +156,8 @@ class Control(Control):
         self.button_right.setEnabled(True)
         self.button_minus.setEnabled(True)
         self.button_plus.setEnabled(True)
+
+        self.timer_button.start()
 
         self.update()
 
@@ -169,6 +186,7 @@ class Control(Control):
         # app.threads.robot_filler.all_stop()
 
         self.play = False
+        self.timer_button.stop()
 
 
 
@@ -285,13 +303,16 @@ class Control(Control):
 
     
     def stop_pump_1(self):
+
         self.min_value = 0
         self.value_update_pump_1()
 
         self.min_value = 5
+        
 
 
     def stop_pump_2(self):
+
         self.min_value = 0
         self.value_update_pump_2()
 
@@ -620,24 +641,41 @@ class Control(Control):
         # button_size = QSize(130, 120)
         # self.button_start.setFixedSize(button_size)
     
-        icon_size = QSize(75, 75)
+        icon_size = QSize(80, 80)
         self.button_start.setIconSize(icon_size)
 
         print(self.play)
 
         if self.play == True:
-            file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-pause-button-100.png')
-            self.button_start.setIcon(QIcon(file_path))
+            
+            
+            self.button_start.setIcon(QIcon(self.file_path_new))
+            self.timer_button.stop()
+            
+
 
             # if raspberry:
             #     self.robot_filler.enable_robot_on(True)
         else:
-            file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
-            self.button_start.setIcon(QIcon(file_path))
+            
+            self.button_start.setIcon(QIcon(self.file_path_new_2))
+
+            self.timer_button.start()
 
 
             # if raspberry:
             #     self.robot_filler.enable_robot_on(False)
+
+        
+    def button_recolor(self):
+        if self.button_start_marker == True:
+            file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_start', 'icons8-circled-play-100.png')
+            self.button_start.setIcon(QIcon(file_path))
+            self.button_start_marker = False
+        else:
+            file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
+            self.button_start.setIcon(QIcon(file_path))
+            self.button_start_marker = True
 
 
     def button_start_clicked(self):

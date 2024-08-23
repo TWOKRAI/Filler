@@ -144,9 +144,9 @@ class Cip_control(Control):
     def pop_up_cip(self):
         app.window_pop_up.hide()
         app.window_pop_up.text = [
-            'Подтверждая, робот выйдет из нулевой позиции!', 
-            'By confirming, the robot will leave the zero position!',
-            'Durch Bestätigen verlässt der Roboter die Nullposition!', 
+            'ОСТОРОЖНО! Нажав подтвердить, робот выйдет в рабочую зону!', 
+            'CAUTION! By pressing confirm, the robot will enter the work area!',
+            'VORSICHT! Durch Bestätigen betritt der Roboter den Arbeitsbereich!',
         ]
 
         app.window_pop_up.show(self.move_cip)
@@ -159,7 +159,7 @@ class Cip_control(Control):
         pop_show_text = {
             0: 'Вы хотите сделать параметры по умолчанию?',
             1: 'Do you want to make the settings default?',
-            2: 'Möchten Sie Standardeinstellungen vornehmen?',
+            2: 'Möchten Sie die Einstellungen als Standard festlegen?',
         }
 
         app.window_pop_up.label_2.setText(pop_show_text[self.lang])
@@ -189,10 +189,12 @@ class Cip_control(Control):
         super().button_menu_clicked()
         self.memory_write(self.param_list)
 
-        if self.move_ready:
-            app.threads.robot_filler.calibration_only_run()
+        # if self.move_ready:
+        #     app.threads.robot_filler.calibration_only_run()
         
         self.move_ready = False
+
+        self.put_parametrs()
 
 
     def button_reset_pressed(self):
@@ -373,7 +375,7 @@ class Cip_control(Control):
         match self.param_num:
             case 1:
                 text = {
-                    0: 'Насоы: Скорость',
+                    0: 'Насосы: Скорость',
                     1: 'Pumps: Speed',
                     2: 'Pumpen: Geschwindigkeit',
                 }
@@ -478,7 +480,6 @@ class Cip_control(Control):
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
-
 
 
     def plus(self):

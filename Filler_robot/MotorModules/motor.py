@@ -62,7 +62,7 @@ class Motor:
 			self.pin_enable.set_value(0)
     
     
-	def init_acceleration(self, distance: int, mode: bool = True, print_log = True) -> float:
+	def init_acceleration(self, distance: int, mode: bool = True, print_log = False) -> float:
 		if self.acc_run:
 			self.speed_min = self.speed_def * self.k
 
@@ -126,7 +126,7 @@ class Motor:
 
 		for step in range(int(self.distance)):
 			if self.stop_for:
-				print(f'{self.name}, self.stop_for')
+				# print(f'{self.name}, self.stop_for')
 				while self.stop_for:
 					await asyncio.sleep(self.speed_def)
 
@@ -259,7 +259,7 @@ class Motor:
 		self.stop_for = False
 		self.pin_step.value = 0
 
-		print('self.time_distance', self.time_distance)
+		#print('self.time_distance', self.time_distance)
 
 	
 
@@ -273,7 +273,7 @@ class Motor:
 
 		self.stop = True
 
-		print('STOPOOOOP')
+		#print('STOPOOOOP')
 
 
 	# @_log_input_output(False)

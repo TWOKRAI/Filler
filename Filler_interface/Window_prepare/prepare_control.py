@@ -158,7 +158,9 @@ class Prepare_control(QMainWindow):
 
 
     def button_menu_clicked(self):
-        app.threads.robot_filler.calibration_stop()
+        if  app.threads.robot_filler.pumping_ready != True:
+            self.reset()
+
         app.window_main_filler.show()
         self.hide()
 
@@ -172,8 +174,6 @@ class Prepare_control(QMainWindow):
  
         
     def on_timer_timeout(self):
-        app.threads.robot_filler.calibration_stop()
-
         app.window_main_filler.show()
         self.hide()
     
@@ -238,7 +238,7 @@ class Prepare_control(QMainWindow):
 
         font = QFont()
         font.setFamily(app.font_family)
-        font.setPointSize(21)
+        font.setPointSize(23)
         font.setBold(False)
         font.setWeight(50)
         self.button_calibr.setFont(font)
@@ -319,7 +319,7 @@ class Prepare_control(QMainWindow):
                 label_name = {
                     0: 'Поставьте стакан перед роботом и нажмите "КАЛИБРОВКА"',
                     1: 'Place the glass in front of the robot and press "CALIBRATION"',
-                    2: 'Platzieren Sie das Glas vor dem Roboter und drücken Sie „KALIBRIEREN“.'
+                    2: 'Platzieren Sie das Glas vor dem Roboter und drücken Sie „KALIBRIERUNG“.'
                 }
 
             case 1:

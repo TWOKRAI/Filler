@@ -73,7 +73,7 @@ class Pump(QObject):
         
         # await self.motor._freq_async(speed, 1, 1000 * -self.dir)
         
-        await self.motor._freq_async(speed, 1, -500 * self.dir, accuration = False)
+        await self.motor._freq_async(speed, 1, -800 * self.dir, accuration = False)
         self.ready = True
         
 
@@ -117,13 +117,14 @@ class Pump_station(QObject):
         self.motor_1.enable_on(False)
         self.pump_1 = Pump('pumps_1', self.motor_1)
         self.pump_1_enable = True
+        self.pump_1.dir = -1
 
         self.motor_2 = Motor('pumps_2',  pins.motor_p2_step, pins.motor_p2_dir, pins.motor_p1p2_enable)
         self.motor_2.speed_def = 0.000005
         self.motor_2.enable_on(False)
         self.pump_2 = Pump('pumps_2', self.motor_2)
         self.pump_2_enable = True
-        self.pump_2.dir = -1
+        self.pump_2.dir = 1
         
         self.mode_game = False
         self.level = 1
@@ -177,8 +178,8 @@ class Pump_station(QObject):
                 ratio_1 = ml_1 / all_ml
                 ratio_2 = ml_2 / all_ml
 
-                ml_1 = self.cap_value * ratio_1
-                ml_2 = self.cap_value * ratio_2
+                ml_1 = self.cap_value * ratio_1 * 0.95
+                ml_2 = self.cap_value * ratio_2 * 0.95
 
                 print('new_ml', ml_1, ml_2, 'ratio', ratio_1, ratio_2)
 
@@ -279,12 +280,12 @@ class Pump_station(QObject):
         # tasks.append(asyncio.create_task(self.pump_1.motor.test()))
 
         if turn1 != 0 and self.pump_1_enable:
-            tasks.append(asyncio.create_task(self.pump_1._pour_async(turn1)))
+            tasks.append(asyncio.create_task(self.pump_1._pour_async(-turn1)))
         else:
             self.pump_1.ready = True
          
         if turn2 != 0 and self.pump_2_enable:
-            tasks.append(asyncio.create_task(self.pump_2._pour_async(-turn2)))
+            tasks.append(asyncio.create_task(self.pump_2._pour_async(turn2)))
         else:
             self.pump_2.ready = True
 

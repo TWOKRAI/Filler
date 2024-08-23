@@ -116,8 +116,8 @@ class Cip_control(Control):
         self.button_reset.pressed.connect(self.button_reset_pressed)
         self.button_reset.released.connect(self.button_reset_released)
 
-        file_path = os.path.join('Filler_interface', 'Window_cip', 'Data')
-        self.memory = Memory(db_path = file_path, db_file = 'memory_db')
+        # file_path = os.path.join('Filler_interface', 'Window_cip', 'Data')
+        # self.memory = Memory(db_path = file_path, db_file = 'memory_db')
         
         self.param_list = self.get_parametrs()
         self.param_list = self.memory_read(self.param_list)

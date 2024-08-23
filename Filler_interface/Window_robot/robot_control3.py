@@ -130,7 +130,7 @@ class Window_robot(Control):
         pop_show_text = {
             0: 'Вы хотите сделать параметры по умолчанию?',
             1: 'Do you want to make the settings default?',
-            2: 'Möchten Sie Standardeinstellungen vornehmen?',
+            2: 'Möchten Sie die Einstellungen als Standard festlegen?',
         }
 
         app.window_pop_up.label_2.setText(pop_show_text[self.lang])
@@ -153,8 +153,11 @@ class Window_robot(Control):
 
     def button_menu_clicked(self):
         super().button_menu_clicked()
-        self.memory_write(self.param_list)
 
+        self.put_parametrs()
+
+        self.memory_write(self.param_list)
+        
 
     def button_reset_pressed(self):
         self.timer_exit.start()

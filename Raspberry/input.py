@@ -22,7 +22,7 @@ class Input_request(QThread):
         self.running = True
 
         self.run_request = True
-        self.time_request = 0.05
+        self.time_request = 0.2 * 1000
 
         self.button_error = False
 
@@ -31,6 +31,8 @@ class Input_request(QThread):
 
         self.button = False
         self.first = False
+
+        self.block = False
 
 
     def run(self):
@@ -66,17 +68,28 @@ class Input_request(QThread):
                     self.button_error = False
                 
                 if pins.button.get_value():
-                    self.button_monitor.emit()
-                    self.motor_monitor.start()
-                    self.starting.emit()
+                    if not self.block: 
+                        self.motor_monitor.start()
+                        self.button_monitor.emit()
+                        self.starting.emit()
                     
-                    QThread.msleep(100)
+                    # QThread.msleep(100)
 
         
             except Exception as e:
                 print(f"Error reading pin values: {e}")
 
-            QThread.msleep(int(self.time_request * 1000))
+            QThread.msleep(int(self.time_request ))
+
+
+    def block_button_on(self):
+        self.block = True
+    
+
+    def block_button_off(self):
+        self.block = False
+
+
         
 
 # input_request = Input_request()

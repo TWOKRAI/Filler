@@ -53,7 +53,17 @@ class Thread():
                 self.input_request.motor_monitor.button_signal.connect(app.window_start.show)
                 self.input_request.motor_monitor.off_signal.connect(app.window_start.show)
                 self.input_request.motor_monitor.off_signal.connect(app.window_view.close)
-                # self.input_request.motor_monitor.off_signal.connect(self.stop_input_thread)
+                # \\self.input_request.motor_monitor.off_signal.connect(self.stop_input_thread)
+
+
+                app.window_filler.start_filler.connect(self.input_request.block_button_on)
+                app.window_filler.stop_filler.connect(self.input_request.block_button_off)
+
+                
+                self.input_request.motor_monitor.button_signal.connect(self.robot_filler.pump_station.stop_pumps)
+                self.input_request.motor_monitor.button_signal.connect(self.robot_filler.filler_stop)
+                self.input_request.motor_monitor.button_signal.connect(app.window_prepare.reset)
+                self.input_request.motor_monitor.button_signal.connect(self.robot_filler.calibration_only_run)
 
                 self.input_request.error.connect(app.window_view.close)
 
