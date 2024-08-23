@@ -94,6 +94,7 @@ class Camera:
         img_border = self.add_border(img_resize, 100)
         
         self.image_out = cv2.cvtColor(img_border, cv2.COLOR_RGB2BGR)
+        self.image_copy = self.image_out.copy()
 
         self.img_width, self.img_height = self.image_out.shape[1], self.image_out.shape[0]
 

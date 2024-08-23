@@ -52,9 +52,12 @@ class Input_request(QThread):
 
             try:
                 if pins.button_stop.get_value():
-                    self.button_error = True
                     self.show_error.emit()
+
+                    # if self.button_error == False:
                     self.error.emit()
+
+                    self.button_error = True
                 else:
                     if self.button_error == True:
                         self.close_error.emit()

@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from PyQt5.QtGui import QPixmap
 import os
 import numpy as np
@@ -12,6 +12,9 @@ from Filler_interface.app import app
 
 
 class View_control(QMainWindow):
+    view_start = pyqtSignal()
+    view_stop = pyqtSignal()
+
     def __init__(self):
         super().__init__()
 
@@ -47,11 +50,20 @@ class View_control(QMainWindow):
 
 
     def show(self, id = 0):
-        if id == 1:
-            self.view2 = True
-            app.threads.robot_filler.view_run()   
+        self.hide()
+
+        if app.window_filler.play == False:
+            #app.threads.robot_filler.view_run() 
+            self.view_start.emit()
         else:
-            self.view2 = False
+            pass
+
+
+        # if id == 1:
+        #     self.view2 = True
+        #     app.threads.robot_filler.view_run()   
+        # else:
+        #     self.view2 = False
                  
 
         if app.on_fullscreen: self.fullscreen()
@@ -70,8 +82,7 @@ class View_control(QMainWindow):
 
 
     def close(self):
-        if self.view2 == True:
-            app.threads.robot_filler.view_stop()
+        self.view_stop.emit()
 
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(

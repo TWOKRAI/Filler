@@ -35,12 +35,17 @@ class Thread():
                 # self.input_request.no_error.connect(app.window_prepare.reset)
                 # self.input_request.no_error.connect(self.robot_filler.robot.no_stop_motors)
                 
-                self.input_request.error.connect(self.robot_filler.robot.stop_motors)
-                self.input_request.error.connect(self.robot_filler.pump_station.stop_pumps)
-                self.input_request.error.connect(self.robot_filler.on_button_error)
-
-                # self.input_request.no_error.connect(app.window_prepare.reset)
-                self.input_request.no_error.connect(self.robot_filler.no_button_error)
+                self.input_request.error.connect(self.robot_filler.error_button)
+                # self.input_request.error.connect(self.robot_filler.robot.stop_motors)
+                # self.input_request.error.connect(self.robot_filler.pump_station.stop_pumps)
+                # self.input_request.error.connect(self.robot_filler.reset_calibration)
+                # self.input_request.error.connect(self.robot_filler.filler_stop)
+                # self.input_request.error.connect(self.robot_filler.on_button_error)
+                
+                
+                self.input_request.no_error.connect(app.window_prepare.reset)
+                self.input_request.no_error.connect(self.robot_filler.no_error_button)
+                self.input_request.no_error.connect(app.window_main_filler.show)
 
                 self.input_request.close_error.connect(app.window_error.close)
 
@@ -76,6 +81,15 @@ class Thread():
                 # app.window_prepare.calibration.connect(self.robot_filler.calibration)
                 app.window_prepare.reset_calibration.connect(self.robot_filler.reset_calibration)
                 app.window_prepare.pumping.connect(self.robot_filler.pumping)
+
+                app.window_filler.start_filler.connect(self.robot_filler.filler_run)
+                app.window_filler.stop_filler.connect(self.robot_filler.pump_station.stop_pumps)
+                app.window_filler.stop_filler.connect(self.robot_filler.filler_stop)
+                # app.window_filler.stop_filler.connect(self.robot_filler.robot.stop_motors)
+                # app.window_filler.stop_filler.connect(self.robot_filler.neuron.forget)
+
+                app.window_view.view_start.connect(self.robot_filler.view_run)
+                app.window_view.view_stop.connect(self.robot_filler.view_stop)
 
                 self.robot_filler.pump_station.bottle_1.connect(app.window_filler.value_update_pump_1)
                 self.robot_filler.pump_station.bottle_2.connect(app.window_filler.value_update_pump_2)

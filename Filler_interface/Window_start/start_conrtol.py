@@ -35,6 +35,8 @@ class Start_control(QMainWindow, Ui_MainWindow):
         # self.setGraphicsEffect(self.opacity_effect)
 
         # self.animation = QPropertyAnimation(self.opacity_effect, b"opacity")
+
+        self.show_marker = 1
        
 
     def fullscreen(self):        
@@ -59,6 +61,16 @@ class Start_control(QMainWindow, Ui_MainWindow):
         app.window_focus = self.window_name
         print(app.window_focus)
         app.close_windows()
+
+        self.show_marker = 1
+
+   
+    def show_2(self):
+        if app.on_fullscreen: self.fullscreen()
+        self.button_raise()
+        super().show()
+
+        self.show_marker = 2
 
 
     def show_animation(self):
@@ -89,7 +101,10 @@ class Start_control(QMainWindow, Ui_MainWindow):
 
     def close(self):
         self.timer.stop()
-        app.window_main_filler.show()
+
+        if self.show_marker == 1:
+            app.window_main_filler.show()
+
         self.hide()
     
 

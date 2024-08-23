@@ -189,7 +189,9 @@ class Cip_control(Control):
         super().button_menu_clicked()
         self.memory_write(self.param_list)
 
-        app.threads.robot_filler.calibration_only_run()
+        if self.move_ready:
+            app.threads.robot_filler.calibration_only_run()
+        
         self.move_ready = False
 
 

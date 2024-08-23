@@ -91,8 +91,8 @@ class Neuron:
 
 		self.objects_filter = []
 		
-		self.region_x = 15
-		self.region_y = 15
+		self.region_x = 12
+		self.region_y = 12
 		self.leen = 1800
 		
 		self.hands_data = []
@@ -109,6 +109,9 @@ class Neuron:
 		self.objects_all = []
 		self.memory_objects = []
 		self.objects = []
+		self.objects_filter = []
+
+		print('ЗАБЫЛ')
 	
 
 	def neuron_vision(self):
@@ -116,7 +119,7 @@ class Neuron:
 			self.id = 0
 			data = []
 
-			self.camera.running()
+			cadr_1 = self.camera.read_cam()
 			
 			self.camera.running()
 			tuple_obj = self.find_objects()
@@ -132,7 +135,6 @@ class Neuron:
 			tuple_obj = self.find_objects()
 			data.append(tuple_obj)
 			self.interface.running()
-
 		
 			# Сортируем список по вторым элементам
 			sorted_data = sorted(data, key=lambda x: x[1])
@@ -151,9 +153,12 @@ class Neuron:
 
 			self.objects_filter = max_value_third[0]
 
+			if len(self.objects_filter) <= len(self.memory_objects):
+				self.memory_objects = self.objects_filter
+
 			self.list_coord = self.pixel_to_coord(self.objects_filter)
-			
-			if len(self.list_coord) <= 0:
+
+			if len(self.list_coord) == 0:
 				self.forget()
 
 
@@ -257,6 +262,58 @@ class Neuron:
 
 		return self.objects_all
 	
+	
+
+	def compare_images_feature_matching(self, obj):
+		x1 = obj[4]
+		y1 = obj[5]
+		w = obj[6]
+		h = obj[7]
+		xr_center = obj[8]
+		yr_center = obj[9]	
+		perspective = obj[10]
+		xr_center_2 = obj[11]
+		yr_center_2 = obj[12]
+		
+
+		image_1 = self.camera.image_copy
+		image_2 = self.camera.read_cam()
+
+		image_1_gray = cv2.cvtColor(image_1, cv2.COLOR_BGR2GRAY)
+		image_2_gray = cv2.cvtColor(image_2, cv2.COLOR_BGR2GRAY)
+
+		# image_1_gray = image_1
+		# image_2_gray = image_2
+
+		cropped_image_1 = image_1_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 10, x1 - 5 : x1 + w + 5]
+		cv2.imwrite('cropped_image.png', cropped_image_1)
+		
+		cropped_image_2 = image_2_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 10, x1 - 5 : x1 + w + 5]
+		cv2.imwrite('cropped_image_2.png', cropped_image_2)
+
+		sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.012, edgeThreshold=100)
+
+		# Нахождение ключевых точек и дескрипторов
+		kp1, des1 = sift.detectAndCompute(cropped_image_1, None)
+		kp2, des2 = sift.detectAndCompute(cropped_image_2, None)
+
+		print('len(kp1)', len(kp1), len(kp2))
+
+    	# Рисование ключевых точек на обрезанных изображениях
+		cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
+		cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
+
+		# Сохранение изображений с нарисованными ключевыми точками
+		cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
+		cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
+
+		if len(kp2) >= len(kp1) * 0.4:
+			print('Стакан есть')
+			return True
+		else:
+			print('Стакан нету')
+			return False
+		
 
 	def detect_v4(self, image):
 		self.objects_all = []
@@ -464,13 +521,18 @@ class Neuron:
 
 			z2 = round(z2, 1)
 
-			v = (3.142 * ((dx / 140) * z2/z) ** 2 * z / 100) * 1000 * 0.8
+			dx = w / 19.2 * (1 + abs(15.7 - y) * 0.04)
+
+			print("W", dx)
+
+
+			v = (3.142 * (dx / 2) ** 2 * z2) / 2 * (1 - abs(self.camera.img_width/2 - xr_center_2) / 250)
 			
-			print('VVV', v, dx, z2)
+			print('VVV', v, dx, z2) 
 
 			v = round(v, 1)
 			
-			list_coord.append((x, y, z2))
+			list_coord.append((x, y, z2, v))
 			
 		# 	print('w', w)
 		

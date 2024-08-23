@@ -82,7 +82,7 @@ class Axis:
 	
 
 
-class Robot_module():
+class Robot_module(QObject):
 	def __init__(self, camera = None, neuron = None, interface = None, pump_station = None, laser = None):
 		super().__init__()
 
@@ -91,6 +91,8 @@ class Robot_module():
 		self.interface = interface
 		self.pump_station = pump_station
 		self.laser = laser
+
+		self.start = False
 
 		self.print_on = True
 
@@ -193,6 +195,10 @@ class Robot_module():
 		# self.pump_station.motor_1.stop_for = True
 		# self.pump_station.motor_2.stop_for = True
 
+		self.stopped = True
+
+		self.start = False
+
 		self.axis_x.motor.stop = True
 		self.axis_y.motor.stop = True
 		self.axis_z.motor.stop = True
@@ -201,16 +207,17 @@ class Robot_module():
 
 		self.calibration_ready = False
 
+
 	
 	def no_stop_motors(self):
+		self.stopped = False
+
 		self.pump_station.motor_1.stop = False
 		self.pump_station.motor_2.stop = False
 
 		self.axis_x.motor.stop = False
 		self.axis_y.motor.stop = False
 		self.axis_z.motor.stop = False
-		
-		self.enable_motors(False)
 
 		self.button_stop = False
 
@@ -219,6 +226,14 @@ class Robot_module():
 		self.axis_x.motor.null_value()
 		self.axis_y.motor.null_value()
 		self.axis_z.motor.null_value()
+
+		self.distance_x = 0
+		self.distance_y = 0
+		self.distance_z = 0
+
+		self.distance_x_end = 0
+		self.distance_y_end = 0
+		self.distance_z_end = 0
 
 
 	def angle_to_coord(self, angle_x, angle_y, angle_z):
@@ -427,7 +442,7 @@ class Robot_module():
 		
 
 	async def _detect_sensor(self):
-		while True:
+		while not self.button_stop:
 			if self.stopped:
 				break
 
@@ -603,8 +618,11 @@ class Robot_module():
 	def move_objects(self, pumping = False):
 		switch_y = pins.switch_y.get_value()
 
-		if not switch_y:
+		if not switch_y and self.button_stop == False:
 			print('Не на свитче Y')
+			self.calibration()
+
+		if not self.calibration_ready and self.button_stop == False:
 			self.calibration()
 
 		
@@ -622,9 +640,14 @@ class Robot_module():
 		completed = False
 
 		for coord in list_coord:
+			print('self.button_stop', self.button_stop)
+			
+			if self.start == False and self.pumping_find == False:
+				break
+
 			self.enable_motors(True)
 			
-			x, y, z = coord
+			x, y, z, v = coord
 
 			# if z > 12:
 			# 	z = z + 3
@@ -652,20 +675,28 @@ class Robot_module():
 
 				# self.neuron.find_objects()
 
-				if self.pumping_find:
-					print('Ищет')
-					self.find = True
-					break
-
+				
 				if self.button_stop == False:
-					self.pump_station.filler()
-					completed = True
-					list_objects[i][0] = True
-					self.neuron.memory_objects = list_objects
+					if app.window_robot.presence_cup == 1:
+						presence = self.neuron.compare_images_feature_matching(list_objects[i])
+					else:
+						presence = True
+
+
+					if presence:
+						if self.pumping_find:
+							self.find = True
+							break
+						
+						self.pump_station.cap_value = v
+						self.pump_station.filler()
+						completed = True
+						list_objects[i][0] = True
+						self.neuron.memory_objects = list_objects
+
 					self.interface.save_image()
 
-					if not self.pumping_find:
-						self.go_home()
+					self.go_home()
 
 			i += 1
 		
@@ -676,7 +707,7 @@ class Robot_module():
 
 
 	async def _detect_switch_x(self):
-		while True:
+		while not self.button_stop:
 			switch_x = pins.switch_x.get_value()
 
 			if switch_x:
@@ -703,7 +734,7 @@ class Robot_module():
 	
 	
 	async def _detect_switch_y(self):
-		while True:
+		while not self.button_stop:
 			switch_y = pins.switch_y.get_value()
 
 			if switch_y:
@@ -732,30 +763,33 @@ class Robot_module():
 	def calibration(self):
 		self.laser.on_off(0)
 
-		self.axis_x.motor.enable_on(True)
-		self.axis_y.motor.enable_on(True)
-		self.axis_z.motor.enable_on(False)
-
-		QThread.msleep(1000)
-
-		self.go_home_marker = True
-
-		switch_y = pins.switch_y.get_value()
-		if switch_y:
-			self.axis_y.motor.speed_def = 0.002
-			self.axis_y.motor.move(210)
-
-			self.axis_y.motor.speed_def = 0.0007
+		if self.button_stop == False:
+			self.axis_x.motor.enable_on(True)
+			self.axis_y.motor.enable_on(True)
 			self.axis_z.motor.enable_on(False)
+
+			QThread.msleep(1000)
 			
+			self.go_home_marker = True
 
-		asyncio.run(self._calibration_y_async())
-		self.move(0, -3, 0)
+			switch_y = pins.switch_y.get_value()
+			if switch_y:
+				self.axis_y.motor.speed_def = 0.002
+				self.axis_y.motor.move(210)
 
-		asyncio.run(self._calibration_x_async())
-		self.move(790, 0, 0)
+				self.axis_y.motor.speed_def = 0.0007
+				self.axis_z.motor.enable_on(False)
+				
+			
+			asyncio.run(self._calibration_y_async())
+			self.move(0, -5, 0)
 
-		self.null_value()
+			asyncio.run(self._calibration_x_async())
+			self.move(790, 0, 0)
+
+			self.null_value()
+
+			self.calibration_ready = True
 
 
 	async def _no_enabel_z(self):
@@ -776,6 +810,8 @@ class Robot_module():
 		self.move_home = False
 		self.move(-self.distance_x_end, -self.distance_y_end - 500, -self.distance_z_end, detect = True)
 		self.move_home = False
+		self.move(0, -5, 0)
+
 
 		self.enable_motors(False)
 

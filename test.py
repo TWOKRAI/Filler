@@ -1,81 +1,104 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout
-from PyQt5.QtCore import QThread, pyqtSignal, QTimer
-import time
+import cv2
+import numpy as np
 
-class Filler(QThread):
-    update_signal = pyqtSignal(int)
+# Функция для обновления изображений и ключевых точек
+def compare_images_feature_matching(nfeatures, contrastThreshold, edgeThreshold):
+    # Получение изображения из камеры
+    # image_1 = self.camera.image_copy
+    # image_2 = self.camera.read_cam()
 
-    def __init__(self):
-        super().__init__()
-        self.count = 0
-        self.running = False
+    image_1 = cv2.imread('cropped_image.png')
+    image_2 = cv2.imread('cropped_image_2.png')
 
-    def run(self):
-        while self.running:
-            self.count += 1
-            self.update_signal.emit(self.count)
-            time.sleep(1)
+    # Преобразование изображений в оттенки серого
+    image_1_gray = cv2.cvtColor(image_1, cv2.COLOR_BGR2GRAY)
+    image_2_gray = cv2.cvtColor(image_2, cv2.COLOR_BGR2GRAY)
 
-    def starting(self):
-        self.running = True
-        self.start()
+    # Обрезка изображений
+    cropped_image_1 = image_1_gray
+    cropped_image_2 = image_2_gray 
 
-    def stop(self):
-        self.running = False
+    # Инициализация SIFT детектора
+    print(edgeThreshold)
+    sift = cv2.SIFT_create(nfeatures = nfeatures, contrastThreshold = contrastThreshold, edgeThreshold = edgeThreshold)
 
-    def go(self):
-        print("go")
+    # Нахождение ключевых точек и дескрипторов
+    kp1, des1 = sift.detectAndCompute(cropped_image_1, None)
+    kp2, des2 = sift.detectAndCompute(cropped_image_2, None)
 
-        for i in range(5):
-            print('go2')
-            time.sleep(1)
+    
+
+    # Проверка, что дескрипторы не пустые
+    if des1 is None or des2 is None:
+        print("Дескрипторы пустые. Проверьте изображения и параметры детектора.")
+        return False
+    
+    print('len(kp1)', len(kp1), len(kp2))
+
+    if len(kp2) >= len(kp1) * 0.33:
+        print('Стакан есть')
+    else:
+        print('Стакан нету')
 
 
-class MyWindow(QWidget):
-    def __init__(self):
-        super().__init__()
+    # Рисование ключевых точек на обрезанных изображениях
+    cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
+    cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 
-        self.filler = Filler()
-        self.filler.update_signal.connect(self.update_count)
+    # Сохранение изображений с нарисованными ключевыми точками
+    cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
+    cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
+    cv2.imshow('Controls', cropped_image_1_with_keypoints)
+    cv2.imshow('Controls2', cropped_image_2_with_keypoints)
+    # # Инициализация BFMatcher
+    # bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
 
-        self.initUI()
+    # # Сопоставление дескрипторов
+    # matches = bf.match(des1, des2)
 
-    def initUI(self):
-        self.setWindowTitle('PyQt Example')
+    # # Сортировка совпадений по расстоянию
+    # matches = sorted(matches, key=lambda x: x.distance)
+    # num_matches = len(matches)
 
-        self.count_label = QLabel('Count: 0', self)
-        self.start_button = QPushButton('�����', self)
-        self.stop_button = QPushButton('����', self)
-        self.go_button = QPushButton('Go', self)
+    # # Максимально возможное количество совпадений
+    # max_matches = min(len(kp1), len(kp2))
 
-        self.start_button.clicked.connect(self.start_counting)
-        self.stop_button.clicked.connect(self.stop_counting)
-        self.go_button.clicked.connect(self.go)
+    # # Процент совпадений
+    # if max_matches != 0:
+    #     match_percentage = (num_matches / max_matches) * 100
+    # else:
+    #     match_percentage = 0  # или любое другое значение, которое имеет смысл в вашем контексте
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.count_label)
-        layout.addWidget(self.start_button)
-        layout.addWidget(self.stop_button)
-        layout.addWidget(self.go_button)
+    # # Результат сравнения
+    # result = match_percentage >= 80
 
-        self.setLayout(layout)
+    # print(f'Сходство: {result}, {match_percentage}')
 
-    def start_counting(self):
-        if not self.filler.isRunning():
-            self.filler.starting()
+    # return result
 
-    def stop_counting(self):
-        self.filler.stop()
 
-    def go(self):
-        self.filler.go()
+# Создание окна для ползунков
+cv2.namedWindow('Controls')
+cv2.namedWindow('Controls2')
 
-    def update_count(self, count):
-        self.count_label.setText(f'Count: {count}')
+# Создание ползунков для настройки параметров
+cv2.createTrackbar('nfeatures', 'Controls', 1337, 10000, lambda x: None)
+cv2.createTrackbar('contrastThreshold', 'Controls', 13, 100, lambda x: None)
+cv2.createTrackbar('edgeThreshold', 'Controls', 33, 100, lambda x: None)
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = MyWindow()
-    window.show()
-    sys.exit(app.exec_())
+# Основной цикл для обновления изображений и ключевых точек
+while True:
+    # Получение текущих значений ползунков
+    nfeatures = cv2.getTrackbarPos('nfeatures', 'Controls')
+    contrastThreshold = cv2.getTrackbarPos('contrastThreshold', 'Controls') / 1000.0
+    edgeThreshold = cv2.getTrackbarPos('edgeThreshold', 'Controls') 
+
+    # Обновление изображений и ключевых точек
+    compare_images_feature_matching(nfeatures, contrastThreshold, edgeThreshold)
+
+    # Ожидание нажатия клавиши для выхода
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Закрытие всех окон
+cv2.destroyAllWindows()

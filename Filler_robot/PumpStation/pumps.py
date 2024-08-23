@@ -6,7 +6,7 @@ from Filler_robot.MotorModules.motor import Motor
 
 from Raspberry.pins_table import pins
 
-from Filler_interface import app
+from Filler_interface.app import app
 
 
 class Pump(QObject):
@@ -91,7 +91,7 @@ class Pump(QObject):
     
 
     async def _pour_async_down(self, dir):
-        self.motor.stop = False
+        # self.motor.stop = False
         self.ready = False
 
         if dir == True:
@@ -132,6 +132,9 @@ class Pump_station(QObject):
 
         self.filler_run = False
 
+        self.autovalue = True
+        self.cap_value = 0
+
         # self.statistic_pump_1 = int(neuron.memory_read('memory.txt','pump_1'))
         # self.statistic_pump_2 = int(neuron.memory_read('memory.txt', 'pump_2'))
         
@@ -162,6 +165,25 @@ class Pump_station(QObject):
 
         ml_1 = app.window_filler.pump_value_1 
         ml_2 = app.window_filler.pump_value_2
+
+        self.autovalue = app.window_robot.autovalue
+
+        print('АВТООБЪЕМ', self.autovalue)
+
+        if self.autovalue:
+            all_ml = ml_1 + ml_2
+
+            if all_ml > self.cap_value:
+                ratio_1 = ml_1 / all_ml
+                ratio_2 = ml_2 / all_ml
+
+                ml_1 = self.cap_value * ratio_1
+                ml_2 = self.cap_value * ratio_2
+
+                print('new_ml', ml_1, ml_2, 'ratio', ratio_1, ratio_2)
+
+                ml_1 = int(ml_1)
+                ml_2 = int(ml_2)
 
         asyncio.run(self._all_pour_async(ml_1, ml_2))
 
@@ -202,8 +224,6 @@ class Pump_station(QObject):
 
         self.enable_motors(False)
 
-        self.motor_1.stop_for = True
-        self.motor_2.stop_for = True
 
 
     async def _stop_pumps(self):
@@ -249,6 +269,7 @@ class Pump_station(QObject):
         self.stop2 = False
         self.pump_1.ready = False
         self.pump_2.ready = False
+        
 
         tasks = []
 

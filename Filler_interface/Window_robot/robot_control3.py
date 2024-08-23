@@ -104,7 +104,13 @@ class Window_robot(Control):
         self.button_reset.pressed.connect(self.button_reset_pressed)
         self.button_reset.released.connect(self.button_reset_released)
 
+        self.speed_robot = 10
+        self.time_robot = 5
+        self.laser_mode = 2
+        self.autovalue = 1
+        self.presence_cup = 1
         
+
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Window_robot', 'Data')
         self.memory = Memory(db_path = file_path, db_file = 'memory_db')
 
@@ -163,14 +169,13 @@ class Window_robot(Control):
 
 
     def get_parametrs(self): 
-        self.speed_robot = 10
-        self.time_robot = 5
-        self.laser_mode = 2
 
         self.param_list = {
             1: self.speed_robot,
             2: self.time_robot,
             3: self.laser_mode,
+            4: self.autovalue,
+            5: self.presence_cup,
         }
     
         return self.param_list
@@ -186,6 +191,8 @@ class Window_robot(Control):
         self.speed_robot = self.param_list[1]
         self.time_robot = self.param_list[2]
         self.laser_mode = self.param_list[3]
+        self.autovalue = self.param_list[4]
+        self.presence_cup = self.param_list[5]
 
 
     def memory_write(self, data):
@@ -198,6 +205,8 @@ class Window_robot(Control):
         self.speed_robot = 5
         self.time_robot = 5
         self.laser_mode = 2
+        self.autovalue = 1
+        self.presence_cup = 1
 
         self.param_list = self.get_parametrs()
         self.memory_write(self.param_list)
@@ -226,6 +235,24 @@ class Window_robot(Control):
 
                 size_text = 25
             case 3:
+                text = {
+                    0: 'НАСТРОЙКИ РОБОТА', 
+                    1: 'ROBOT SETTINGS',
+                    2: 'ROBOTEREINSTELLUNGEN',
+                }
+
+                size_text = 25
+            
+            case 4:
+                text = {
+                    0: 'НАСТРОЙКИ РОБОТА', 
+                    1: 'ROBOT SETTINGS',
+                    2: 'ROBOTEREINSTELLUNGEN',
+                }
+
+                size_text = 25
+
+            case 5:
                 text = {
                     0: 'НАСТРОЙКИ РОБОТА', 
                     1: 'ROBOT SETTINGS',
@@ -285,7 +312,29 @@ class Window_robot(Control):
                 value = value
 
                 size_text = 90
-          
+            
+            case 4:
+                value_text = [
+                    ['Выкл', 'Off', 'Aus'],
+                    ['Вкл', 'On', 'An'],
+                    ]
+
+                value = value_text[value]
+                value = value[self.lang]
+        
+                size_text = 90
+            
+            case 5:
+                value_text = [
+                    ['Выкл', 'Off', 'Aus'],
+                    ['Вкл', 'On', 'An'],
+                    ]
+
+                value = value_text[value]
+                value = value[self.lang]
+        
+                size_text = 90
+               
             case _:
                 value = None
 
@@ -320,6 +369,24 @@ class Window_robot(Control):
 
                 size_text = 35
             case 3:
+                text = {
+                    0: '',
+                    1: '',
+                    2: '',
+                }
+
+                size_text = 35
+            
+            case 4:
+                text = {
+                    0: '',
+                    1: '',
+                    2: '',
+                }
+
+                size_text = 35
+
+            case 5:
                 text = {
                     0: '',
                     1: '',
@@ -375,7 +442,24 @@ class Window_robot(Control):
                 }
 
                 size_text = 35
-          
+
+            case 4:
+                text = {
+                    0: 'Автообъем для ограничения',
+                    1: 'Auto volume for limitation',
+                    2: 'Automatisches Volumen zur Begrenzung',
+                }
+
+                size_text = 29
+            
+            case 5:
+                text = {
+                    0: 'Проверка наличия стакана',
+                    1: 'Check for the presence of a glass',
+                    2: 'Überprüfung auf das Vorhandensein eines Glases',
+                }
+
+                size_text = 29
             case _:
                 text = {
                     0: '',
@@ -419,9 +503,17 @@ class Window_robot(Control):
             case 3:
                 if self.param_list[self.param_num] > 0:
                     self.param_list[self.param_num] -= 1
-                
+            
+            case 4:
+                if self.param_list[self.param_num] > 0:
+                    self.param_list[self.param_num] -= 1
+
+            case 5:
+                if self.param_list[self.param_num] > 0:
+                    self.param_list[self.param_num] -= 1
+                  
                 self.put_parametrs()
-                app.recolor()
+
 
         self.update()
         self.enable_control()
@@ -464,6 +556,18 @@ class Window_robot(Control):
                     self.button_minus.setEnabled(False)
                 else:
                     self.button_minus.setEnabled(True)
+            
+            case 4:
+                if self.param_list[self.param_num] <= 0:
+                    self.button_minus.setEnabled(False)
+                else:
+                    self.button_minus.setEnabled(True)
+
+            case 5:
+                if self.param_list[self.param_num] <= 0:
+                    self.button_minus.setEnabled(False)
+                else:
+                    self.button_minus.setEnabled(True)
 
 
     def plus(self):
@@ -484,6 +588,18 @@ class Window_robot(Control):
                 self.put_parametrs()
             case 3:
                 if self.param_list[self.param_num] < 2:
+                    self.param_list[self.param_num] += 1
+
+                self.put_parametrs()
+
+            case 4:
+                if self.param_list[self.param_num] < 1:
+                    self.param_list[self.param_num] += 1
+
+                self.put_parametrs()
+
+            case 5:
+                if self.param_list[self.param_num] < 1:
                     self.param_list[self.param_num] += 1
 
                 self.put_parametrs()
@@ -532,6 +648,19 @@ class Window_robot(Control):
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
+
+            case 4:
+                if self.param_list[self.param_num] >= 1:
+                    self.button_plus.setEnabled(False)
+                else:
+                    self.button_plus.setEnabled(True)
+
+            case 5:
+                if self.param_list[self.param_num] >= 1:
+                    self.button_plus.setEnabled(False)
+                else:
+                    self.button_plus.setEnabled(True)
+
 
     
     def left(self):

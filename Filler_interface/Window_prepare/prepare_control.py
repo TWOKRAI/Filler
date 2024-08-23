@@ -141,8 +141,6 @@ class Prepare_control(QMainWindow):
         self.myprogressBar.setValue(self.value)
         self.button_calibr.setEnabled(True)
 
-        app.threads.robot_filler.calibration_stop()
-
         self.reset_calibration.emit()
 
         self.update_text()
@@ -245,7 +243,7 @@ class Prepare_control(QMainWindow):
         font.setWeight(50)
         self.button_calibr.setFont(font)
 
-        button_size = QSize(200, 120)
+        button_size = QSize(200, 130)
         self.button_calibr.setFixedSize(button_size)
         
 
@@ -261,9 +259,9 @@ class Prepare_control(QMainWindow):
 
         print('self.param_num', self.param_num)
 
-        if app.threads.robot_filler.robot.calibration_ready == True:
+        if app.threads.robot_filler.pumping_ready == True:
             self.param_num = 6
-            app.threads.robot_filler.robot.calibration_ready = False
+            #app.threads.robot_filler.pumping_ready = False
 
         match self.param_num:
             case 1:
@@ -290,7 +288,7 @@ class Prepare_control(QMainWindow):
             case 6:
                 # app.threads.robot_filler.filler_run()
 
-                app.threads.robot_filler.robot.calibration_ready = True
+                app.threads.robot_filler.pumping_ready = True
 
                 app.window_filler.show()
                 self.hide()
@@ -402,59 +400,7 @@ class Prepare_control(QMainWindow):
 
 
         self.label.setText(label_name[self.lang])
-        
-
-    # def update_prepare(self, id):
-    #     print('id', id)
-
-    #     match id:
-    #         case 0:
-    #             label_name = {
-    #                 0: 'Калибровка готова (Нажмите продолжить)',
-    #                 1: 'Началась rrrr калибровка робота (Подождите)',
-    #             }
-
-    #             self.label.setText(label_name[self.lang])
-    #             self.button_calibr.setEnabled(True)
-
-    #             self.value = 40
-
-    #             self.myprogressBar.setValue(self.value)
-
-    #             print(self.value)
-
-
-    #         case 1:
-    #             label_name = {
-    #                 0: 'Стакан обнаружен (Нажмите Прокачка)',
-    #                 1: 'Началась rrrr калибровка робота (Подождите)',
-    #             }
-
-    #             self.label.setText(label_name[self.lang])
-    #             self.button_calibr.setEnabled(True)
-
-    #             self.value = 65
-
-    #             self.myprogressBar.setValue(self.value)
-
-    #             print(self.value)
                 
-    #         case 2:
-    #             label_name = {
-    #                 0: 'Система готова (Нажмите Начать)',
-    #                 1: 'Началась rrrr калибровка робота (Подождите)',
-    #             }
-
-    #             self.label.setText(label_name[self.lang])
-    #             self.button_calibr.setEnabled(True)
-
-    #             self.value = 100
-
-    #             self.myprogressBar.setValue(self.value)
-
-    #             print(self.value)
-            
-        
 
 
 window_prepare = Prepare_control()

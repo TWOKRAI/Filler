@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QTimer, QSize
+from PyQt5.QtCore import QTimer, QSize, pyqtSignal
 from PyQt5.QtGui import QIcon, QFont
 import os
 
@@ -11,6 +11,10 @@ from Filler_interface.filler import filler
 
 
 class Control(Control):
+    start_filler = pyqtSignal()
+    stop_filler = pyqtSignal()
+
+
     def __init__(self):
         super().__init__()
         
@@ -160,19 +164,20 @@ class Control(Control):
     def button_menu_clicked(self):
         super().button_menu_clicked()
         self.memory_write(self.param_list)
-
-        app.threads.robot_filler.filler_stop()
+        
+        # app.threads.robot_filler.robot.stop_motors()
+        # app.threads.robot_filler.all_stop()
 
         self.play = False
 
 
 
     def button_view_pressed(self):
-        self.timer_exit.start()
+        pass
 
 
     def button_view_released(self):
-        self.timer_exit.stop()
+        pass
 
 
     def on_timer_reset(self):
@@ -640,11 +645,13 @@ class Control(Control):
         print('start')
 
         if self.play == True:
-            app.threads.robot_filler.filler_run()
+            self.start_filler.emit()
         else:
-            app.threads.robot_filler.filler_stop()
+            self.stop_filler.emit()
+            # app.threads.robot_filler.filler_stop()
 
-
+            # app.threads.robot_filler.robot.stop_motors()
+            # app.threads.robot_filler.all_stop()
 
         self.button_start_update()            
 

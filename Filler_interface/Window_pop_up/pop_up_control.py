@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont
 import os
 
@@ -22,31 +22,36 @@ class Pop_up_control(QMainWindow):
 
         self.func = None
 
+        self.timer = QTimer(self)
+        self.timer.setSingleShot(True)
+        self.timer.setInterval(500) 
+        self.timer.timeout.connect(self.hide)
+
+
         self.font_text = QFont()
         self.font_text.setFamily(app.font_family)
 
         font_1 = QFont()
         font_1.setFamily(app.font_family)
-        font_1.setPointSize(25)
+        font_1.setPointSize(26)
         font_1.setBold(False)
         font_1.setWeight(50)
 
         font_2 = QFont()
         font_2.setFamily(app.font_family)
-        font_2.setPointSize(18)
+        font_2.setPointSize(22)
         font_2.setBold(False)
         font_2.setWeight(50)
 
         self.label_2.setFont(font_1)
         self.label_2.setWordWrap(True)
 
-        self.pushButton_ok.setFixedSize(150, 100)
+        self.pushButton_ok.setFixedSize(170, 120)
         self.pushButton_ok.setFont(font_2)
 
         self.pushButton_ok.clicked.connect(self.ok)
 
-
-        self.pushButton_cancel.setFixedSize(150, 100)
+        self.pushButton_cancel.setFixedSize(170, 120)
         self.pushButton_cancel.setFont(font_2)
 
         self.pushButton_cancel.clicked.connect(self.cancel)
@@ -103,10 +108,10 @@ class Pop_up_control(QMainWindow):
         ]
 
         self.font_size = [
-            [25, 16],
-            [25, 16],
-            [25, 16],
-            [25, 16],
+            [27, 18],
+            [27, 18],
+            [27, 18],
+            [27, 18],
         ]
 
 
@@ -142,8 +147,8 @@ class Pop_up_control(QMainWindow):
 
     def ok(self):
         self.func()
-        self.hide()
-
+        self.timer.start()
+        
     
     def cancel(self):
         self.hide()
