@@ -66,7 +66,7 @@ class App(QApplication):
             self.window_main_filler.fullscreen()
             self.window_list1.fullscreen()
             self.window_statistic.fullscreen()
-            self.window_settings1.fullscreen()
+            # self.window_settings1.fullscreen()
             self.window_settings2.fullscreen()
             self.window_prepare.fullscreen()
             self.window_view.fullscreen()
@@ -129,7 +129,7 @@ class App(QApplication):
         
         self.window_main_filler.set_icons()
         self.window_list1.set_icons()
-        self.window_settings1.set_icons()
+        # self.window_settings1.set_icons()
         self.window_settings2.set_icons()
         self.window_statistic.set_icons()
         self.window_cip.set_icons()
@@ -164,9 +164,9 @@ class App(QApplication):
             self.window_statistic.hide()
             print(f'close: {self.window_statistic.window_name}')
 
-        if self.window_focus != self.window_settings1.window_name:
-            self.window_settings1.hide()
-            print(f'close: {self.window_settings1.window_name}')
+        # if self.window_focus != self.window_settings1.window_name:
+        #     self.window_settings1.hide()
+        #     print(f'close: {self.window_settings1.window_name}')
 
         if self.window_focus != self.window_settings2.window_name:
             self.window_settings2.hide()
@@ -214,9 +214,9 @@ class App(QApplication):
                 self.window_statistic.hide()
                 self.window_statistic.show()
             
-            case self.window_settings1.window_name:
-                self.window_settings1.hide()
-                self.window_settings1.show()
+            # case self.window_settings1.window_name:
+            #     self.window_settings1.hide()
+            #     self.window_settings1.show()
                 
             case self.window_settings2.window_name:
                 self.window_settings2.hide()
@@ -275,8 +275,8 @@ app.window_list1 = window_list1
 from Filler_interface.Window_statistic.statistic_control import window_statistic
 app.window_statistic = window_statistic
 
-from Filler_interface.Window_settings1.settings_control2 import window_setting1
-app.window_settings1 = window_setting1
+# from Filler_interface.Window_settings1.settings_control2 import window_setting1
+# app.window_settings1 = window_setting1
 
 from Filler_interface.Window_settings2.settings2_control import window_setting2
 app.window_settings2 = window_setting2

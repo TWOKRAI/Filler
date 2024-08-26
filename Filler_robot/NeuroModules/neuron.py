@@ -318,12 +318,12 @@ class Neuron:
 		print('len(kp1)', len(kp1), len(kp2))
 
     	# Рисование ключевых точек на обрезанных изображениях
-		# cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
-		# cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
+		cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
+		cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 
 		# Сохранение изображений с нарисованными ключевыми точками
-		# cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
-		# cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
+		cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
+		cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
 
 		if len(kp2) >= len(kp1) * 0.4:
 			print('Стакан есть')
@@ -541,10 +541,19 @@ class Neuron:
 
 			dx = w / 19.2 * (1 + abs(15.7 - y) * 0.04)
 
-			# print("W", dx)
+			print("dx", dx)
+
+			z3 = z2
+
+			if z2 > 7.7:
+				if dx < 7:
+					z3 = z2 * 0.6
+			else:
+				z3 = z2
 
 
-			v = (3.142 * (dx / 2) ** 2 * z2) / 2 * (1 - abs(self.camera.img_width/2 - xr_center_2) / 250)
+
+			v = (3.142 * (dx / 2) ** 2 * z3) / 2 * (1 - abs(self.camera.img_width/2 - xr_center_2) / 250)
 			
 			# print('VVV', v, dx, z2) 
 

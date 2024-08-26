@@ -88,96 +88,105 @@ class Robot_filler(QThread):
 
             # print(i)
             # i += 1
-            
-            if self.view:
-                print('view run')
-                self.laser.on_off(1)
 
-                if not self.first_view:
-                    self.camera.running()
-                    self.neuron.find_objects()
-                    self.interface.running()
-                    self.first_view = True
+            self.view_run2()
+            self.filler_run2()
+            self.calibration_run2()
+            self.cip_run2()
+            self.calibration_only_run2()
+            self.calibration_first_run2()
+            self.cip_move_run2()
 
-                self.camera.running()
-                self.neuron.neuron_vision()
+            # if self.view:
+            #     print('view run')
+            #     self.laser.on_off(1)
 
-                self.interface.running()
+            #     if not self.first_view:
+            #         self.camera.running()
+            #         self.neuron.find_objects()
+            #         self.interface.running()
+            #         self.first_view = True
 
-                QThread.msleep(500)
+            #     self.camera.running()
+            #     self.neuron.neuron_vision()
+
+            #     self.interface.running()
+
+            #     QThread.msleep(500)
  
-            if self.filler:
-                print('filler run')
+            # if self.filler:
+            #     print('filler run')
 
-                self.laser.on_off(1)
+            #     self.laser.on_off(1)
 
-                QThread.msleep(1000)
+            #     QThread.msleep(1000)
 
-                self.camera.running()
-                find_tuple = self.neuron.find_objects()
+            #     self.camera.running()
+            #     find_tuple = self.neuron.find_objects()
 
-                if find_tuple[1] > 0:
-                    if self.robot.calibration_ready == False:
-                        self.robot.calibration()
+            #     if find_tuple[1] > 0:
+            #         if self.robot.calibration_ready == False:
+            #             self.robot.calibration()
 
-                    self.laser.running()
-                    self.laser.on_off(0)
+            #         self.laser.running()
+            #         self.laser.on_off(0)
 
-                    self.camera.running()
-                    self.neuron.neuron_vision()
+            #         self.camera.running()
+            #         self.neuron.neuron_vision()
 
-                    self.time = 0
+            #         self.time = 0
 
-                self.interface.running()
+            #     self.interface.running()
 
-                self.robot.running()
-
+            #     self.robot.running()
+            
+            
                
  
-            if self.calibration_func:
-                print('calibration_func run')
+            # if self.calibration_func:
+            #     print('calibration_func run')
 
-                if not self.button_error: self.robot.calibration()
+            #     if not self.button_error: self.robot.calibration()
                 
-                if not self.button_error: self.prepare.emit()
+            #     if not self.button_error: self.prepare.emit()
 
-                if not self.button_error: self.pumping()
+            #     if not self.button_error: self.pumping()
 
-                self.calibratiom_func = False
+            #     self.calibratiom_func = False
 
-                # self.stop()
+            #     # self.stop()
 
-            if self.cip:
-                print('cip run')
+            # if self.cip:
+            #     print('cip run')
 
-                self.pump_station.cip()
-                self.cip_stop()
-
-
-            if self.calibration_only:
-                print('calibration run')
-
-                self.robot.calibration()
-
-                self.calibration_only = False
+            #     self.pump_station.cip()
+            #     self.cip_stop()
 
 
-            if self.calibration_first:
-                if self.first == False:
-                    self.robot.calibration()
-                    self.calibration_only = False
+            # if self.calibration_only:
+            #     print('calibration run')
 
-                    self.laser.first_start()
+            #     self.robot.calibration()
 
-                self.first = True
+            #     self.calibration_only = False
 
 
-            if self.cip_move:
-                print('cip_move run')
+            # if self.calibration_first:
+            #     if self.first == False:
+            #         self.robot.calibration()
+            #         self.calibration_only = False
 
-                self.robot.move_cip()
+            #         self.laser.first_start()
 
-                self.cip_move_stop()
+            #     self.first = True
+
+
+            # if self.cip_move:
+            #     print('cip_move run')
+
+            #     self.robot.move_cip()
+
+            #     self.cip_move_stop()
 
             
             if not self.filler and not self.view:
@@ -231,7 +240,6 @@ class Robot_filler(QThread):
         self.cip_move = False
 
 
-
     def view_run(self):
         self.view = True
         self.filler = False
@@ -239,6 +247,25 @@ class Robot_filler(QThread):
         self.cip = False
         self.cip_move = False
 
+
+    def view_run2(self):
+        while self.view:
+            print('view run')
+            self.laser.on_off(1)
+
+            if not self.first_view:
+                self.camera.running()
+                self.neuron.find_objects()
+                self.interface.running()
+                self.first_view = True
+
+            self.camera.running()
+            self.neuron.neuron_vision()
+
+            self.interface.running()
+
+            QThread.msleep(500)
+    
 
     def view_stop(self):
         self.view = False
@@ -257,6 +284,35 @@ class Robot_filler(QThread):
         self.robot.start = True
 
 
+    def filler_run2(self):
+        while self.filler:
+            print('filler run')
+
+            self.laser.on_off(1)
+
+            QThread.msleep(1000)
+
+            self.camera.running()
+            find_tuple = self.neuron.find_objects()
+
+            if find_tuple[1] > 0:
+                if self.robot.calibration_ready == False:
+                    self.robot.calibration()
+
+                self.laser.running()
+                self.laser.on_off(0)
+
+                self.camera.running()
+                self.neuron.neuron_vision()
+
+                self.time = 0
+
+            self.interface.running()
+
+            self.robot.running()
+
+
+
     def filler_stop(self):
         self.filler = False
 
@@ -273,6 +329,19 @@ class Robot_filler(QThread):
         self.time = 0
 
 
+    def calibration_run2(self):
+        if self.calibration_func:
+            print('calibration_func run')
+
+            if not self.button_error: self.robot.calibration()
+            
+            if not self.button_error: self.prepare.emit()
+
+            if not self.button_error: self.pumping()
+
+            self.calibratiom_func = False
+
+
     def calibration_stop(self):
         self.calibration_func = False
 
@@ -283,6 +352,14 @@ class Robot_filler(QThread):
         self.calibration_func = False
         self.cip = True
         self.cip_move = False
+
+    
+    def cip_run2(self):
+        if self.cip:
+            print('cip run')
+
+            self.pump_station.cip()
+            self.cip_stop()
 
 
     def cip_stop(self):
@@ -295,6 +372,16 @@ class Robot_filler(QThread):
         self.calibration_func = False
         self.cip = False
         self.cip_move = True
+
+
+    def cip_move_run2(self):
+        if self.cip_move:
+            print('cip_move run')
+
+            self.robot.move_cip()
+
+            self.cip_move_stop()
+
 
 
     def cip_move_stop(self):
@@ -310,8 +397,28 @@ class Robot_filler(QThread):
         self.calibration_only = True
 
 
+    def calibration_only_run2(self):
+        if self.calibration_only:
+            print('calibration run')
+
+            self.robot.calibration()
+
+            self.calibration_only = False
+
+
     def calibration_first_run(self):
         self.calibration_first = True
+
+
+    def calibration_first_run2(self):
+        if self.calibration_first:
+            if self.first == False:
+                self.robot.calibration()
+                self.calibration_only = False
+
+                self.laser.first_start()
+
+            self.first = True
 
 
     def reset_calibration(self):

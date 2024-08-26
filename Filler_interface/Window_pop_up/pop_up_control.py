@@ -43,7 +43,7 @@ class Pop_up_control(QMainWindow):
 
         font_2 = QFont()
         font_2.setFamily(app.font_family)
-        font_2.setPointSize(22)
+        font_2.setPointSize(27)
         font_2.setBold(False)
         font_2.setWeight(50)
 
@@ -51,12 +51,12 @@ class Pop_up_control(QMainWindow):
         self.label_2.setFixedSize(300, 100) 
         self.label_2.setWordWrap(True)
 
-        self.pushButton_ok.setFixedSize(170, 120)
+        self.pushButton_ok.setFixedSize(180, 140)
         self.pushButton_ok.setFont(font_2)
 
         self.pushButton_ok.clicked.connect(self.ok)
 
-        self.pushButton_cancel.setFixedSize(170, 120)
+        self.pushButton_cancel.setFixedSize(180, 140)
         self.pushButton_cancel.setFont(font_2)
 
         self.pushButton_cancel.clicked.connect(self.cancel)

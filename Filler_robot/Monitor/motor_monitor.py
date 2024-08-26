@@ -62,7 +62,8 @@ class Motor_monitor(QThread):
                 distance = -self.distance
             else:
                 distance = self.distance
-
+        
+        print('поехал')
         asyncio.run(self._move_async(distance, detect = True))
         self.direction = not self.direction
 

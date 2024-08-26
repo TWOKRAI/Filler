@@ -22,7 +22,7 @@ class Input_request(QThread):
         self.running = True
 
         self.run_request = True
-        self.time_request = 0.2 * 1000
+        self.time_request = 50
 
         self.button_error = False
 
@@ -70,6 +70,9 @@ class Input_request(QThread):
                 if pins.button.get_value():
                     if not self.block: 
                         self.motor_monitor.start()
+
+                        self.time_request = 200
+
                         self.button_monitor.emit()
                         self.starting.emit()
                     
