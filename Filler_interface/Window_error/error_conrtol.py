@@ -107,7 +107,7 @@ class Error_control(QMainWindow):
 
         font = QFont()
         font.setFamily(app.font_family)
-        font.setPointSize(28)
+        font.setPointSize(33)
         font.setBold(False)
         font.setWeight(50)
         self.label_warning.setFont(font)

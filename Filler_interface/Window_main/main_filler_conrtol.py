@@ -89,11 +89,13 @@ class Main_filler_control(QMainWindow):
 
     def show(self):
         if app.on_fullscreen: self.fullscreen()
+        
         super().show()
 
         app.window_focus = self.window_name
         print(app.window_focus)
         app.close_windows()
+        self.no_focus_button()
 
 
     def show_animation(self):
@@ -124,6 +126,14 @@ class Main_filler_control(QMainWindow):
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-водяной-шланг-100.png')
         self.button_cip.setIcon(QIcon(file_path))
+
+    
+    def no_focus_button(self): 
+        self.button_start.clearFocus()
+        self.button_robot.clearFocus()
+        self.button_settings.clearFocus()
+        self.button_view.clearFocus()
+        self.button_cip.clearFocus()
 
 
     def start(self):

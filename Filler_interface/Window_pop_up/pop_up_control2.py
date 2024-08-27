@@ -46,6 +46,10 @@ class Window_confirm(QMainWindow):
         self.label_2.setFont(font_1)
         self.label_2.setFixedSize(300, 100) 
         self.label_2.setWordWrap(True)
+        self.label_2.setScaledContents(True)
+
+        self.label_2.setMinimumSize(600, 120) 
+
 
         self.pushButton_ok.setFixedSize(180, 140)
         self.pushButton_ok.setFont(font_2)
@@ -119,8 +123,8 @@ class Window_confirm(QMainWindow):
     def show(self, func):
         if app.on_fullscreen: self.fullscreen()
 
-        app.window_focus = self.window_name
-        print(app.window_focus)
+        # app.window_focus = self.window_name
+        # print(app.window_focus)
 
         self.update_text()
         self.func = func

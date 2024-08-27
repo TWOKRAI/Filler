@@ -136,19 +136,10 @@ class Neuron:
 			data.append(tuple_obj)
 			self.interface.running()
 		
-			# Сортируем список по вторым элементам
 			sorted_data = sorted(data, key=lambda x: x[1])
-
-			# Находим максимальное значение среди вторых элементов
 			max_value_second = max(sorted_data, key=lambda x: x[1])[1]
-
-			# Оставляем только те кортежи, у которых второй элемент равен максимальному значению
 			filtered_data = [item for item in sorted_data if item[1] == max_value_second]
-
-			# Сортируем оставшиеся кортежи по третьим элементам
 			sorted_filtered_data = sorted(filtered_data, key=lambda x: x[2])
-
-			# Находим кортеж с максимальным третьим элементом
 			max_value_third = max(sorted_filtered_data, key=lambda x: x[2])
 
 			self.objects_filter = max_value_third[0]
@@ -168,8 +159,6 @@ class Neuron:
 
 			if len(self.objects_filter) <= len(self.memory_objects):
 				self.memory_objects = self.objects_filter
-
-
 
 			if len(self.objects_filter) <= len(self.memory_objects):
 				self.memory_objects = self.objects_filter
@@ -303,10 +292,10 @@ class Neuron:
 		# image_1_gray = image_1
 		# image_2_gray = image_2
 
-		cropped_image_1 = image_1_gray[y1 + abs(y1 - yr_center) + 30: y1 + h - 10, x1 + 10 : x1 + w - 20]
+		cropped_image_1 = image_1_gray[y1 + abs(y1 - yr_center) + 30: y1 + h - 10, x1 + 20 : x1 + w - 20]
 		# cv2.imwrite('cropped_image.png', cropped_image_1)
 		
-		cropped_image_2 = image_2_gray[y1 + abs(y1 - yr_center) + 30: y1 + h - 10, x1 + 10: x1 + w  - 20]
+		cropped_image_2 = image_2_gray[y1 + abs(y1 - yr_center) + 30: y1 + h - 10, x1 + 20: x1 + w  - 20]
 		# cv2.imwrite('cropped_image_2.png', cropped_image_2)
 
 		sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.012, edgeThreshold=100)
@@ -528,11 +517,9 @@ class Neuron:
 			else:
 				dx = abs(x1 + w - xr_center)
 
-			
 
 			x = round(point[0], 1)
 			y = round(point[1], 1)
-
 
 			z = h  / 19.2 
 			z2 = z * (1 + abs(15.7 - y) * 0.04)
@@ -544,16 +531,19 @@ class Neuron:
 			print("dx", dx)
 
 			z3 = z2
+			dz = z3
 
 			if z2 > 7.7:
 				if dx < 7:
 					z3 = z2 * 0.6
+
+				dz = 7.7
 			else:
 				z3 = z2
+				dz = z3
 
 
-
-			v = (3.142 * (dx / 2) ** 2 * z3) / 2 * (1 - abs(self.camera.img_width/2 - xr_center_2) / 250)
+			v = (3.142 * (dx / 2) ** 2 * z3) / 2 * (1 - abs(self.camera.img_width/2 - xr_center_2) / 250) * (1 - abs(dz - z3) / 21)
 			
 			# print('VVV', v, dx, z2) 
 

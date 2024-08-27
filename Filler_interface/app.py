@@ -247,10 +247,6 @@ class App(QApplication):
                 self.window_robot.hide()
                 self.window_robot.show()
 
-            case self.window_pop_up.window_name:
-                self.window_pop_up.hide()
-                self.window_pop_up.show()
-
 
     def exit(self):
         sys.exit(self.exec_())

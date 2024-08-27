@@ -205,7 +205,7 @@ class Window_robot(Control):
     def default_parametrs(self):
         self.memory.recreate_database()
 
-        self.speed_robot = 5
+        self.speed_robot = 10
         self.time_robot = 5
         self.laser_mode = 2
         self.autovalue = 1
