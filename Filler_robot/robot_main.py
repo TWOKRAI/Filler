@@ -192,7 +192,6 @@ class Robot_filler(QThread):
             
             if not self.filler and not self.view:
                 self.laser.on_off(0)
-                self.robot.enable_motors(False)
 
 
             if self.time > 100:

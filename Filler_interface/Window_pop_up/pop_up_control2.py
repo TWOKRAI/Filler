@@ -7,7 +7,7 @@ import os
 from Filler_interface.app import app
 
 
-class Pop_up_control(QMainWindow):
+class Window_confirm(QMainWindow):
     def __init__(self):
         super().__init__()
 
@@ -16,14 +16,9 @@ class Pop_up_control(QMainWindow):
         uic.loadUi(file_path, self)
        
         self.statusBar().setHidden(True)
-
-        # self.setWindowFlags(Qt.WindowStaysOnTopHint)
-
-        # self.setWindowFlag(Qt.FramelessWindowHint, True)
-
-
         self.setFixedSize(app.window_size)
 
+        self.window_name = 'pop_confirm'
 
         self.func = None
 
@@ -38,13 +33,13 @@ class Pop_up_control(QMainWindow):
 
         font_1 = QFont()
         font_1.setFamily(app.font_family)
-        font_1.setPointSize(26)
+        font_1.setPointSize(55)
         font_1.setBold(False)
         font_1.setWeight(50)
 
         font_2 = QFont()
         font_2.setFamily(app.font_family)
-        font_2.setPointSize(27)
+        font_2.setPointSize(30)
         font_2.setBold(False)
         font_2.setWeight(50)
 
@@ -62,36 +57,36 @@ class Pop_up_control(QMainWindow):
 
         self.pushButton_cancel.clicked.connect(self.cancel)
 
-        self.setStyleSheet("""
-            QWidget{
-                border: 3px solid rgb(108, 161, 141);
-            }
+        # self.setStyleSheet("""
+        #     QWidget{
+        #         border: 3px solid rgb(108, 161, 141);
+        #     }
             
-            QLabel{
-                border: 0px solid rgb(108, 161, 141);        
-            }
+        #     QLabel{
+        #         border: 0px solid rgb(108, 161, 141);        
+        #     }
                            
-            QPushButton {
-                background-color: #dad7d7;
-                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
-                stop: 0 white, stop: 0.7 #A9A9A9, stop: 0.95 #dad7d7);
-                border-radius: 25px;
-                color: rgb(63, 94, 83);
-                border: 4px solid rgb(108, 161, 141);
-                border-bottom: 5px solid rgb(87, 121, 101);
-            }
+        #     QPushButton {
+        #         background-color: #dad7d7;
+        #         background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, 
+        #         stop: 0 white, stop: 0.7 #A9A9A9, stop: 0.95 #dad7d7);
+        #         border-radius: 25px;
+        #         color: rgb(63, 94, 83);
+        #         border: 4px solid rgb(108, 161, 141);
+        #         border-bottom: 5px solid rgb(87, 121, 101);
+        #     }
 
-            QPushButton:hover {
-                background-color: qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0, 
-                stop: 0 white, stop: 0.7 #A9A9A9, stop: 0.95 #dad7d7);
-                border: 4px solid rgb(108, 161, 141);
-            }
+        #     QPushButton:hover {
+        #         background-color: qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0, 
+        #         stop: 0 white, stop: 0.7 #A9A9A9, stop: 0.95 #dad7d7);
+        #         border: 4px solid rgb(108, 161, 141);
+        #     }
 
-            QPushButton#Button_close {
-                background-color: rgba(0, 0, 0, 0);
-                border: none;
-            }
-        """)
+        #     QPushButton#Button_close {
+        #         background-color: rgba(0, 0, 0, 0);
+        #         border: none;
+        #     }
+        # """)
 
         self.lang = 0
 
@@ -114,18 +109,27 @@ class Pop_up_control(QMainWindow):
         ]
 
         self.font_size = [
-            [27, 18],
-            [27, 18],
-            [27, 18],
-            [27, 18],
+            [33, 21],
+            [33, 21],
+            [33, 21],
+            [33, 21],
         ]
 
 
     def show(self, func):
+        if app.on_fullscreen: self.fullscreen()
+
+        app.window_focus = self.window_name
+        print(app.window_focus)
+
         self.update_text()
         self.func = func
 
         super().show()
+
+    
+    def fullscreen(self):        
+        self.setWindowState(Qt.WindowFullScreen)
 
 
     def language(self, lang):
@@ -159,5 +163,3 @@ class Pop_up_control(QMainWindow):
     def cancel(self):
         self.hide()
         
-
-window_pop_up = Pop_up_control()

@@ -74,6 +74,7 @@ class App(QApplication):
             self.window_error.fullscreen()
             self.window_cip.fullscreen()
             self.window_robot.fullscreen()
+            self.window_pop_up.fullscreen()
 
 
     def eventFilter(self, obj, event):
@@ -246,6 +247,10 @@ class App(QApplication):
                 self.window_robot.hide()
                 self.window_robot.show()
 
+            case self.window_pop_up.window_name:
+                self.window_pop_up.hide()
+                self.window_pop_up.show()
+
 
     def exit(self):
         sys.exit(self.exec_())
@@ -260,8 +265,11 @@ app.window_start = window_start
 from Filler_interface.Window_datetime.datetime_control import window_datetime
 app.window_datetime = window_datetime
 
-from Filler_interface.Window_pop_up.pop_up_control import window_pop_up
-app.window_pop_up = window_pop_up
+# from Filler_interface.Window_pop_up.pop_up_control import window_pop_up
+# app.window_pop_up = window_pop_up
+
+from Filler_interface.Window_pop_up.pop_up_control2 import Window_confirm
+app.window_pop_up = Window_confirm()
 
 from Filler_interface.Window_low.low_control import window_low
 app.window_low = window_low
