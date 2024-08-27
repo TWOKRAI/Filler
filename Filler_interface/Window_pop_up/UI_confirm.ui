@@ -26,7 +26,7 @@
       <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
-        <height>76</height>
+        <height>85</height>
        </size>
       </property>
      </spacer>
@@ -50,7 +50,7 @@
        <widget class="QLabel" name="label_2">
         <property name="maximumSize">
          <size>
-          <width>620</width>
+          <width>650</width>
           <height>16777215</height>
          </size>
         </property>
@@ -88,7 +88,7 @@
        <enum>Qt::Vertical</enum>
       </property>
       <property name="sizeType">
-       <enum>QSizePolicy::MinimumExpanding</enum>
+       <enum>QSizePolicy::Expanding</enum>
       </property>
       <property name="sizeHint" stdset="0">
        <size>
@@ -141,7 +141,7 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>30</width>
+            <width>50</width>
             <height>20</height>
            </size>
           </property>
@@ -191,7 +191,7 @@
       <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
-        <height>50</height>
+        <height>70</height>
        </size>
       </property>
      </spacer>
