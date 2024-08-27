@@ -93,6 +93,4 @@ class Input_request(QThread):
         self.block = False
 
 
-        
-
 # input_request = Input_request()

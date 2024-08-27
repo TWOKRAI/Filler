@@ -90,6 +90,7 @@ class Motor_monitor(QThread):
             switch_out = pins.switch_out.get_value()
             switch_in = pins.switch_in.get_value()
             button = pins.button.get_value()
+            button_stop = pins.button_stop.get_value()
 
             if not button:
                 self.not_button = True
@@ -97,6 +98,9 @@ class Motor_monitor(QThread):
             if button and self.not_button:
                 self.state_button = not self.state_button
                 self.not_button = False
+                raise asyncio.CancelledError()
+            
+            if button_stop:
                 raise asyncio.CancelledError()
             
             if self.motor.ready:
@@ -111,7 +115,7 @@ class Motor_monitor(QThread):
                 self.state = not self.state
                 raise asyncio.CancelledError()
 
-            await asyncio.sleep(0.001)
+            await asyncio.sleep(0.01)
 
 
     async def _move_async(self, distance, detect = False):

@@ -114,6 +114,8 @@ class Thread():
                 
                 self.robot_filler.prepare.connect(app.window_prepare.button_calibr_clicked)
 
+                self.robot_filler.start_state.connect(app.window_filler.button_start_update)
+
             self.robot_filler.start()
 
 

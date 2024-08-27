@@ -15,6 +15,7 @@ from Filler_interface import app
 
 class Robot_filler(QThread):
     prepare = pyqtSignal()
+    start_state = pyqtSignal(int)
 
     def __init__(self, camera_on = True, neuron_on = True, interface_on = True, robot_on = False) -> None:
         super().__init__()
@@ -191,6 +192,7 @@ class Robot_filler(QThread):
             
             if not self.filler and not self.view:
                 self.laser.on_off(0)
+                self.robot.enable_motors(False)
 
 
             if self.time > 100:
@@ -251,7 +253,8 @@ class Robot_filler(QThread):
     def view_run2(self):
         while self.view:
             print('view run')
-            self.laser.on_off(1)
+            self.laser.on_off(0)
+            self.robot.enable_motors(False)
 
             if not self.first_view:
                 self.camera.running()
@@ -286,6 +289,8 @@ class Robot_filler(QThread):
 
     def filler_run2(self):
         while self.filler:
+            self.start_state.emit(1)
+
             print('filler run')
 
             self.laser.on_off(1)
@@ -310,6 +315,8 @@ class Robot_filler(QThread):
             self.interface.running()
 
             self.robot.running()
+        
+        self.start_state.emit(0)
 
 
 

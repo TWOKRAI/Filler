@@ -707,13 +707,14 @@ class Robot_module(QObject):
 
 			i += 1
 
+		if not self.start and not self.pumping_find:
+			self.go_home()
 
-		
-		if completed and not self.pumping_find:
+		if completed and not self.pumping_find and self.start:
 			self.laser.on_off(0)
 			time_wait = app.window_robot.time_robot * 1000
 			QThread.msleep(time_wait)
-
+		
 
 	async def _detect_switch_x(self):
 		while not self.button_stop:

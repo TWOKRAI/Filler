@@ -303,10 +303,10 @@ class Neuron:
 		# image_1_gray = image_1
 		# image_2_gray = image_2
 
-		cropped_image_1 = image_1_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 10, x1 + 10 : x1 + w - 10]
+		cropped_image_1 = image_1_gray[y1 + abs(y1 - yr_center) + 30: y1 + h - 10, x1 + 10 : x1 + w - 20]
 		# cv2.imwrite('cropped_image.png', cropped_image_1)
 		
-		cropped_image_2 = image_2_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 10, x1 + 10: x1 + w  - 10]
+		cropped_image_2 = image_2_gray[y1 + abs(y1 - yr_center) + 30: y1 + h - 10, x1 + 10: x1 + w  - 20]
 		# cv2.imwrite('cropped_image_2.png', cropped_image_2)
 
 		sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.012, edgeThreshold=100)

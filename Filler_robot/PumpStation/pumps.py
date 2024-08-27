@@ -1,5 +1,6 @@
 import asyncio
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
+import random
 
 from Filler_robot.MotorModules.motor import Motor
 # from Filler_robot.NeuroModules.neuron import neuron
@@ -136,6 +137,8 @@ class Pump_station(QObject):
         self.autovalue = True
         self.cap_value = 0
 
+        self.rullete_run = True
+
         # self.statistic_pump_1 = int(neuron.memory_read('memory.txt','pump_1'))
         # self.statistic_pump_2 = int(neuron.memory_read('memory.txt', 'pump_2'))
         
@@ -185,12 +188,45 @@ class Pump_station(QObject):
 
                 ml_1 = int(ml_1)
                 ml_2 = int(ml_2)
+            
+        if self.rullete_run:
+            ml_1, ml_2 = self.russian_rullete(ml_1, ml_2)
 
         asyncio.run(self._all_pour_async(ml_1, ml_2))
 
         self.enable_motors(False)
 
         self.stop_pump.emit()
+
+
+    def russian_rullete(self, ml_1, ml_2):
+        ratio_1 = random.random()
+        
+        all_value = (ml_1 + ml_2)
+
+        if self.autovalue:
+            if self.cap_value <= all_value:
+                all_value = self.cap_value
+
+        if ml_1 != 0:
+            ml_1 = all_value * ratio_1 * 0.95
+        else:
+            ml_1 = 0
+
+        if ml_2 != 0:
+            ml_2 = all_value * (1 - ratio_1) * 0.95
+        else:
+            ml_2 = 0
+
+        # if ml_1 < all_value * 0.2:
+        #     ml_1 = ml_1 * 2
+
+        # if ml_2 < all_value * 0.2:
+        #     ml_2 = ml_2 * 2
+
+        print('RUSSIAN RULLETE', ml_1, ml_2)
+
+        return ml_1, ml_2
 
 
     def prepare(self):
@@ -224,7 +260,6 @@ class Pump_station(QObject):
         self.pump_2.motor.stop = True
 
         self.enable_motors(False)
-
 
 
     async def _stop_pumps(self):
