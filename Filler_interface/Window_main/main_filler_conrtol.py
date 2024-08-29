@@ -66,7 +66,7 @@ class Main_filler_control(QMainWindow):
         self.view_text = [' ВИД', ' VISION', ' VISION']
         self.button_view.setMinimumSize(button_size)
         self.button_view.setMaximumSize(button_size)
-        self.button_view.setIconSize(icon_size)
+        self.button_view.setIconSize(QSize(55, 55))
         self.button_view.setFont(font)
 
         self.button_view.clicked.connect(self.view)
@@ -82,7 +82,6 @@ class Main_filler_control(QMainWindow):
         self.set_icons()
 
 
-
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
 
@@ -95,7 +94,8 @@ class Main_filler_control(QMainWindow):
         app.window_focus = self.window_name
         print(app.window_focus)
         app.close_windows()
-        self.no_focus_button()
+
+        QTimer.singleShot(1000, self.no_focus_button)
 
 
     def show_animation(self):
@@ -129,11 +129,20 @@ class Main_filler_control(QMainWindow):
 
     
     def no_focus_button(self): 
+        self.button_start.setDown(False)
+        self.button_robot.setDown(False)
+        self.button_settings.setDown(False)
+        self.button_view.setDown(False)
+        self.button_cip.setDown(False)
+
         self.button_start.clearFocus()
         self.button_robot.clearFocus()
         self.button_settings.clearFocus()
         self.button_view.clearFocus()
         self.button_cip.clearFocus()
+
+        print('NO FOCUS')
+
 
 
     def start(self):
@@ -142,7 +151,12 @@ class Main_filler_control(QMainWindow):
         
 
     def robot(self):
+        # sender = self.sender()
+        # print(f'{sender.text()} clicked')
+        # sender.setDown(False)  # Сброс состояния нажатия
+        # sender.clearFocus()  
         app.window_robot.show()
+        self.hide()
     
 
     def settings(self):

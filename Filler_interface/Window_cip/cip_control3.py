@@ -31,7 +31,7 @@ class Cip_control(Control):
         self.font_text.setWeight(50)
 
         self.button_menu.setMinimumSize(button_size)
-        self.button_menu.setIconSize(icon_size)
+        # self.button_menu.setIconSize(icon_size)
 
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)

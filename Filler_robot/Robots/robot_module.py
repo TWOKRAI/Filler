@@ -122,6 +122,8 @@ class Robot_module(QObject):
 		self.error_y = False
 		self.error_z = False
 
+		self.joker = 0
+
 		self.button_stop = False
 
 		self.motor_x = Motor('x', pins.motor_x_step, pins.motor_x_dir, pins.motor_x_enable)
@@ -675,17 +677,24 @@ class Robot_module(QObject):
 				# z = z + 2
 				
 				self.enable_motors(True)
+
+
+				if self.joker >= 2:
+					self.joker_move()
+					list_objects[i][0] = True
+					self.neuron.memory_objects = list_objects
+					self.joker = 0
+					continue
+					
 				self.go_to_point(x, y, z)
 
 				# self.neuron.find_objects()
-
 				
 				if self.button_stop == False:
 					if app.window_robot.presence_cup == 1:
 						presence = self.neuron.compare_images_feature_matching(list_objects[i])
 					else:
 						presence = True
-
 
 					if presence:
 						if self.pumping_find:
@@ -700,6 +709,9 @@ class Robot_module(QObject):
 						completed = True
 						list_objects[i][0] = True
 						self.neuron.memory_objects = list_objects
+					else:
+						self.joker += 1
+
 
 					self.interface.save_image()
 
@@ -824,7 +836,6 @@ class Robot_module(QObject):
 		self.move_home = False
 		self.move(0, -7, 0)
 
-
 		self.enable_motors(False)
 
 		self.home = True
@@ -832,6 +843,14 @@ class Robot_module(QObject):
 		self.null_value()
 
 		print('go home')
+
+	
+	def joker_move(self):
+		self.move(-300, 0, 0)
+		self.move(600, 0, 0)
+		self.move(-300, 0, 0)
+
+		self.null_value()
 
 
 	def move_cip(self):

@@ -137,7 +137,9 @@ class Pump_station(QObject):
         self.autovalue = True
         self.cap_value = 0
 
-        self.rullete_run = True
+        self.rullete_run = False
+        self.rullete_2_run = False
+        self.i_cup = 0
 
         # self.statistic_pump_1 = int(neuron.memory_read('memory.txt','pump_1'))
         # self.statistic_pump_2 = int(neuron.memory_read('memory.txt', 'pump_2'))
@@ -190,6 +192,9 @@ class Pump_station(QObject):
                 ml_2 = int(ml_2)
             
         if self.rullete_run:
+            ml_1, ml_2 = self.russian_rullete(ml_1, ml_2)
+
+        if self.rullete_2_run:
             ml_1, ml_2 = self.russian_rullete(ml_1, ml_2)
 
         asyncio.run(self._all_pour_async(ml_1, ml_2))

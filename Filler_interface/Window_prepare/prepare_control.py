@@ -147,13 +147,13 @@ class Prepare_control(QMainWindow):
         
 
     def button_menu_update(self):
-        icon_size = QSize(65, 65)
+        icon_size = QSize(75, 75)
         self.button_menu.setIconSize(icon_size)
 
         button_size = QSize(140, 130)
         self.button_menu.setFixedSize(button_size)
 
-        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-закрыть-окно-96')
         self.button_menu.setIcon(QIcon(file_path))
 
 

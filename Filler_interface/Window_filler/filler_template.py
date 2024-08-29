@@ -34,6 +34,8 @@ class Control(QMainWindow):
         self.pressed_right.setInterval(500)
         self.pressed_right.timeout.connect(self.right_pressed_2)
 
+        self.button_menu.setIconSize(QSize(76, 76))
+
     
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
@@ -90,7 +92,7 @@ class Control(QMainWindow):
 
     
     def set_icons(self):
-        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-закрыть-окно-96')
         self.button_menu.setIcon(QIcon(file_path))
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
