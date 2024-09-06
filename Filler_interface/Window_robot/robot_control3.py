@@ -37,7 +37,7 @@ class Window_robot(Control):
         self.button_reset.setMinimumSize(button_size)
         self.button_reset.setIconSize(icon_size)
 
-        self.button_reset.clicked.connect(self.show_popup)
+        self.button_reset.released.connect(self.show_popup)
 
         self.timer_left_pressed = QTimer(self)
         self.timer_left_pressed.setInterval(int(300))
@@ -94,7 +94,6 @@ class Window_robot(Control):
         self.value_id = 1
 
         self.param_list = []
-
         
         self.timer_exit = QTimer(self)
         self.timer_exit.setSingleShot(True)
@@ -109,7 +108,6 @@ class Window_robot(Control):
         self.laser_mode = 2
         self.autovalue = 1
         self.presence_cup = 1
-        
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Window_robot', 'Data')
         self.memory = Memory(db_path = file_path, db_file = 'memory_db')
@@ -117,7 +115,6 @@ class Window_robot(Control):
         self.param_list = self.get_parametrs()
         self.param_list = self.memory_read(self.param_list)
         self.put_parametrs()
-        
 
         self.update()
         self.enable_control()
@@ -134,6 +131,8 @@ class Window_robot(Control):
         }
 
         app.window_pop_up.label_2.setText(pop_show_text[self.lang])
+
+        self.setFocus()
 
 
     def update(self):
@@ -165,6 +164,7 @@ class Window_robot(Control):
 
     def button_reset_released(self):
         self.timer_exit.stop()
+        self.setFocus()
 
 
     def on_timer_reset(self):
@@ -172,7 +172,6 @@ class Window_robot(Control):
 
 
     def get_parametrs(self): 
-
         self.param_list = {
             1: self.speed_robot,
             2: self.time_robot,
@@ -191,7 +190,9 @@ class Window_robot(Control):
 
 
     def put_parametrs(self):
-        self.speed_robot = self.param_list[1]
+        speed = (10 - self.param_list[1]) / 5000
+        self.speed_robot = round(speed, 6)
+        
         self.time_robot = self.param_list[2]
         self.laser_mode = self.param_list[3]
         self.autovalue = self.param_list[4]
@@ -524,6 +525,7 @@ class Window_robot(Control):
         
     def minus_released(self):
         super().minus_released()
+        self.setFocus()
 
         match self.param_num:
             case 1:
@@ -615,6 +617,7 @@ class Window_robot(Control):
 
     def plus_released(self):
         super().plus_released()
+        self.setFocus()
 
         match self.param_num:
             case 1:
@@ -663,7 +666,6 @@ class Window_robot(Control):
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)
-
 
     
     def left(self):

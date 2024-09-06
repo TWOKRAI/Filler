@@ -7,8 +7,6 @@ from Filler_interface.app import app
 
 from Filler_interface.Window_filler.filler_template import Control
 
-from Filler_interface.filler import filler
-
 
 class Control(Control):
     start_filler = pyqtSignal()
@@ -293,6 +291,16 @@ class Control(Control):
         font.setWeight(50)
         self.value.setFont(font)
         self.value_2.setFont(font)
+
+    
+    def update_thread(self, data):
+        print(f"UPDATE {data}")
+        self.param_list[1] = data[1]
+        self.param_list[2] = data[2]
+
+        print(f"UPDATE {self.param_list[1]} {self.param_list[2]}")
+
+        self.value_update()
 
 
     def start_pump(self): 

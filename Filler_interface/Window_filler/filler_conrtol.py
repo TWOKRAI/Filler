@@ -8,15 +8,15 @@ from Filler_interface.app import app
 
 # from Filler_interface.threads import thread
 
-try:
-    # from Filler_robot.NeuroModules.interface import interface
-    from Filler_robot.robot_main import Robot_filler
+# try:
+#     # from Filler_robot.NeuroModules.interface import interface
+#     from robot_main import Robot_filler
 
-    from Raspberry.input import Input_request
+#     from Raspberry.input import Input_request
 
-    raspberry = True
-except ImportError:
-    raspberry = False
+#     raspberry = True
+# except ImportError:
+#     raspberry = False
 
 from Filler_interface.filler import filler
 
@@ -52,7 +52,7 @@ class filler_control(QMainWindow):
         self.button_menu.setMinimumSize(button_size)
         self.button_menu.setIconSize(icon_size)
         self.button_menu.setFont(font)
-        
+    
 
         self.button_menu.clicked.connect(self.button_menu_clicked)
         self.button_menu.pressed.connect(self.button_menu_pressed)

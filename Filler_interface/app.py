@@ -306,7 +306,7 @@ app.window_filler = window_filler
 
 app.ready = True
 
-from Filler_interface.threads import Thread
+from Threads.threads import Thread
 app.threads = Thread()
 
 

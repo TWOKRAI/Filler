@@ -54,12 +54,12 @@ class Window_confirm(QMainWindow):
         self.pushButton_ok.setFixedSize(180, 140)
         self.pushButton_ok.setFont(font_2)
 
-        self.pushButton_ok.clicked.connect(self.ok)
+        self.pushButton_ok.released.connect(self.ok)
 
         self.pushButton_cancel.setFixedSize(180, 140)
         self.pushButton_cancel.setFont(font_2)
 
-        self.pushButton_cancel.clicked.connect(self.cancel)
+        self.pushButton_cancel.released.connect(self.cancel)
 
         # self.setStyleSheet("""
         #     QWidget{
@@ -130,6 +130,8 @@ class Window_confirm(QMainWindow):
         self.func = func
 
         super().show()
+        
+        self.setFocus()
 
     
     def fullscreen(self):        
@@ -162,8 +164,12 @@ class Window_confirm(QMainWindow):
     def ok(self):
         self.func()
         self.timer.start()
+
+        self.setFocus()
         
     
     def cancel(self):
         self.hide()
+
+        self.setFocus()
         

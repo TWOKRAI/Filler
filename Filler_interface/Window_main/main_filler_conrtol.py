@@ -42,7 +42,8 @@ class Main_filler_control(QMainWindow):
         font1.setWeight(50)
         self.button_start.setFont(font1)
         
-        self.button_start.clicked.connect(self.start)
+        #self.button_start.clicked.connect(self.start)
+        self.button_start.released.connect(self.start)
         
 
         self.game_text = [' РОБОТ', ' ROBOT', ' ROBOTER']
@@ -51,7 +52,8 @@ class Main_filler_control(QMainWindow):
         self.button_robot.setIconSize(icon_size)
         self.button_robot.setFont(font)
 
-        self.button_robot.clicked.connect(self.robot)
+        #self.button_robot.clicked.connect(self.robot)
+        self.button_robot.released.connect(self.robot)
 
 
         self.settings_text = [' НАСТРОЙКИ', ' SETTINGS', 'EINSTELLUNGEN']
@@ -60,7 +62,8 @@ class Main_filler_control(QMainWindow):
         self.button_settings.setIconSize(icon_size)
         self.button_settings.setFont(font)
 
-        self.button_settings.clicked.connect(self.settings)
+        #self.button_settings.clicked.connect(self.settings)
+        self.button_settings.released.connect(self.settings)
 
 
         self.view_text = [' ВИД', ' VISION', ' VISION']
@@ -69,7 +72,8 @@ class Main_filler_control(QMainWindow):
         self.button_view.setIconSize(QSize(55, 55))
         self.button_view.setFont(font)
 
-        self.button_view.clicked.connect(self.view)
+        #self.button_view.clicked.connect(self.view)
+        self.button_view.released.connect(self.view)
 
 
         self.statistics_text = [' ПРОМЫВКА', ' RINSE', ' SPÜLEN']
@@ -77,7 +81,8 @@ class Main_filler_control(QMainWindow):
         self.button_cip.setIconSize(icon_size)
         self.button_cip.setFont(font)
 
-        self.button_cip.clicked.connect(self.cip)
+        #self.button_cip.clicked.connect(self.cip)
+        self.button_cip.released.connect(self.cip)
 
         self.set_icons()
 
@@ -93,7 +98,9 @@ class Main_filler_control(QMainWindow):
 
         app.window_focus = self.window_name
         print(app.window_focus)
-        app.close_windows()
+        #app.close_windows()
+
+        self.setFocus()
 
         QTimer.singleShot(1000, self.no_focus_button)
 
@@ -144,24 +151,25 @@ class Main_filler_control(QMainWindow):
         print('NO FOCUS')
 
 
-
     def start(self):
+        app.window_prepare.hide()
         app.window_prepare.show()
-        self.hide()
+        self.setFocus()
+        #self.hide()
         
 
     def robot(self):
-        # sender = self.sender()
-        # print(f'{sender.text()} clicked')
-        # sender.setDown(False)  # Сброс состояния нажатия
-        # sender.clearFocus()  
+        app.window_robot.hide()
         app.window_robot.show()
-        self.hide()
+        self.setFocus()
+        #self.hide()
     
 
     def settings(self):
+        app.window_settings2.hide()
         app.window_settings2.show()
-        self.hide()
+        self.setFocus()
+        #self.hide()
        
     
     def view(self):
@@ -173,14 +181,17 @@ class Main_filler_control(QMainWindow):
         
         app.setStyleSheet(new_stylesheet)
         app.window_view.show(1)
+
+        self.setFocus()
         
         #self.hide()
 
     
     def cip(self):
+        app.window_cip.hide()
         app.window_cip.show()
-
-        self.hide()
+        self.setFocus()
+        #self.hide()
 
 
 main_filler_window = Main_filler_control()

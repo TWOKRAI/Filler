@@ -136,8 +136,8 @@ class Robot_module(QObject):
 
 		self.axis_x = Axis('motor_x', self.motor_x)
 		self.axis_x.motor.enable_on(False)
-		self.axis_x.motor.speed_default = 0.0001
-		self.axis_x.motor.speed_def = 0.0001
+		self.axis_x.motor.speed_default = 0.00007
+		self.axis_x.motor.speed_def = 0.00007
 		self.axis_x.motor.direction = False
 		self.axis_x.step_angle = 0.04
 		self.axis_x.angle_0 = 0
@@ -148,8 +148,8 @@ class Robot_module(QObject):
 
 		self.axis_y = Axis('motor_y', self.motor_y)
 		self.axis_y.motor.enable_on(False)
-		self.axis_y.motor.speed_default = 0.0001
-		self.axis_y.motor.speed_def = 0.0001
+		self.axis_y.motor.speed_default = 0.00007
+		self.axis_y.motor.speed_def = 0.00007
 		self.axis_y.motor.direction = False
 		self.axis_y.step_angle = 0.123
 		self.axis_y.arm_lenght = 12
@@ -163,8 +163,8 @@ class Robot_module(QObject):
 
 		self.axis_z = Axis('motor_z', self.motor_z)
 		self.axis_z.motor.enable_on(False)
-		self.axis_z.motor.speed_default = 0.0009
-		self.axis_z.motor.speed_def = 0.0009
+		self.axis_z.motor.speed_default = 0.0004
+		self.axis_z.motor.speed_def = 0.0004
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
 		self.axis_z.direction_distance = False
@@ -517,8 +517,10 @@ class Robot_module(QObject):
 	def move(self, distance_x, distance_y, distance_z, detect = False):
 		self.laser.on_off(0)
 		
-		speed = (10 - app.window_robot.speed_robot) / 5000
-		speed = round(speed, 6)
+		# speed = (10 - app.window_robot.speed_robot) / 5000
+		# speed = round(speed, 6)
+
+		speed = app.window_robot.speed_robot
 
 		self.axis_x.motor.speed_def = self.axis_x.motor.speed_default + speed
 		self.axis_y.motor.speed_def = self.axis_y.motor.speed_default + speed

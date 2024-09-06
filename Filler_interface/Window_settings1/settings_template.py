@@ -19,11 +19,11 @@ class Control(QMainWindow):
         self.setFixedSize(app.window_size)
 
         self.pressed_minus = QTimer(self)
-        self.pressed_minus.setInterval(500)
+        self.pressed_minus.setInterval(1000)
         self.pressed_minus.timeout.connect(self.minus_pressed_2)
 
         self.pressed_plus = QTimer(self)
-        self.pressed_plus.setInterval(500)
+        self.pressed_plus.setInterval(1000)
         self.pressed_plus.timeout.connect(self.plus_pressed_2)
 
         button_size = QSize(140, 130)
@@ -46,12 +46,13 @@ class Control(QMainWindow):
 
         app.window_focus = self.window_name
         print(app.window_focus)
-        app.close_windows()
+        #app.close_windows()
+
+        self.setFocus()
 
 
     def button_menu_clicked(self):
-        app.window_main_filler.show()
-        self.hide()
+        pass
     
 
     def button_menu_pressed(self):    
@@ -59,6 +60,9 @@ class Control(QMainWindow):
 
 
     def button_menu_released(self):
+        app.window_main_filler.show()
+        self.hide()
+    
         self.timer.stop()
 
 

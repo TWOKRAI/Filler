@@ -16,14 +16,6 @@ file = open(file_path,"r")
 classes = file.read().split('\n')
 #print(classes)
 
-file_path = os.path.join('/home/innotech/Project/Filler/Filler_robot/NeuroModules/models', 'coco.names')
-classes_file = file_path
-# classes_file = 'Filler_robot/NeuroModules/models/coco.names'
-class_names = []
-
-with open(classes_file, 'rt') as f:
-    class_names = f.read().rstrip('\n').split('\n')      
-
 
 class Timer:
 	def __init__(self):
@@ -47,13 +39,6 @@ class Neuron:
 		self.interface = None
 
 		self.timer = Timer()
-
-		# file_path1 = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov4-tiny.cfg')
-		# file_path2 = os.path.join('Filler_robot', 'NeuroModules', 'models', 'yolov4-tiny.weights')
-		# self.net_v4 = cv2.dnn.readNetFromDarknet(file_path1, file_path2)
-		# self.net_v4.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
-		# self.net_v4.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
-
 
 		file_path = os.path.join('/home/innotech/Project/Filler/Filler_robot/NeuroModules/models', 'yolov5n.onnx')
 		self.net_v5 = cv2.dnn.readNetFromONNX(file_path)
@@ -242,11 +227,6 @@ class Neuron:
 						yd = 7
 
 					w1 = int(w - self.perspective)
-
-					
-					# xr_center_2 = int(x1 + w / 1.8) - self.perspective * 1.2
-					
-					# yr_center_2 = int((y1 + h1) - h1 * 0.3) 
 					
 					if xr_center >= self.camera.img_width / 2:
 						xr_center_2 = int((xr_center - self.perspective * 2)) - xd #+ (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
@@ -257,11 +237,6 @@ class Neuron:
 					yr_center_2 = int(((y1 + h) - w1 / 2 * 0.7) + (1 - abs(self.camera.img_height - (y1 + h)) / 700)) + yd
 
 					yr_center = int((y1 + w1 / 2 * 0.5 * (1 + h/1000)))
-
-					# if xr_center >= self.camera.img_width / 2:
-					# 	xr_center = int(xr_center + self.perspective)
-					# else:
-					# 	xr_center = int(xr_center - self.perspective)
 
 					self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective, xr_center_2, yr_center_2])
 			else:
@@ -321,65 +296,6 @@ class Neuron:
 			print('Стакан нету')
 			return False
 		
-
-	def detect_v4(self, image):
-		self.objects_all = []
-
-		# image = cv2.resize(image, (320, 320), interpolation = cv2.INTER_AREA)
-		
-		blob = cv2.dnn.blobFromImage(image, 1/255, (320, 320), [0,0,0], 1, crop = True)
-		self.net_v4.setInput(blob)
-		detections = self.net_v4.forward()[0]
-		
-		layers_names = self.net_v4.getLayerNames()
-		#print(net.getUnconnectedOutLayers())
-		output_names = [layers_names[i-1] for i in self.net_v4.getUnconnectedOutLayers()]
-		outputs = self.net_v4.forward(output_names)
-		
-		ht, wt, ct = image.shape
-		bbox = []
-		classIds = []
-		confs = []
-		
-		for output in outputs:
-			for det in output:
-				scores = det[5:]
-				classId = np.argmax(scores)
-				confidence = scores[classId]
-				if confidence > self.threshold:
-					w, h = int(det[2]*wt), int(det[3]*ht)
-					x, y = int((det[0]*wt) - w/2), int((det[1]*ht) - h/2)
-					bbox.append([x,y,w,h])
-					classIds.append(classId)
-					confs.append(float(confidence))
-		
-		indices = cv2.dnn.NMSBoxes(bbox, confs, self.threshold, self.nmsthreshold)
-		
-		for i in indices:
-			id_obj = 0
-			ready = False
-			label = class_names[classIds[i]].upper()
-			conf = int(confs[i]*100) 
-			box = bbox[i]
-			x1, y1, w, h = box[0], box[1], box[2], box[3]
-			
-			yr_center = int(y1 + w*(y1 + h * 1.2)/self.leen)
-			xr_center = int(x1 + w/2)
-					
-			self.perspective = (xr_center - wt/2) * 1/ self.factor_x
-			
-			#print('perspective', self.perspective)
-			
-			xr_center = int(xr_center + self.perspective)
-
-			self.objects_all.append([ready, id_obj, label, conf, x1, y1, w, h, xr_center, yr_center, self.perspective])
-			#print('objects', self.objects_all)
-			
-
-		#print('1 self.all_objects', self.objects_all)
-
-		return self.objects_all
-
 
 	def filter(self, objects_list):
 		objects_new = []
@@ -463,49 +379,8 @@ class Neuron:
 			y = y1
 			z = h
 			
-
-			
-			
-			# if xr_center_2 < camera.img_width/2:
-			# 	x = xr_center_2 * 1
-			# else:
-			# 	x = xr_center_2 * 1
-
-			# if abs(camera.img_width/2  - xr_center_2) > 150:
-			# 	if xr_center_2 < camera.img_width/2:
-			# 		x = xr_center_2 + 40
-			# 	else:
-			# 		x = xr_center_2 - 40
-			# else:
-			# 	x = xr_center_2
-
-			# x = xr_center_2
-			
-			# if abs(img_width/2  - xr_center_2) < 9:
-			# 	y = yr_center_2 - (img_height - (y1 + h)) ** 2 * 0.00031 + math.sqrt(abs(img_width/2  - xr_center_2)) * 0.01
-			# else:
-			# 	y = yr_center_2 + 1
-
-			
-			# #ssinput()
-			# z = h * 0.004 * math.sqrt(img_height - (y1 + h)) + (img_height - (y1 + h)) ** 2 * 0.00007 - abs(img_width/2  - xr_center_2) * 0.004
-
 			x = xr_center_2
 			y = yr_center_2
-
-			#z = h * 0.047 * (1 + (abs(self.camera.img_height - yr_center_2 - 150)/130)**3) * (1 - abs(self.camera.img_width/2 - xr_center_2)/1300)
-
-			
-
-			#z = h * 0.046 * (1 + abs(self.camera.img_height - yr_center_2)/500)
-			# if z > 12:
-			# 	z += 2
-
-
-			# v = v * 0.00034
-
-			# print('v', v)
-
 
 			point = (x, y)
 			point = self.camera.perspective.transform_coord(point)
@@ -551,11 +426,6 @@ class Neuron:
 			
 			list_coord.append((x, y, z2, v))
 			
-		# 	print('w', w)
-		
-		# print('list_coord', list_coord)
-		
-		#input('PIXXXEL')
 		
 		return list_coord
 		

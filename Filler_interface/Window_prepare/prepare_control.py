@@ -62,9 +62,9 @@ class Prepare_control(QMainWindow):
         self.button_menu.pressed.connect(self.button_menu_pressed)
         self.button_menu.released.connect(self.button_menu_released)
 
-        self.button_reset.clicked.connect(self.show_popup)
+        self.button_reset.released.connect(self.show_popup)
 
-        self.button_calibr.clicked.connect(self.button_calibr_clicked)
+        self.button_calibr.released.connect(self.button_calibr_clicked)
         self.button_calibr.setFont(font_2)
         self.button_calibr.setFixedSize(button_size_2)
 
@@ -91,7 +91,9 @@ class Prepare_control(QMainWindow):
 
         app.window_focus = self.window_name
         print(app.window_focus)
-        app.close_windows()
+        #app.close_windows()
+
+        self.setFocus()
 
         # app.threads.start_robot_thread(camera_on = True, neuron_on = True, interface_on = True, robot_on = True)
 
@@ -158,11 +160,7 @@ class Prepare_control(QMainWindow):
 
 
     def button_menu_clicked(self):
-        if  app.threads.robot_filler.pumping_ready != True:
-            self.reset()
-
-        app.window_main_filler.show()
-        self.hide()
+        pass
 
 
     def button_menu_pressed(self):
@@ -170,6 +168,13 @@ class Prepare_control(QMainWindow):
 
 
     def button_menu_released(self):
+        if  app.threads.robot_filler.pumping_ready != True:
+            self.reset()
+
+        self.setFocus()
+        app.window_main_filler.show()
+        self.hide()
+
         self.timer.stop()
  
         
@@ -291,7 +296,7 @@ class Prepare_control(QMainWindow):
                 app.threads.robot_filler.pumping_ready = True
 
                 app.window_filler.show()
-                self.hide()
+                #self.hide()
                 # self.param_num = 0
 
             case _:

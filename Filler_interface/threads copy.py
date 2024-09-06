@@ -1,9 +1,9 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 
-from Filler_robot.robot_main import Robot_filler
+from robot_main import Robot_filler
 from Filler_robot.PumpStation.pumps import Pump_station
 
-from Raspberry.input import Input_request
+from Threads.input import Input_request
 
 
 from Filler_interface.app import app
