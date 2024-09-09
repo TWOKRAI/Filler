@@ -4,13 +4,9 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QSize, QTimer, QEvent
 from PyQt5.QtGui import QCursor, QFontDatabase
 
+from Server.database import DatabaseManager
+
 from Filler_interface.Style_windows.style import Style
-
-
-try:
-    raspberry = True
-except ImportError:
-    raspberry = False
 
 
 class App(QApplication):
@@ -23,6 +19,8 @@ class App(QApplication):
 
         self.on_fullscreen = False
         self.cursor_move_2 = True
+
+        raspberry = True
 
         if raspberry:
             font_id = QFontDatabase.addApplicationFont("/usr/share/fonts/truetype/siemens_ad_vn.ttf")
@@ -45,6 +43,9 @@ class App(QApplication):
         self.installEventFilter(self)
 
         self.ready = False
+
+        self.database = DatabaseManager('Server/myproject/db.sqlite3')
+        self.database.create_connection()
 
     
     def run(self):

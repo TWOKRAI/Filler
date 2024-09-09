@@ -1,7 +1,6 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from Raspberry.pins_table import pins
-from Server.database import db_manager
 
 from Filler_robot.Monitor.motor_monitor import Motor_monitor
 

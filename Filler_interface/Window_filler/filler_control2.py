@@ -7,6 +7,8 @@ from Filler_interface.app import app
 
 from Filler_interface.Window_filler.filler_template import Control
 
+from Server.database import DatabaseManager
+
 
 class Control(Control):
     start_filler = pyqtSignal()
@@ -15,6 +17,9 @@ class Control(Control):
 
     def __init__(self):
         super().__init__()
+
+        # self.database = DatabaseManager('Server/myproject/db.sqlite3')
+        # self.database.create_connection()
         
         self.window_name = 'settings1'
 
@@ -222,6 +227,9 @@ class Control(Control):
         self.pump_value_1 = self.param_list[1]
         self.pump_value_2 = self.param_list[2]
 
+        app.database.update_data('drink1', self.param_list[1])
+        app.database.update_data('drink2', self.param_list[2])
+
 
     def memory_write(self, data):
         self.memory.memory_write('data', data)
@@ -294,11 +302,13 @@ class Control(Control):
 
     
     def update_thread(self, data):
-        print(f"UPDATE {data}")
-        self.param_list[1] = data[1]
-        self.param_list[2] = data[2]
+        #print(f"UPDATE {data}")
+        self.param_list[1] = data['drink1']
+        self.param_list[2] = data['drink2']
 
-        print(f"UPDATE {self.param_list[1]} {self.param_list[2]}")
+        self.put_parametrs()
+
+        #print(f"UPDATE {self.param_list[1]} {self.param_list[2]}")
 
         self.value_update()
 
@@ -678,8 +688,10 @@ class Control(Control):
 
         if self.play == True:
             self.start_filler.emit()
+            app.database.update_data('status', 1)
         else:
             self.stop_filler.emit()
+            app.database.update_data('status', 0)
             # app.threads.robot_filler.filler_stop()
 
             # app.threads.robot_filler.robot.stop_motors()

@@ -107,6 +107,10 @@ class Pump_station(QObject):
     bottle_2 = pyqtSignal()
     start_pump = pyqtSignal()
     stop_pump = pyqtSignal()
+
+    block_data_on = pyqtSignal()
+    block_data_off = pyqtSignal()
+
     
     def __init__(self):
         super().__init__()
@@ -283,18 +287,22 @@ class Pump_station(QObject):
 
                 raise asyncio.CancelledError()
             
+            await asyncio.sleep(0.1)
+            
             if self.filler_run:
                 if self.pump_1.motor.time_distance >= self.pump_1.motor.time_distance_2:
                     self.pump_1.motor.time_distance_2 = self.pump_1.motor.time_distance + 1
                     self.bottle_1.emit()
                     #print(self.pump_1.motor.time_distance)
+                
+                await asyncio.sleep(0.1)
 
                 if self.pump_2.motor.time_distance >= self.pump_2.motor.time_distance_2:
                     self.pump_2.motor.time_distance_2 = self.pump_2.motor.time_distance + 1 
                     #print(self.pump_2.motor.time_distance)
                     self.bottle_2.emit()
-
-            await asyncio.sleep(0.1)
+                
+                await asyncio.sleep(0.1)
 
     
     async def _pour_async2(self, motor, turn):
@@ -310,7 +318,8 @@ class Pump_station(QObject):
         self.stop2 = False
         self.pump_1.ready = False
         self.pump_2.ready = False
-        
+
+        self.block_data_on.emit()
 
         tasks = []
 
@@ -335,6 +344,8 @@ class Pump_station(QObject):
             for task in tasks:
                 if not task.done():
                     task.cancel()
+        
+        self.block_data_off.emit()
         
     
     async def _all_pour_async2(self):

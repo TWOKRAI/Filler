@@ -140,6 +140,18 @@ class Thread():
 
             if app.ready == True:
                 self.data_thread.update.connect(app.window_filler.update_thread)
+                self.data_thread.button_start.connect(self.robot_filler.filler_run)
+                self.data_thread.button_stop.connect(self.robot_filler.filler_stop)
+                self.data_thread.button_stop.connect(self.robot_filler.pump_station.stop_pumps)
+                self.data_thread.button_stop.connect(self.robot_filler.filler_stop)
+
+                self.robot_filler.pump_station.block_data_on.connect(self.data_thread.block_on)
+                self.robot_filler.pump_station.block_data_off.connect(self.data_thread.block_off)
+
+                self.robot_filler.robot.block_data_on.connect(self.data_thread.block_on)
+                self.robot_filler.robot.block_data_off.connect(self.data_thread.block_off)
+                self.robot_filler.robot.update_data.connect(self.data_thread.update_data)
+            
             
             self.data_thread.start()
 

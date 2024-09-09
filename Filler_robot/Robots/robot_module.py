@@ -83,6 +83,11 @@ class Axis:
 
 
 class Robot_module(QObject):
+	block_data_on = pyqtSignal()
+	block_data_off = pyqtSignal()
+	update_data = pyqtSignal()
+
+    
 	def __init__(self, camera = None, neuron = None, interface = None, pump_station = None, laser = None):
 		super().__init__()
 
@@ -193,6 +198,8 @@ class Robot_module(QObject):
 
 	
 	def stop_motors(self):
+		self.block_data_off.emit()
+
 		# self.pump_station.enable_motors(False)
 		# self.pump_station.motor_1.stop_for = True
 		# self.pump_station.motor_2.stop_for = True
@@ -209,9 +216,10 @@ class Robot_module(QObject):
 
 		self.calibration_ready = False
 
-
 	
 	def no_stop_motors(self):
+		self.block_data_off.emit()
+
 		self.stopped = False
 
 		self.pump_station.motor_1.stop = False
@@ -473,6 +481,8 @@ class Robot_module(QObject):
 
 
 	async def _move_async(self, distance_x, distance_y, distance_z, detect = False):
+		#self.block_data_on.emit()
+
 		self.stopped = False
 		tasks = []
 
@@ -508,6 +518,8 @@ class Robot_module(QObject):
 
 		self.move_home = False
 
+		self.block_data_off.emit()
+
 		# if detect:
 		# 	sensor_task.cancel()
 		
@@ -527,7 +539,7 @@ class Robot_module(QObject):
 		self.axis_z.motor.speed_def = self.axis_z.motor.speed_default + speed
 		
 		asyncio.run(self._move_async(distance_x, distance_y, distance_z, detect))
-
+		
 
 	def go_to_point(self, x, y, z):
 		if self.print_on: 
