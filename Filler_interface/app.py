@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QSize, QTimer, QEvent
 from PyQt5.QtGui import QCursor, QFontDatabase
 
-from Server.database import DatabaseManager
+#from Server.database import DatabaseManager
+from Server.database_postgresql import DatabaseManager
 
 from Filler_interface.Style_windows.style import Style
 
@@ -44,7 +45,17 @@ class App(QApplication):
 
         self.ready = False
 
-        self.database = DatabaseManager('Server/myproject/db.sqlite3')
+        # self.database = DatabaseManager('Server/myproject/db.sqlite3')
+
+        self.database = DatabaseManager(
+            db_name='myapp',
+            db_user='myapp_user',
+            db_password='',
+            db_host='localhost',
+            db_port='5432',
+            verbose=False
+        )
+
         self.database.create_connection()
 
     
@@ -309,6 +320,7 @@ app.ready = True
 
 from Threads.threads import Thread
 app.threads = Thread()
+
 
 
 

@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 
-from Server.database import DatabaseManager
+#from Server.database import DatabaseManager
+from Server.database_postgresql import DatabaseManager
 
 from Filler_interface.app import app
 
@@ -23,7 +24,18 @@ class Data_request(QThread):
         self.data = None
         self.data_prev = None
 
-        self.database = DatabaseManager('Server/myproject/db.sqlite3')
+        #self.database = DatabaseManager('Server/myproject/db.sqlite3')
+
+        self.database = DatabaseManager(
+            db_name='myapp',
+            db_user='myapp_user',
+            db_password='',
+            db_host='localhost',
+            db_port='5432',
+            verbose=False
+        )
+
+        self.database.create_connection()
 
 
     def run(self):
@@ -37,8 +49,6 @@ class Data_request(QThread):
 
 
     def request(self):
-        self.database.create_connection()
-
         while self.running:
             if self.block == False:
                 self.update_data()

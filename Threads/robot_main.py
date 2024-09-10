@@ -12,17 +12,17 @@ from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 from Filler_interface import app
 
-import psycopg2
+# import psycopg2
 
 
-# Подключение к базе данных
-conn = psycopg2.connect(
-    dbname='mydb',
-    user='myuser',
-    password='',
-    host='localhost',
-    port='5432'
-)
+# # Подключение к базе данных
+# conn = psycopg2.connect(
+#     dbname='mydb',
+#     user='myuser',
+#     password='',
+#     host='localhost',
+#     port='5432'
+# )
 
 
 class Robot_filler(QThread):

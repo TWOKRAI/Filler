@@ -7,8 +7,6 @@ from Filler_interface.app import app
 
 from Filler_interface.Window_filler.filler_template import Control
 
-from Server.database import DatabaseManager
-
 
 class Control(Control):
     start_filler = pyqtSignal()
@@ -302,7 +300,6 @@ class Control(Control):
 
     
     def update_thread(self, data):
-        #print(f"UPDATE {data}")
         self.param_list[1] = data['drink1']
         self.param_list[2] = data['drink2']
 
@@ -688,10 +685,10 @@ class Control(Control):
 
         if self.play == True:
             self.start_filler.emit()
-            app.database.update_data('status', 1)
+            app.database.update_data('status', True)
         else:
             self.stop_filler.emit()
-            app.database.update_data('status', 0)
+            app.database.update_data('status', False)
             # app.threads.robot_filler.filler_stop()
 
             # app.threads.robot_filler.robot.stop_motors()
