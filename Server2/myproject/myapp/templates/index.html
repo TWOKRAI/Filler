@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innotech filler</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles2.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="{% static 'images/logo.png' %}" alt="Логотип">
+        </header>
+        <main class="main">
+            <h2>Параметры наливатора</h2>
+            <form id="drinkForm" method="POST">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="drink1">Напиток 1:</label>
+                    <input type="number" id="drink1" name="drink1" required value="{{ settings.drink1 }}">
+                    <span>мл</span>
+                </div>
+                <div class="input-group">
+                    <label for="drink2">Напиток 2:</label>
+                    <input type="number" id="drink2" name="drink2" required value="{{ settings.drink2 }}">
+                    <span>мл</span>
+                </div>
+                <div class="input-group">
+                    <label class="switch">
+                        <input type="checkbox" id="statusSwitch" name="status" {% if settings.status %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                    <span id="statusText">{{ settings.status|yesno:"ВКЛЮЧЕН,ВЫКЛЮЧЕН" }}</span>
+                </div>
+            </form>
+            <a href="{% url 'settings' %}"><button id="settingsButton">Настройки</button></a>
+        </main>
+    </div>
+    <script src="{% static 'js/scripts2.js' %}"></script>
+</body>
+</html>
