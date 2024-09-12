@@ -53,21 +53,7 @@ class Data_request(QThread):
             if self.block == False:
                 self.update_data()
             
-            status_button = self.database.read_single_value('status')
-
-            if status_button == 1 and app.threads.robot_filler.filler == False:
-                self.button_start.emit()
-                print('ВКОЮЧИТЬ')
-
-
-            if status_button == 0 and app.threads.robot_filler.filler == True:
-                self.button_stop.emit()
-                print('ВЫКлЮЧИТЬ')
-
-
-            # if data[0] == 1:
-            #     self.button_start.emit()
-            #     self.database.insert_data('status', 0)
+            self.update_data_status()
 
             self.data_prev = self.data
 
@@ -88,6 +74,18 @@ class Data_request(QThread):
                     print(f'Изменилось c {self.data_prev[index]} на {d}')
                     self.update.emit(self.data)
                     break
+
+    
+    def update_data_status(self):
+        status_button = self.database.read_single_value('status')
+
+        if status_button == 1 and app.threads.robot_filler.filler == False:
+            self.button_start.emit()
+            print('ВКОЮЧИТЬ')
+
+        if status_button == 0 and app.threads.robot_filler.filler == True:
+            self.button_stop.emit()
+            print('ВЫКЛЮЧИТЬ')
                 
 
     def block_on(self):

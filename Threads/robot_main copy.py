@@ -11,11 +11,12 @@ from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 from Filler_interface import app
 
+
 class Robot_filler(QThread):
     prepare = pyqtSignal()
     start_state = pyqtSignal(int)
 
-    def __init__(self, camera_on = True, neuron_on = True, interface_on = True, robot_on = False) -> None:
+    def __init__(self) -> None:
         super().__init__()
 
         self.running = False
@@ -88,7 +89,6 @@ class Robot_filler(QThread):
 
             if not self.filler and not self.view:
                 self.laser.on_off(0)
-
 
             if self.filler:
                 self.time += 1
@@ -210,7 +210,6 @@ class Robot_filler(QThread):
             self.robot.running()
         
         self.start_state.emit(0)
-
 
 
     def filler_stop(self):

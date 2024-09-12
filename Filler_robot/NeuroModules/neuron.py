@@ -5,16 +5,12 @@ import math
 import os
 import time
 
-from Filler_robot.VisionTech.camera import Camera
-
 from Lib.Decorators.wrapper import _timing
 
 
 file_path = os.path.join('/home/innotech/Project/Filler/Filler_robot/NeuroModules/models', 'coco.txt')
 file = open(file_path,"r")
-# file = open("Filler_robot/NeuroModules/models/coco.txt","r")
 classes = file.read().split('\n')
-#print(classes)
 
 
 class Timer:
@@ -229,9 +225,9 @@ class Neuron:
 					w1 = int(w - self.perspective)
 					
 					if xr_center >= self.camera.img_width / 2:
-						xr_center_2 = int((xr_center - self.perspective * 2)) - xd #+ (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
+						xr_center_2 = int((xr_center - self.perspective * 2)) - xd 
 					else:
-						xr_center_2 = int((xr_center + self.perspective * 2)) + xd #- (w * 0.165) * abs(self.camera.img_width / 2 - xr_center) / 320) * 0.97
+						xr_center_2 = int((xr_center + self.perspective * 2)) + xd 
 
 					
 					yr_center_2 = int(((y1 + h) - w1 / 2 * 0.7) + (1 - abs(self.camera.img_height - (y1 + h)) / 700)) + yd
@@ -275,19 +271,16 @@ class Neuron:
 
 		sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.012, edgeThreshold=100)
 
-		# Нахождение ключевых точек и дескрипторов
 		kp1, des1 = sift.detectAndCompute(cropped_image_1, None)
 		kp2, des2 = sift.detectAndCompute(cropped_image_2, None)
 
 		print('len(kp1)', len(kp1), len(kp2))
 
-    	# Рисование ключевых точек на обрезанных изображениях
 		cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 		cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 
-		# Сохранение изображений с нарисованными ключевыми точками
-		cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
-		cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
+		#cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
+		#cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
 
 		if len(kp2) >= len(kp1) * 0.4:
 			print('Стакан есть')
@@ -419,15 +412,9 @@ class Neuron:
 
 
 			v = (3.142 * (dx / 2) ** 2 * z3) / 2 * (1 - abs(self.camera.img_width/2 - xr_center_2) / 250) * (1 - abs(dz - z3) / 21)
-			
-			# print('VVV', v, dx, z2) 
-
 			v = round(v, 1)
 			
 			list_coord.append((x, y, z2, v))
 			
 		
 		return list_coord
-		
-
-# neuron = Neuron()
