@@ -26,14 +26,14 @@ class ToggleButton:
 
 
         
-        self.pin_enable = pins.motor_p1p2_enable
+        self.pin_enable = pins.motor_y_enable
         self.pin_enable.set_value(0)
         self.state = False
         self.button1 = tk.Button(root, text=f"enable {self.pin_enable}", command=lambda: self.enable(self.pin_enable))
         self.button1.pack()
 
         
-        self.pin_step = pins.motor_p1_step
+        self.pin_step = pins.motor_y_step
         self.pin_step.set_value(0)
         self.state2 = False
         self.button2 = tk.Button(root, text=f"step {self.pin_step}", command=lambda: self.step(self.pin_step))
@@ -43,7 +43,7 @@ class ToggleButton:
         self.button4.pack()
 
 
-        self.pin_dir = pins.motor_p1_dir
+        self.pin_dir = pins.motor_y_dir
         self.pin_step.set_value(0)
         self.state3 = False
         self.button3 = tk.Button(root, text=f"dir {self.pin_dir}", command=lambda: self.dir(self.pin_dir))
