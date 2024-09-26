@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon, QFont
 import os
 
-from Filler_interface.app import app
+from Filler_interface.app import app, enable_marker_decorator
 
 
 class Control(QMainWindow):
@@ -31,6 +31,12 @@ class Control(QMainWindow):
         self.button_menu.setMinimumSize(button_size)
         self.button_menu.setIconSize(QSize(76, 76))
 
+        self.timer_enable = QTimer(self)
+        self.timer_enable.setSingleShot(True) 
+        self.timer_enable.timeout.connect(self.all_enable_on)
+        self.timer_enable.start(1000) 
+        self.enable_marker = True
+
     
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
@@ -50,15 +56,28 @@ class Control(QMainWindow):
 
         self.setFocus()
 
+        self.all_enable_off()
+
+
+    def all_enable_on(self):
+        self.enable_marker = True
+
+    
+    def all_enable_off(self):
+        self.enable_marker = False
+        self.timer_enable.start()
+
 
     def button_menu_clicked(self):
         pass
     
-
+    
+    @enable_marker_decorator('enable_marker')
     def button_menu_pressed(self):    
         self.timer.start()
 
 
+    @enable_marker_decorator('enable_marker')
     def button_menu_released(self):
         app.window_main_filler.show()
         self.hide()
@@ -170,11 +189,13 @@ class Control(QMainWindow):
         pass
 
     def left_pressed(self):
-        self.timer_left_pressed.start()
+        #self.timer_left_pressed.start()
+        pass
 
 
     def left_released(self):
-        self.timer_left_pressed.stop()
+        #self.timer_left_pressed.stop()
+        pass
 
     
     def left_enable(self):
@@ -186,11 +207,13 @@ class Control(QMainWindow):
     
 
     def right_pressed(self):
-        self.timer_right_pressed.start()
+        #self.timer_right_pressed.start()
+        pass
 
 
     def right_released(self):
-        self.timer_right_pressed.stop()
+        #self.timer_right_pressed.stop()
+        pass
 
     
     def right_enable(self):
@@ -198,7 +221,7 @@ class Control(QMainWindow):
 
 
     def minus(self):
-        self.timer_minus_pressed.setInterval(int(500/(1 + self.step_button)))
+        self.timer_minus_pressed.setInterval(int(1000/(1 + self.step_button)))
         self.step_button += 0.2
     
 
@@ -223,7 +246,7 @@ class Control(QMainWindow):
 
 
     def plus(self):
-        self.timer_plus_pressed.setInterval(int(500/(1 + self.step_button)))
+        self.timer_plus_pressed.setInterval(int(1000/(1 + self.step_button)))
         self.step_button += 0.2
 
 

@@ -3,7 +3,7 @@ from PyQt5.QtGui import QIcon, QFont
 import os
 
 from Lib.memory import Memory
-from Filler_interface.app import app
+from Filler_interface.app import app, enable_marker_decorator
 
 from Filler_interface.Window_settings1.settings_template import Control
 
@@ -158,10 +158,12 @@ class Window_robot(Control):
         self.memory_write(self.param_list)
         
 
+    @enable_marker_decorator('enable_marker')
     def button_reset_pressed(self):
         self.timer_exit.start()
 
 
+    @enable_marker_decorator('enable_marker')
     def button_reset_released(self):
         self.timer_exit.stop()
         self.setFocus()
@@ -522,7 +524,8 @@ class Window_robot(Control):
         self.update()
         self.enable_control()
        
-        
+    
+    @enable_marker_decorator('enable_marker')
     def minus_released(self):
         super().minus_released()
         self.setFocus()
@@ -541,7 +544,7 @@ class Window_robot(Control):
 
         self.memory_write(self.param_list)
 
-
+    
     def minus_enable(self):
         match self.param_num:
             case 1:
@@ -615,6 +618,7 @@ class Window_robot(Control):
         print('click') 
     
 
+    @enable_marker_decorator('enable_marker')
     def plus_released(self):
         super().plus_released()
         self.setFocus()

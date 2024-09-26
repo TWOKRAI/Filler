@@ -75,9 +75,9 @@ def regulator_angle(x0, y0, z0, func):
 		#print(i)
 		
 		if abs(x) >= abs(x0) and y >= y0 and z <= z0:
-			print(f"angle_x: {angle_x} x: {x}")
-			print(f"angle_y: {angle_y} y: {y}")
-			print(f"angle_z: {angle_z} z: {z}")
+			#print(f"angle_x: {angle_x} x: {x}")
+			#print(f"angle_y: {angle_y} y: {y}")
+			#print(f"angle_z: {angle_z} z: {z}")
 			print('ZZZZZZZZZZZZZZZZZZZZZZz', 'x0, y0, z0', x0, y0, z0)
 			break
 			

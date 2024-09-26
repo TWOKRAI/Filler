@@ -11,6 +11,8 @@ from Filler_robot.VisionTech.perspective import Perspective
 
 class Camera:
     def __init__(self):
+        self.connect_0 = None
+
         self.print_on = True
 
         logging.debug("Initializing camera...")

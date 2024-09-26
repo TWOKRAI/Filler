@@ -88,14 +88,10 @@ class Robot_module(QObject):
 	update_data = pyqtSignal()
 
     
-	def __init__(self, camera = None, neuron = None, interface = None, pump_station = None, laser = None):
+	def __init__(self):
 		super().__init__()
 
-		self.camera = camera
-		self.neuron = neuron
-		self.interface = interface
-		self.pump_station = pump_station
-		self.laser = laser
+		self.connect_0 = None
 
 		self.start = False
 
@@ -168,8 +164,8 @@ class Robot_module(QObject):
 
 		self.axis_z = Axis('motor_z', self.motor_z)
 		self.axis_z.motor.enable_on(False)
-		self.axis_z.motor.speed_default = 0.0004
-		self.axis_z.motor.speed_def = 0.0004
+		self.axis_z.motor.speed_default = 0.00007
+		self.axis_z.motor.speed_def = 0.00007
 		self.axis_z.motor.direction = True
 		self.axis_z.direction_real = False
 		self.axis_z.direction_distance = False
@@ -184,7 +180,7 @@ class Robot_module(QObject):
 		self.time_start_y = 0
 		self.time_start_z = 0
 
-		self.laser_on = False
+		#self.connect_0.laser.laser_on = False
 		
 
 	def running(self):
@@ -200,9 +196,9 @@ class Robot_module(QObject):
 	def stop_motors(self):
 		self.block_data_off.emit()
 
-		# self.pump_station.enable_motors(False)
-		# self.pump_station.motor_1.stop_for = True
-		# self.pump_station.motor_2.stop_for = True
+		# self.connect_0.pump_station.enable_motors(False)
+		# self.connect_0.pump_station.motor_1.stop_for = True
+		# self.connect_0.pump_station.motor_2.stop_for = True
 
 		self.stopped = True
 
@@ -222,8 +218,8 @@ class Robot_module(QObject):
 
 		self.stopped = False
 
-		self.pump_station.motor_1.stop = False
-		self.pump_station.motor_2.stop = False
+		self.connect_0.pump_station.motor_1.stop = False
+		self.connect_0.pump_station.motor_2.stop = False
 
 		self.axis_x.motor.stop = False
 		self.axis_y.motor.stop = False
@@ -489,8 +485,8 @@ class Robot_module(QObject):
 		if detect:
 			tasks.append(asyncio.create_task(self._detect_sensor()))
 
-		if self.move_home:
-			tasks.append(asyncio.create_task(self._no_enabel_z()))
+		# if self.move_home:
+		# 	tasks.append(asyncio.create_task(self._no_enabel_z()))
 
 		# tasks.append(asyncio.create_task(self._limit()))
 
@@ -527,7 +523,7 @@ class Robot_module(QObject):
 
 
 	def move(self, distance_x, distance_y, distance_z, detect = False):
-		self.laser.on_off(0)
+		self.connect_0.laser.on_off(0)
 		
 		# speed = (10 - app.window_robot.speed_robot) / 5000
 		# speed = round(speed, 6)
@@ -642,8 +638,8 @@ class Robot_module(QObject):
 			self.calibration()
 
 		
-		list_objects = self.neuron.objects_filter
-		list_coord = self.neuron.list_coord
+		list_objects = self.connect_0.neuron.objects_filter
+		list_coord = self.connect_0.neuron.list_coord
 
 		# if self.print_on:
 		print('move_objects list_objects', list_objects)
@@ -696,17 +692,17 @@ class Robot_module(QObject):
 				if self.joker >= 2:
 					self.joker_move()
 					list_objects[i][0] = True
-					self.neuron.memory_objects = list_objects
+					self.connect_0.neuron.memory_objects = list_objects
 					self.joker = 0
 					continue
 					
 				self.go_to_point(x, y, z)
 
-				# self.neuron.find_objects()
+				# self.connect_0.neuron.find_objects()
 				
 				if self.button_stop == False:
 					if app.window_robot.presence_cup == 1:
-						presence = self.neuron.compare_images_feature_matching(list_objects[i])
+						presence = self.connect_0.neuron.compare_images_feature_matching(list_objects[i])
 					else:
 						presence = True
 
@@ -718,16 +714,16 @@ class Robot_module(QObject):
 						if self.start == False:
 							break
 						
-						self.pump_station.cap_value = v
-						self.pump_station.filler()
+						self.connect_0.pump_station.cap_value = v
+						self.connect_0.pump_station.filler()
 						completed = True
 						list_objects[i][0] = True
-						self.neuron.memory_objects = list_objects
+						self.connect_0.neuron.memory_objects = list_objects
 					else:
 						self.joker += 1
 
 
-					self.interface.save_image()
+					self.connect_0.interface.save_image()
 
 					self.go_home()
 
@@ -737,7 +733,7 @@ class Robot_module(QObject):
 			self.go_home()
 
 		if completed and not self.pumping_find and self.start:
-			self.laser.on_off(0)
+			self.connect_0.laser.on_off(0)
 			time_wait = app.window_robot.time_robot * 1000
 			QThread.msleep(time_wait)
 		
@@ -797,7 +793,7 @@ class Robot_module(QObject):
 
 
 	def calibration(self):
-		self.laser.on_off(0)
+		self.connect_0.laser.on_off(0)
 
 		if self.button_stop == False:
 			self.axis_x.motor.enable_on(True)

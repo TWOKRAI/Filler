@@ -19,7 +19,7 @@ class Control(Control):
         # self.database = DatabaseManager('Server/myproject/db.sqlite3')
         # self.database.create_connection()
         
-        self.window_name = 'settings1'
+        self.window_name = 'filler_control'
 
         icon_size = QSize(65, 65)
         button_size = QSize(140, 130)
@@ -225,8 +225,8 @@ class Control(Control):
         self.pump_value_1 = self.param_list[1]
         self.pump_value_2 = self.param_list[2]
 
-        app.database.update_data('drink1', self.param_list[1])
-        app.database.update_data('drink2', self.param_list[2])
+        app.database.update_data('myapp_filler', 'drink1', self.param_list[1])
+        app.database.update_data('myapp_filler', 'drink2', self.param_list[2])
 
 
     def memory_write(self, data):
@@ -300,8 +300,8 @@ class Control(Control):
 
     
     def update_thread(self, data):
-        self.param_list[1] = data['drink1']
-        self.param_list[2] = data['drink2']
+        self.param_list[1] = data[1]
+        self.param_list[2] = data[2]
 
         self.put_parametrs()
 
@@ -685,10 +685,10 @@ class Control(Control):
 
         if self.play == True:
             self.start_filler.emit()
-            app.database.update_data('status', True)
+            app.database.update_data('myapp_filler', 'status', True)
         else:
             self.stop_filler.emit()
-            app.database.update_data('status', False)
+            app.database.update_data('myapp_filler', 'status', False)
             # app.threads.robot_filler.filler_stop()
 
             # app.threads.robot_filler.robot.stop_motors()

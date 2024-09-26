@@ -84,7 +84,6 @@ def regulator_angle(x0, y0, z0, func):
 			#break
 		elif t > 10000:
 			print('ERORR COORD')
-			print('£££££££££££££££££££££££££££££££££££££££££££')
 			error = True
 		
 		t += 1

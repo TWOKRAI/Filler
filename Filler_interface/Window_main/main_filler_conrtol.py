@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon, QFont
 import os
 
-from Filler_interface.app import app
+from Filler_interface.app import app, enable_marker_decorator
 
 
 class Main_filler_control(QMainWindow):
@@ -86,6 +86,12 @@ class Main_filler_control(QMainWindow):
 
         self.set_icons()
 
+        self.timer_enable = QTimer(self)
+        self.timer_enable.setSingleShot(True)  
+        self.timer_enable.timeout.connect(self.all_enable_on)
+        self.timer_enable.start(1000) 
+        self.enable_marker = True
+
 
     def fullscreen(self):        
         self.setWindowState(Qt.WindowFullScreen)
@@ -103,6 +109,8 @@ class Main_filler_control(QMainWindow):
         self.setFocus()
 
         QTimer.singleShot(1000, self.no_focus_button)
+
+        self.all_enable_off()
 
 
     def show_animation(self):
@@ -150,21 +158,33 @@ class Main_filler_control(QMainWindow):
 
         print('NO FOCUS')
 
+    
+    def all_enable_on(self):
+        self.enable_marker = True
 
+    
+    def all_enable_off(self):
+        self.enable_marker = False
+        self.timer_enable.start()
+
+
+    @enable_marker_decorator('enable_marker')
     def start(self):
         app.window_prepare.hide()
         app.window_prepare.show()
-        self.setFocus()
+        #self.setFocus()
         #self.hide()
         
 
+    @enable_marker_decorator('enable_marker')
     def robot(self):
         app.window_robot.hide()
         app.window_robot.show()
-        self.setFocus()
+        #self.setFocus()
         #self.hide()
     
 
+    @enable_marker_decorator('enable_marker')
     def settings(self):
         app.window_settings2.hide()
         app.window_settings2.show()
@@ -172,6 +192,7 @@ class Main_filler_control(QMainWindow):
         #self.hide()
        
     
+    @enable_marker_decorator('enable_marker')
     def view(self):
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(
@@ -186,7 +207,8 @@ class Main_filler_control(QMainWindow):
         
         #self.hide()
 
-    
+
+    @enable_marker_decorator('enable_marker')
     def cip(self):
         app.window_cip.hide()
         app.window_cip.show()

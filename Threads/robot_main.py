@@ -12,6 +12,8 @@ from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 from Filler_interface import app
 
+from Server.database_redis import RedisClient
+
 
 class Robot_filler(QThread):
     prepare = pyqtSignal()
@@ -26,18 +28,14 @@ class Robot_filler(QThread):
         #self.database.create_connection()
 
         self.laser = Laser() 
-        self.laser.on_off(1)
-
         self.camera = Camera()
-
-        self.neuron = Neuron(self.camera)
-    
-        self.interface = Interface(self.camera, self.neuron)
-        self.neuron.interface = self.interface
-
+        self.neuron = Neuron()
+        self.interface = Interface()
         self.pump_station = Pump_station()
+        self.robot = Robot_module()
+        self.create_connect()
 
-        self.robot = Robot_module(self.camera, self.neuron, self.interface, self.pump_station, self.laser)
+        self.laser.on_off(1)
         
         self.camera_on = camera_on
         self.neuron_on = neuron_on 
@@ -66,6 +64,15 @@ class Robot_filler(QThread):
         self.first = False
 
         self.pumping_ready = False
+
+    
+    def create_connect(self):
+        self.laser.connect_0 = self
+        self.camera.connect_0 = self
+        self.interface.connect_0 = self
+        self.neuron.connect_0 = self
+        self.pump_station.connect_0  = self
+        self.robot.connect_0  = self
 
 
     def stop(self):

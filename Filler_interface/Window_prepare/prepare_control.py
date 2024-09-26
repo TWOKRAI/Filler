@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QSize, QTimer, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon, QFont
 import os
 
-from Filler_interface.app import app
+from Filler_interface.app import app, enable_marker_decorator
 
 
 class Prepare_control(QMainWindow):
@@ -81,6 +81,12 @@ class Prepare_control(QMainWindow):
 
         self.update()
 
+        self.timer_enable = QTimer(self)
+        self.timer_enable.setSingleShot(True) 
+        self.timer_enable.timeout.connect(self.all_enable_on)
+        self.timer_enable.start(1000) 
+        self.enable_marker = True
+
 
     def show(self):
         if app.on_fullscreen: self.fullscreen()
@@ -94,6 +100,8 @@ class Prepare_control(QMainWindow):
         #app.close_windows()
 
         self.setFocus()
+
+        self.all_enable_off()
 
         # app.threads.start_robot_thread(camera_on = True, neuron_on = True, interface_on = True, robot_on = True)
 
@@ -118,6 +126,16 @@ class Prepare_control(QMainWindow):
         self.label_update()
 
 
+    def all_enable_on(self):
+        self.enable_marker = True
+
+    
+    def all_enable_off(self):
+        self.enable_marker = False
+        self.timer_enable.start()
+
+
+    @enable_marker_decorator('enable_marker')
     def show_popup(self):
         app.window_pop_up.hide()
         app.window_pop_up.show(self.reset)
@@ -162,11 +180,13 @@ class Prepare_control(QMainWindow):
     def button_menu_clicked(self):
         pass
 
-
+    
+    @enable_marker_decorator('enable_marker')
     def button_menu_pressed(self):
         self.timer.start()
 
 
+    @enable_marker_decorator('enable_marker')
     def button_menu_released(self):
         if  app.threads.robot_filler.pumping_ready != True:
             self.reset()
@@ -255,7 +275,8 @@ class Prepare_control(QMainWindow):
     def button_calibr_enable(self):
         pass 
 
-
+    
+    @enable_marker_decorator('enable_marker')
     def button_calibr_clicked(self):
         self.param_num += 1
 
@@ -296,7 +317,7 @@ class Prepare_control(QMainWindow):
                 app.threads.robot_filler.pumping_ready = True
 
                 app.window_filler.show()
-                #self.hide()
+                self.hide()
                 # self.param_num = 0
 
             case _:

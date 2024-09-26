@@ -13,13 +13,13 @@ class Memory():
     def memory_write(self, key, data):
         with shelve.open(self.file_path) as db: 
             db[f'{key}'] = data 
-            print('записал', key, data)
+            #print('записал', key, data)
 
     def memory_read(self, key, default):
         with shelve.open(self.file_path) as db: 
             try:
                 data = db[f'{key}']
-                print('считал', key, data)
+                #print('считал', key, data)
                 return data  # Десериализация не требуется, shelve сам позаботится об этом
             except KeyError:
                 print('Ключ не найден, записываю значение по умолчанию')

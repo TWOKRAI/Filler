@@ -1,16 +1,37 @@
 import sys
 from typing import List
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import QSize, QTimer, QEvent
 from PyQt5.QtGui import QCursor, QFontDatabase
 
 #from Server.database import DatabaseManager
 from Server.database_postgresql import DatabaseManager
+from Server.database_redis import RedisClient
+import pickle
 
 from Filler_interface.Style_windows.style import Style
 
 
+def enable_marker_decorator(marker_attr):
+    def decorator(func):
+        def wrapper(self, *args, **kwargs):
+            if getattr(self, marker_attr):
+                return func(self, *args, **kwargs)
+            else:
+                print(f"{func.__name__} не выполнена, так как {marker_attr} == False")
+        return wrapper
+    return decorator
+
+
 class App(QApplication):
+    button_start = pyqtSignal()
+    button_stop = pyqtSignal()
+
+    button_start = pyqtSignal()
+    button_stop = pyqtSignal()
+
+
     def __init__(self, argv: List[str]) -> None:
         super().__init__(argv)
 
@@ -57,6 +78,13 @@ class App(QApplication):
         )
 
         self.database.create_connection()
+        self.redis = RedisClient()
+
+        self.timer_database = QTimer()
+        self.block_database = False
+        self.timer_database.timeout.connect(self.database_update)
+        self.time_database = 1000
+        self.timer_database.start(self.time_database)
 
     
     def run(self):
@@ -65,6 +93,7 @@ class App(QApplication):
         self.fullscreen()
 
         self.window_low.show()
+        app.window_main_filler.show_animation()
         self.window_start.show_animation()
 
         sys.exit(app.exec_()) 
@@ -102,9 +131,59 @@ class App(QApplication):
         
         if event.type() == QEvent.MouseButtonPress:
             self.datetime_reset()
+            self.database_reset()
+
             self.window_datetime.hide()
 
         return super().eventFilter(obj, event)
+    
+
+    def database_update(self):
+        self.data_filler = self.database.read_data('myapp_filler')
+
+        if self.block_database == False:
+            
+            self.data_robot = self.database.read_data('myapp_robot')
+            self.data_control = self.database.read_data('myapp_control')
+
+
+            if self.data_control[0][1] == True: 
+                self.database.update_data('myapp_control', 'calibration', False)
+
+            if self.data_control[0][2] == True: 
+                self.database.update_data('myapp_control', 'panel', False)
+
+            if self.data_control[0][3] == True: 
+                self.database.update_data('myapp_control', 'motor', False)
+
+
+            # print('self.data_filler', self.data_filler)
+            # print('self.data_robot', self.data_robot)
+
+            self.window_filler.update_thread(self.data_filler[0])
+
+        if self.data_filler[0][3] == True and self.window_filler.play == False: 
+            self.button_start.emit()
+            self.window_filler.play = True
+
+        if self.data_filler[0][3] == False and self.window_filler.play == True: 
+            self.button_stop.emit()
+            self.window_filler.play = False
+            
+    
+    def block_on(self):
+        self.block_database = True
+        print('Block data')
+    
+
+    def block_off(self):
+        self.block_database = False
+        print('UNBlock data')
+    
+    
+    def database_reset(self):
+        self.timer_database.stop()
+        self.timer_database.start(self.time_database)
 
 
     def datetime(self):
@@ -159,55 +238,51 @@ class App(QApplication):
     def close_windows(self):
         if self.window_focus != self.window_start.window_name:
             self.window_start.hide()
-            print(f'close: {self.window_start.window_name}')
+            #print(f'close: {self.window_start.window_name}')
         
         if self.window_focus != self.window_datetime.window_name:
             self.window_datetime.hide()
-            print(f'close: {self.window_datetime.window_name}')
+            #print(f'close: {self.window_datetime.window_name}')
         
-        if self.window_focus != self.window_main_filler.window_name:
-            self.window_main_filler.hide()
-            print(f'close: {self.window_main_filler.window_name}')
+        # if self.window_focus != self.window_main_filler.window_name:
+        #     self.window_main_filler.hide()
+        #     print(f'close: {self.window_main_filler.window_name}')
 
         if self.window_focus != self.window_list1.window_name:
             self.window_list1.hide()
-            print(f'close: {self.window_list1.window_name}')
+            #print(f'close: {self.window_list1.window_name}')
         
         if self.window_focus != self.window_statistic.window_name:
             self.window_statistic.hide()
-            print(f'close: {self.window_statistic.window_name}')
-
-        # if self.window_focus != self.window_settings1.window_name:
-        #     self.window_settings1.hide()
-        #     print(f'close: {self.window_settings1.window_name}')
+            #print(f'close: {self.window_statistic.window_name}')
 
         if self.window_focus != self.window_settings2.window_name:
             self.window_settings2.hide()
-            print(f'close: {self.window_settings2.window_name}')
+            #print(f'close: {self.window_settings2.window_name}')
 
         if self.window_focus != self.window_prepare.window_name:
             self.window_prepare.hide()
-            print(f'close: {self.window_prepare.window_name}')
+            #print(f'close: {self.window_prepare.window_name}')
 
         if self.window_focus != self.window_view.window_name:
             self.window_view.close()
-            print(f'close: {self.window_view.window_name}')
+            #print(f'close: {self.window_view.window_name}')
 
         if self.window_focus != self.window_filler.window_name:
             self.window_filler.hide()
-            print(f'close: {self.window_filler.window_name}')
+            #print(f'close: {self.window_filler.window_name}')
 
         if self.window_focus != self.window_error.window_name:
             self.window_error.hide()
-            print(f'close: {self.window_error.window_name}')
+            #print(f'close: {self.window_error.window_name}')
 
         if self.window_focus != self.window_cip.window_name:
             self.window_cip.hide()
-            print(f'close: {self.window_cip.window_name}')
+            #print(f'close: {self.window_cip.window_name}')
 
         if self.window_focus != self.window_robot.window_name:
             self.window_robot.hide()
-            print(f'close: {self.window_robot.window_name}')
+            #print(f'close: {self.window_robot.window_name}')
 
 
     def show_windows(self):

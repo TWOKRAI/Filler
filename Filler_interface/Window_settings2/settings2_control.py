@@ -5,7 +5,7 @@ import subprocess
 
 from Lib.memory import Memory
 from Filler_interface.app import app
-from Server.server_control import server
+#from Server.server_control import server
 
 from Filler_interface.Window_settings1.settings_template import Control
 
@@ -159,7 +159,8 @@ class Control(Control):
 
 
     def on_timer_reset(self):
-        server.stop()
+        #server.stop()
+        app.threads.stop_server()
         app.exit()
 
 

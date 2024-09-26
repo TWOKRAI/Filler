@@ -30,9 +30,8 @@ class Timer:
 	
 
 class Neuron:
-	def __init__(self, camera):
-		self.camera = camera
-		self.interface = None
+	def __init__(self):
+		self.connect_0 = None
 
 		self.timer = Timer()
 
@@ -96,26 +95,26 @@ class Neuron:
 	
 
 	def neuron_vision(self):
-		if self.interface != None:
+		if self.connect_0.interface != None:
 			self.id = 0
 			data = []
 
-			cadr_1 = self.camera.read_cam()
+			cadr_1 = self.connect_0.camera.read_cam()
 			
-			self.camera.running()
+			self.connect_0.camera.running()
 			tuple_obj = self.find_objects()
 			data.append(tuple_obj)
-			self.interface.running()
+			self.connect_0.interface.running()
 
-			self.camera.running()
+			self.connect_0.camera.running()
 			tuple_obj = self.find_objects()
 			data.append(tuple_obj)
-			self.interface.running()
+			self.connect_0.interface.running()
 
-			self.camera.running()
+			self.connect_0.camera.running()
 			tuple_obj = self.find_objects()
 			data.append(tuple_obj)
-			self.interface.running()
+			self.connect_0.interface.running()
 		
 			sorted_data = sorted(data, key=lambda x: x[1])
 			max_value_second = max(sorted_data, key=lambda x: x[1])[1]
@@ -151,7 +150,7 @@ class Neuron:
 
 
 	def find_objects(self):
-		objects_list = self.detect_v5(self.camera.image_out)
+		objects_list = self.detect_v5(self.connect_0.camera.image_out)
 		self.objects_filter = self.filter(objects_list)
 
 		self.list_coord = self.pixel_to_coord(self.objects_filter)
@@ -224,13 +223,13 @@ class Neuron:
 
 					w1 = int(w - self.perspective)
 					
-					if xr_center >= self.camera.img_width / 2:
+					if xr_center >= self.connect_0.camera.img_width / 2:
 						xr_center_2 = int((xr_center - self.perspective * 2)) - xd 
 					else:
 						xr_center_2 = int((xr_center + self.perspective * 2)) + xd 
 
 					
-					yr_center_2 = int(((y1 + h) - w1 / 2 * 0.7) + (1 - abs(self.camera.img_height - (y1 + h)) / 700)) + yd
+					yr_center_2 = int(((y1 + h) - w1 / 2 * 0.7) + (1 - abs(self.connect_0.camera.img_height - (y1 + h)) / 700)) + yd
 
 					yr_center = int((y1 + w1 / 2 * 0.5 * (1 + h/1000)))
 
@@ -254,8 +253,8 @@ class Neuron:
 		yr_center_2 = obj[12]
 		
 
-		image_1 = self.camera.image_copy
-		image_2 = self.camera.read_cam()
+		image_1 = self.connect_0.camera.image_copy
+		image_2 = self.connect_0.camera.read_cam()
 
 		image_1_gray = cv2.cvtColor(image_1, cv2.COLOR_BGR2GRAY)
 		image_2_gray = cv2.cvtColor(image_2, cv2.COLOR_BGR2GRAY)
@@ -355,7 +354,7 @@ class Neuron:
 	def pixel_to_coord(self, objects):
 		list_coord = []
 
-		img_width, img_height = self.camera.img_width , self.camera.img_height
+		img_width, img_height = self.connect_0.camera.img_width , self.connect_0.camera.img_height
 
 		for obj in objects:
 			x1 = obj[4]
@@ -376,11 +375,11 @@ class Neuron:
 			y = yr_center_2
 
 			point = (x, y)
-			point = self.camera.perspective.transform_coord(point)
-			point = self.camera.perspective.scale(point)
+			point = self.connect_0.camera.perspective.transform_coord(point)
+			point = self.connect_0.camera.perspective.scale(point)
 
 
-			if point[0] <= self.camera.img_width/2:
+			if point[0] <= self.connect_0.camera.img_width/2:
 				dx = abs(x1 - xr_center)
 			else:
 				dx = abs(x1 + w - xr_center)
@@ -411,7 +410,7 @@ class Neuron:
 				dz = z3
 
 
-			v = (3.142 * (dx / 2) ** 2 * z3) / 2 * (1 - abs(self.camera.img_width/2 - xr_center_2) / 250) * (1 - abs(dz - z3) / 21)
+			v = (3.142 * (dx / 2) ** 2 * z3) / 2 * (1 - abs(self.connect_0.camera.img_width/2 - xr_center_2) / 250) * (1 - abs(dz - z3) / 21)
 			v = round(v, 1)
 			
 			list_coord.append((x, y, z2, v))

@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QThread, pyqtSignal
+import multiprocessing
 
 from Threads.robot_main import Robot_filler
 from Threads.input import Input_request
@@ -6,7 +7,7 @@ from Threads.data_thread import Data_request
 
 
 from Filler_interface.app import app
-from Server.server_control import server
+from Server.server_control import start_server, stop_server
 
 
 class Thread():
@@ -17,9 +18,25 @@ class Thread():
 
         self.start_input_thread()
         self.start_robot_thread()
-        server.run()
-        self.start_data_thread()
+
+        self.server_process = None
+        self.start_server()
+
+        # server.run()
+        #self.start_data_thread()
         
+
+    def start_server(self):
+        if self.server_process is None or not self.server_process.is_alive():
+            self.server_process = multiprocessing.Process(target=start_server)
+            self.server_process.start()
+
+
+    def stop_server(self):
+        if self.server_process is not None and self.server_process.is_alive():
+            stop_server()
+            self.server_process.terminate()
+            self.server_process = None
 
 
     def start_input_thread(self):
@@ -101,6 +118,12 @@ class Thread():
                 app.window_filler.start_filler.connect(self.robot_filler.filler_run)
                 app.window_filler.stop_filler.connect(self.robot_filler.pump_station.stop_pumps)
                 app.window_filler.stop_filler.connect(self.robot_filler.filler_stop)
+                
+                app.button_start.connect(self.robot_filler.filler_run)
+                app.button_stop.connect(self.robot_filler.pump_station.stop_pumps)
+                app.button_stop.connect(self.robot_filler.filler_stop)
+
+
                 # app.window_filler.stop_filler.connect(self.robot_filler.robot.stop_motors)
                 # app.window_filler.stop_filler.connect(self.robot_filler.neuron.forget)
 
@@ -121,6 +144,14 @@ class Thread():
                 self.robot_filler.prepare.connect(app.window_prepare.button_calibr_clicked)
 
                 self.robot_filler.start_state.connect(app.window_filler.button_start_update)
+
+                self.robot_filler.robot.block_data_on.connect(app.block_on)
+                self.robot_filler.robot.block_data_off.connect(app.block_off)
+
+                self.robot_filler.pump_station.block_data_on.connect(app.block_on)
+                self.robot_filler.pump_station.block_data_off.connect(app.block_off)
+
+
 
             self.robot_filler.start()
 

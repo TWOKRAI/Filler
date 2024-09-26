@@ -6,6 +6,8 @@ from Filler_interface.app import app
 
 class Laser:
     def __init__(self) -> None:
+        self.connect_0 = None
+
         self.mode = 2
         self.laser_on = False
 

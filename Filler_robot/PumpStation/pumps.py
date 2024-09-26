@@ -115,6 +115,8 @@ class Pump_station(QObject):
     def __init__(self):
         super().__init__()
 
+        self.connect_0 = None
+
         self.running = True
 
         self.motor_1 = Motor('pumps_1', pins.motor_p1_step, pins.motor_p1_dir, pins.motor_p1p2_enable)
