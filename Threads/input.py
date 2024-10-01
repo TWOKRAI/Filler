@@ -34,6 +34,8 @@ class Input_request(QThread):
 
         self.block = False
 
+        self.monitor_run = False
+
 
     def run(self):
         self.running = True
@@ -78,6 +80,12 @@ class Input_request(QThread):
 
                         self.button_monitor.emit()
                         self.starting.emit()
+                
+                if self.monitor_run == True:
+                    if not self.block: 
+                        self.motor_monitor.start()
+                   
+                    self.monitor_run = False
                     
                     # QThread.msleep(100)
 

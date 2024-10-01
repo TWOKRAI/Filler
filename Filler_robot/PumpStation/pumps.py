@@ -66,15 +66,14 @@ class Pump(QObject):
 
         print('speed', self.speed_k, speed, self.turn)
 
-        await self.motor._freq_async(speed, 1, self.turn)
+        #await self.motor._freq_async(speed, 1, self.turn)
+        await self.motor._freq_async_new(int(self.turn), speed, 300, 300, 100, 100)
 
         self.stop_pump.emit()
 
-        # QThread.sleep(1)
-        
-        # await self.motor._freq_async(speed, 1, 1000 * -self.dir)
-        
-        await self.motor._freq_async(speed, 1, -800 * self.dir, accuration = False)
+        #await self.motor._freq_async(speed, 1, -800 * self.dir, accuration = False)
+        await self.motor._freq_async_new(int(-600 * self.dir), speed, 300, 300, 100, 100)
+
         self.ready = True
         
 
@@ -292,17 +291,32 @@ class Pump_station(QObject):
             await asyncio.sleep(0.1)
             
             if self.filler_run:
-                if self.pump_1.motor.time_distance >= self.pump_1.motor.time_distance_2:
-                    self.pump_1.motor.time_distance_2 = self.pump_1.motor.time_distance + 1
+                # if self.pump_1.motor.time_distance >= self.pump_1.motor.time_distance_2:
+                #     self.pump_1.motor.time_distance_2 = self.pump_1.motor.time_distance + 1
+                #     self.bottle_1.emit()
+                #     #print(self.pump_1.motor.time_distance)
+                
+                # await asyncio.sleep(0.1)
+
+                # if self.pump_2.motor.time_distance >= self.pump_2.motor.time_distance_2:
+                #     self.pump_2.motor.time_distance_2 = self.pump_2.motor.time_distance + 1 
+                #     #print(self.pump_2.motor.time_distance)
+                #     self.bottle_2.emit()
+                
+                # await asyncio.sleep(0.1)
+
+                print('self.pump_1.motor.step_info', self.pump_1.motor.step_info)
+                if  self.pump_1.motor.step_info >= self.pump_1.motor.step_info_2:
+                    self.pump_1.motor.step_info_2 = self.pump_1.motor.step_info + 1000
                     self.bottle_1.emit()
                     #print(self.pump_1.motor.time_distance)
                 
                 await asyncio.sleep(0.1)
 
-                if self.pump_2.motor.time_distance >= self.pump_2.motor.time_distance_2:
-                    self.pump_2.motor.time_distance_2 = self.pump_2.motor.time_distance + 1 
-                    #print(self.pump_2.motor.time_distance)
+                if  self.pump_2.motor.step_info >= self.pump_2.motor.step_info_2:
+                    self.pump_2.motor.step_info_2 = self.pump_2.motor.step_info + 1000
                     self.bottle_2.emit()
+                    #print(self.pump_1.motor.time_distance)
                 
                 await asyncio.sleep(0.1)
 

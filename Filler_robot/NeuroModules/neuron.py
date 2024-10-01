@@ -259,16 +259,23 @@ class Neuron:
 		image_1_gray = cv2.cvtColor(image_1, cv2.COLOR_BGR2GRAY)
 		image_2_gray = cv2.cvtColor(image_2, cv2.COLOR_BGR2GRAY)
 
+		image_1_gray = cv2.GaussianBlur(image_1_gray, (5, 5), 0)
+		image_2_gray = cv2.GaussianBlur(image_2_gray, (5, 5), 0)
+
+		image_1_gray = cv2.medianBlur(image_1_gray, 5)
+		image_2_gray = cv2.medianBlur(image_2_gray, 5)
+
 		# image_1_gray = image_1
 		# image_2_gray = image_2
 
 		cropped_image_1 = image_1_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 2, x1 + 10 : x1 + w - 10]
-		# cv2.imwrite('cropped_image.png', cropped_image_1)
+		cv2.imwrite('cropped_image.png', cropped_image_1)
 		
 		cropped_image_2 = image_2_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 2, x1 + 10: x1 + w  - 10]
-		# cv2.imwrite('cropped_image_2.png', cropped_image_2)
+		cv2.imwrite('cropped_image_2.png', cropped_image_2)
 
-		sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.012, edgeThreshold=100)
+		#sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.012, edgeThreshold=100)
+		sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.007, edgeThreshold=100)
 
 		kp1, des1 = sift.detectAndCompute(cropped_image_1, None)
 		kp2, des2 = sift.detectAndCompute(cropped_image_2, None)
@@ -278,10 +285,10 @@ class Neuron:
 		cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 		cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 
-		#cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
-		#cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
+		cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
+		cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
 
-		if len(kp2) >= len(kp1) * 0.4:
+		if len(kp2) >= len(kp1) * 0.6:
 			print('Стакан есть')
 			return True
 		else:

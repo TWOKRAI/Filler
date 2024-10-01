@@ -223,6 +223,8 @@ class Control(QMainWindow):
     def minus(self):
         self.timer_minus_pressed.setInterval(int(1000/(1 + self.step_button)))
         self.step_button += 0.2
+
+        print('self.step_button', self.step_button)
     
 
     def minus_pressed(self):
@@ -231,7 +233,6 @@ class Control(QMainWindow):
     
     def minus_pressed_2(self):
         self.timer_minus_pressed.start()
-        print('preeeesed minus')
         self.pressed_minus.stop()
 
 

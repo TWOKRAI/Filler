@@ -1,5 +1,6 @@
 import asyncio
 from PyQt5.QtCore import QObject, pyqtSignal, QThread
+import time
 
 from Filler_robot.MotorModules.motor import Motor
 from Raspberry.pins_table import pins
@@ -20,6 +21,8 @@ class Motor_monitor(QThread):
 
         self.motor.direction = False
 
+        self.direct = False
+
         self.motor.acc_run = True
         self.motor.k = 10
         self.acc_start = 20
@@ -29,7 +32,7 @@ class Motor_monitor(QThread):
         
         self.motor.limit_min = -15000
         self.motor.limit_max = 15000
-        self.distance = 12000
+        self.distance = 6000
 
         self.direction = True
 
@@ -53,17 +56,26 @@ class Motor_monitor(QThread):
         if switch_in == True:
             distance = -self.distance
 
+            self.direct = True
+
         elif switch_out == True:
             distance = self.distance
             self.off_signal.emit()
 
+            self.direct = False
+
         elif switch_in == False and switch_out == False:
             if self.state_button:
                 distance = -self.distance
+
+                self.direct = True
             else:
                 distance = self.distance
+
+                self.direct = False
         
         print('поехал')
+        #time.sleep(1)
         asyncio.run(self._move_async(distance, detect = True))
         self.direction = not self.direction
 
@@ -106,7 +118,7 @@ class Motor_monitor(QThread):
             if self.motor.ready:
                 raise asyncio.CancelledError()
 
-            if (switch_in and not dir) or (switch_out and dir):
+            if (switch_in and self.direct == False) or (switch_out and self.direct == True):
                 print('SWITCH')
 
                 if switch_out:
@@ -124,7 +136,8 @@ class Motor_monitor(QThread):
         if detect:
             tasks.append(asyncio.create_task(self._detect_sensor()))
 
-        tasks.append(asyncio.create_task(self.motor._freq_async(self.motor_speed, 1, distance)))
+        #tasks.append(asyncio.create_task(self.motor._freq_async(self.motor_speed, 1, distance)))
+        tasks.append(asyncio.create_task(self.motor._freq_async_new(distance, 3000, 300, 300, 500, 500)))
             
         try:
             await asyncio.gather(*tasks)

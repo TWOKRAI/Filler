@@ -528,7 +528,10 @@ class Robot_module(QObject):
 		# speed = (10 - app.window_robot.speed_robot) / 5000
 		# speed = round(speed, 6)
 
-		speed = app.window_robot.speed_robot
+		# speed = app.window_robot.speed_robot
+
+		speed = (100 - app.window_robot.speed_robot) / 50000
+		speed = round(speed, 6)
 
 		self.axis_x.motor.speed_def = self.axis_x.motor.speed_default + speed
 		self.axis_y.motor.speed_def = self.axis_y.motor.speed_default + speed
@@ -814,7 +817,9 @@ class Robot_module(QObject):
 				
 			
 			asyncio.run(self._calibration_y_async())
-			self.move(0, -7, 0)
+
+			print('111111111111111111111')
+			self.move(0, -10, 0)
 
 			asyncio.run(self._calibration_x_async())
 			self.move(790, 0, 0)

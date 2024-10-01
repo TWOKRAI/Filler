@@ -103,7 +103,7 @@ class Window_robot(Control):
         self.button_reset.pressed.connect(self.button_reset_pressed)
         self.button_reset.released.connect(self.button_reset_released)
 
-        self.speed_robot = 10
+        self.speed_robot = 70
         self.time_robot = 5
         self.laser_mode = 2
         self.autovalue = 1
@@ -113,11 +113,16 @@ class Window_robot(Control):
         self.memory = Memory(db_path = file_path, db_file = 'memory_db')
 
         self.param_list = self.get_parametrs()
-        self.param_list = self.memory_read(self.param_list)
+        #self.param_list = self.memory_read(self.param_list)
         self.put_parametrs()
 
         self.update()
         self.enable_control()
+
+    
+    def show(self):
+        self.get_parametrs()
+        super().show()
 
 
     def show_popup(self):
@@ -141,6 +146,7 @@ class Window_robot(Control):
         self.value_update()
         self.value_mini_update()
         self.name_params_update()
+        self.enable_control()
     
     
     def enable_control(self):
@@ -172,8 +178,23 @@ class Window_robot(Control):
     def on_timer_reset(self):
         app.exit()
 
+    
+    def database_update(self):
+        self.get_parametrs()
+        self.update()
+
 
     def get_parametrs(self): 
+        self.data_robot = app.database.read_data('myapp_robot')
+
+        self.speed_robot = self.data_robot[0][1]
+        self.time_robot = self.data_robot[0][2]
+        self.laser_mode = self.data_robot[0][3]
+        self.autovalue = int(self.data_robot[0][4])
+        self.presence_cup = int(self.data_robot[0][5])
+
+        #print( 'GET robot myapp_robot', self.speed_robot, self.time_robot, self.laser_mode, self.autovalue, self.presence_cup)
+
         self.param_list = {
             1: self.speed_robot,
             2: self.time_robot,
@@ -192,23 +213,37 @@ class Window_robot(Control):
 
 
     def put_parametrs(self):
-        speed = (10 - self.param_list[1]) / 5000
-        self.speed_robot = round(speed, 6)
+        # speed = (100 - self.param_list[1]) / 50000
+        # self.speed_robot = round(speed, 6)
         
+        self.speed_robot = self.param_list[1]
         self.time_robot = self.param_list[2]
         self.laser_mode = self.param_list[3]
         self.autovalue = self.param_list[4]
         self.presence_cup = self.param_list[5]
 
+        self.autovalue = bool(self.autovalue)
+        self.presence_cup = bool(self.presence_cup)
+
+        print( 'PUT robot myapp_robot', self.param_list[1], self.time_robot, self.laser_mode, self.autovalue, self.presence_cup)
+
+        app.database.update_data('myapp_robot', 'speed', self.param_list[1])
+        app.database.update_data('myapp_robot', 'time_wait', self.time_robot)
+        app.database.update_data('myapp_robot', 'laser_mode', self.laser_mode)
+        app.database.update_data('myapp_robot', 'autovalue', self.autovalue)
+        app.database.update_data('myapp_robot', 'presence_cup', self.presence_cup)
+
 
     def memory_write(self, data):
-        self.memory.memory_write('data', data)
+        # self.memory.memory_write('data', data)
+
+        self.put_parametrs()
 
     
     def default_parametrs(self):
         self.memory.recreate_database()
 
-        self.speed_robot = 10
+        self.speed_robot = 70
         self.time_robot = 5
         self.laser_mode = 2
         self.autovalue = 1
@@ -509,11 +544,13 @@ class Window_robot(Control):
             case 3:
                 if self.param_list[self.param_num] > 0:
                     self.param_list[self.param_num] -= 1
-            
+
+                self.put_parametrs()
             case 4:
                 if self.param_list[self.param_num] > 0:
                     self.param_list[self.param_num] -= 1
 
+                self.put_parametrs()
             case 5:
                 if self.param_list[self.param_num] > 0:
                     self.param_list[self.param_num] -= 1
@@ -523,6 +560,8 @@ class Window_robot(Control):
 
         self.update()
         self.enable_control()
+
+        print('click') 
        
     
     @enable_marker_decorator('enable_marker')
@@ -585,7 +624,7 @@ class Window_robot(Control):
 
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] < 10:
+                if self.param_list[self.param_num] < 100:
                     self.param_list[self.param_num] += 1
                 
                 self.put_parametrs()
@@ -614,8 +653,6 @@ class Window_robot(Control):
 
         self.update()
         self.enable_control()
-
-        print('click') 
     
 
     @enable_marker_decorator('enable_marker')
@@ -642,7 +679,7 @@ class Window_robot(Control):
     def plus_enable(self):
         match self.param_num:
             case 1:
-                if self.param_list[self.param_num] >= 10:
+                if self.param_list[self.param_num] >= 100:
                     self.button_plus.setEnabled(False)
                 else:
                     self.button_plus.setEnabled(True)

@@ -33,6 +33,8 @@ class Thread():
 
 
     def stop_server(self):
+        stop_server()
+        
         if self.server_process is not None and self.server_process.is_alive():
             stop_server()
             self.server_process.terminate()
@@ -86,7 +88,7 @@ class Thread():
                 self.input_request.motor_monitor.button_signal.connect(self.robot_filler.pump_station.stop_pumps)
                 self.input_request.motor_monitor.button_signal.connect(self.robot_filler.filler_stop)
                 self.input_request.motor_monitor.button_signal.connect(app.window_prepare.reset)
-                self.input_request.motor_monitor.button_signal.connect(self.robot_filler.calibration_only_run)
+                #self.input_request.motor_monitor.button_signal.connect(self.robot_filler.calibration_only_run)
 
                 self.input_request.error.connect(app.window_view.close)
 
@@ -122,6 +124,8 @@ class Thread():
                 app.button_start.connect(self.robot_filler.filler_run)
                 app.button_stop.connect(self.robot_filler.pump_station.stop_pumps)
                 app.button_stop.connect(self.robot_filler.filler_stop)
+
+                app.button_calibration.connect(self.robot_filler.calibration_only_run)
 
 
                 # app.window_filler.stop_filler.connect(self.robot_filler.robot.stop_motors)

@@ -50,6 +50,10 @@ class Motor:
 
 		self.time_distance = 0
 
+		self.step_info = 0
+		self.step_info_2 = 0
+
+
     
 	def null_value(self):
 		self.value = 0
@@ -261,10 +265,60 @@ class Motor:
 
 		#print('self.time_distance', self.time_distance)
 
-	
 
 	def freq(self, frequency, k):
 		asyncio.run(self._freq_async(self, frequency, k))
+
+
+	async def _freq_async_new(self, steps, speed, acc_step, dec_step, start_speed, end_speed):
+		if steps >= 0:
+			self.pin_direction.set_value(self.direction)
+		else:
+			self.pin_direction.set_value(not self.direction)
+		
+		steps = abs(steps)
+
+		acceleration_steps = acc_step
+		deceleration_steps = dec_step
+
+		constant_speed_steps = steps - acceleration_steps - deceleration_steps
+		
+		self.step_info = 0
+		self.step_info_2 = 0
+
+		for i in range(acceleration_steps):
+			if self.stop == True:
+				break
+
+			current_speed = start_speed + (speed - start_speed) * (i + 1) / acceleration_steps
+			self.pin_step.frequency = current_speed
+			self.pin_step.value = 0.5
+			await asyncio.sleep(1 / current_speed)
+
+		self.pin_step.frequency = speed
+		
+		for i in range(constant_speed_steps):
+			if self.stop == True:
+				break
+
+			self.pin_step.value = 0.5
+			await asyncio.sleep(1 / speed)
+
+			self.step_info = i
+
+
+		for i in range(deceleration_steps):
+			if self.stop == True:
+				break
+
+			current_speed = speed - (speed - end_speed) * (i + 1) / deceleration_steps
+			self.pin_step.frequency = current_speed
+			self.pin_step.value = 0.5
+			await asyncio.sleep(1 / current_speed)		
+
+
+	def freq_new(self, steps, speed, acc_step, dec_step, start_speed, end_speed):
+		asyncio.run(self._freq_async_new(self, steps, speed, acc_step, dec_step, start_speed, end_speed))
 
 
 	def stop_freq(self):

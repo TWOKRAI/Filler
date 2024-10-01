@@ -8,7 +8,6 @@ from PyQt5.QtGui import QCursor, QFontDatabase
 #from Server.database import DatabaseManager
 from Server.database_postgresql import DatabaseManager
 from Server.database_redis import RedisClient
-import pickle
 
 from Filler_interface.Style_windows.style import Style
 
@@ -28,8 +27,9 @@ class App(QApplication):
     button_start = pyqtSignal()
     button_stop = pyqtSignal()
 
-    button_start = pyqtSignal()
-    button_stop = pyqtSignal()
+    button_calibration = pyqtSignal()
+    button_panel = pyqtSignal()
+    button_motor = pyqtSignal()
 
 
     def __init__(self, argv: List[str]) -> None:
@@ -78,7 +78,7 @@ class App(QApplication):
         )
 
         self.database.create_connection()
-        self.redis = RedisClient()
+        self.database_default()
 
         self.timer_database = QTimer()
         self.block_database = False
@@ -143,17 +143,20 @@ class App(QApplication):
 
         if self.block_database == False:
             
-            self.data_robot = self.database.read_data('myapp_robot')
+            self.window_robot.database_update()
             self.data_control = self.database.read_data('myapp_control')
 
-
-            if self.data_control[0][1] == True: 
+            
+            if self.data_control[0][1] == True:
+                self.button_calibration.emit()
                 self.database.update_data('myapp_control', 'calibration', False)
 
             if self.data_control[0][2] == True: 
+                self.threads.input_request.monitor_run = True
                 self.database.update_data('myapp_control', 'panel', False)
 
-            if self.data_control[0][3] == True: 
+            if self.data_control[0][3] == True:
+                self.button_motor.emit()
                 self.database.update_data('myapp_control', 'motor', False)
 
 
@@ -169,7 +172,14 @@ class App(QApplication):
         if self.data_filler[0][3] == False and self.window_filler.play == True: 
             self.button_stop.emit()
             self.window_filler.play = False
-            
+    
+
+    def database_default(self):
+        self.database.update_data('myapp_filler', 'status', False)
+        self.database.update_data('myapp_control', 'calibration', False)
+        self.database.update_data('myapp_control', 'panel', False)
+        self.database.update_data('myapp_control', 'motor', False)
+
     
     def block_on(self):
         self.block_database = True

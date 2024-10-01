@@ -34,6 +34,8 @@ class Main_filler_control(QMainWindow):
         self.button_start.setMinimumSize(button_size)
         self.button_start.setMaximumSize(button_size)
         self.button_start.setIconSize(QSize(55, 55))
+        self.button_start.setFocusPolicy(Qt.NoFocus)
+
         
         font1 = QFont()
         font1.setFamily(app.font_family)
@@ -51,6 +53,7 @@ class Main_filler_control(QMainWindow):
         self.button_robot.setMaximumSize(button_size)
         self.button_robot.setIconSize(icon_size)
         self.button_robot.setFont(font)
+        self.button_robot.setFocusPolicy(Qt.NoFocus)
 
         #self.button_robot.clicked.connect(self.robot)
         self.button_robot.released.connect(self.robot)
@@ -61,6 +64,7 @@ class Main_filler_control(QMainWindow):
         self.button_settings.setMaximumSize(button_size)
         self.button_settings.setIconSize(icon_size)
         self.button_settings.setFont(font)
+        self.button_settings.setFocusPolicy(Qt.NoFocus)
 
         #self.button_settings.clicked.connect(self.settings)
         self.button_settings.released.connect(self.settings)
@@ -71,6 +75,8 @@ class Main_filler_control(QMainWindow):
         self.button_view.setMaximumSize(button_size)
         self.button_view.setIconSize(QSize(55, 55))
         self.button_view.setFont(font)
+        self.button_view.setFocusPolicy(Qt.NoFocus)
+
 
         #self.button_view.clicked.connect(self.view)
         self.button_view.released.connect(self.view)
@@ -89,7 +95,7 @@ class Main_filler_control(QMainWindow):
         self.timer_enable = QTimer(self)
         self.timer_enable.setSingleShot(True)  
         self.timer_enable.timeout.connect(self.all_enable_on)
-        self.timer_enable.start(1000) 
+        self.timer_enable.start(500) 
         self.enable_marker = True
 
 
@@ -99,6 +105,8 @@ class Main_filler_control(QMainWindow):
 
     def show(self):
         if app.on_fullscreen: self.fullscreen()
+
+        self.setFocus()
         
         super().show()
 
@@ -106,9 +114,7 @@ class Main_filler_control(QMainWindow):
         print(app.window_focus)
         #app.close_windows()
 
-        self.setFocus()
-
-        QTimer.singleShot(1000, self.no_focus_button)
+        QTimer.singleShot(500, self.no_focus_button)
 
         self.all_enable_off()
 
@@ -170,6 +176,9 @@ class Main_filler_control(QMainWindow):
 
     @enable_marker_decorator('enable_marker')
     def start(self):
+        self.setFocus()
+        self.all_enable_off()
+        
         app.window_prepare.hide()
         app.window_prepare.show()
         #self.setFocus()
@@ -178,6 +187,9 @@ class Main_filler_control(QMainWindow):
 
     @enable_marker_decorator('enable_marker')
     def robot(self):
+        self.setFocus()
+        self.all_enable_off()
+
         app.window_robot.hide()
         app.window_robot.show()
         #self.setFocus()
@@ -186,14 +198,19 @@ class Main_filler_control(QMainWindow):
 
     @enable_marker_decorator('enable_marker')
     def settings(self):
+        self.setFocus()
+        self.all_enable_off()
+
         app.window_settings2.hide()
         app.window_settings2.show()
-        self.setFocus()
         #self.hide()
        
     
     @enable_marker_decorator('enable_marker')
     def view(self):
+        self.setFocus()
+        self.all_enable_off()
+
         stylesheet = app.styleSheet()
         new_stylesheet = stylesheet.replace(
             'background-color: qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0, stop: 0 white, stop: 0.4 #DCDCDC, stop: 0.9 #878787);',
@@ -202,17 +219,18 @@ class Main_filler_control(QMainWindow):
         
         app.setStyleSheet(new_stylesheet)
         app.window_view.show(1)
-
-        self.setFocus()
         
         #self.hide()
 
 
     @enable_marker_decorator('enable_marker')
     def cip(self):
+        self.setFocus()
+        self.all_enable_off()
+
         app.window_cip.hide()
         app.window_cip.show()
-        self.setFocus()
+
         #self.hide()
 
 
