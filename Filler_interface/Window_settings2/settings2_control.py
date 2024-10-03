@@ -10,7 +10,7 @@ from Filler_interface.app import app
 from Filler_interface.Window_settings1.settings_template import Control
 
 
-class Control(Control):
+class Settings_control(Control):
     def __init__(self):
         super().__init__()
 
@@ -23,7 +23,6 @@ class Control(Control):
         self.font_text.setFamily(app.font_family)
         self.font_text.setBold(False)
         self.font_text.setWeight(50)
-
 
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
@@ -979,6 +978,4 @@ class Control(Control):
             self.button_right.setEnabled(False)
         else:
             self.button_right.setEnabled(True)
-
-
-window_setting2 = Control()
+            

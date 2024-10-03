@@ -9,7 +9,7 @@ import os
 from Filler_interface.app import app
 
 
-class Control(QMainWindow):
+class Datetime_control(QMainWindow):
     def __init__(self):
         super().__init__()
 
@@ -123,5 +123,3 @@ class Control(QMainWindow):
         self.time_text.setText(time)
         self.date.setText(date)
     
-    
-window_datetime = Control()

@@ -7,7 +7,6 @@ from PyQt5.QtGui import QCursor, QFontDatabase
 
 #from Server.database import DatabaseManager
 from Server.database_postgresql import DatabaseManager
-from Server.database_redis import RedisClient
 
 from Filler_interface.Style_windows.style import Style
 
@@ -106,8 +105,6 @@ class App(QApplication):
             self.window_low.fullscreen()
             self.window_main_filler.fullscreen()
             self.window_list1.fullscreen()
-            self.window_statistic.fullscreen()
-            # self.window_settings1.fullscreen()
             self.window_settings2.fullscreen()
             self.window_prepare.fullscreen()
             self.window_view.fullscreen()
@@ -211,7 +208,6 @@ class App(QApplication):
 
         self.window_main_filler.language(lang_num)
         self.window_list1.language(lang_num)
-        self.window_statistic.language(lang_num)
         self.window_settings2.language(lang_num)
         self.window_prepare.language(lang_num)
         self.window_filler.language(lang_num)
@@ -233,7 +229,6 @@ class App(QApplication):
         self.window_list1.set_icons()
         # self.window_settings1.set_icons()
         self.window_settings2.set_icons()
-        self.window_statistic.set_icons()
         self.window_cip.set_icons()
         self.window_robot.set_icons()
 
@@ -243,7 +238,58 @@ class App(QApplication):
         #style.recolor(self, (42, 122, 96, 255))
         style = self.styling.recolor_css(style)
         self.setStyleSheet(style)
-   
+    
+
+    def create_windows(self):
+        from Filler_interface.Window_start.start_conrtol import Start_control
+        self.window_start = Start_control()
+
+        from Filler_interface.Window_datetime.datetime_control import Datetime_control
+        self.window_datetime = Datetime_control()
+
+        # from Filler_interface.Window_pop_up.pop_up_control import window_pop_up
+        # app.window_pop_up = window_pop_up
+
+        from Filler_interface.Window_pop_up.pop_up_control2 import Confirm_control
+        self.window_pop_up = Confirm_control()
+
+        from Filler_interface.Window_low.low_control import Low_control
+        self.window_low = Low_control()
+
+        from Filler_interface.Window_main.main_filler_conrtol import Main_filler_control
+        self.window_main_filler = Main_filler_control()
+
+        from Filler_interface.Window_list1.list1_control import List_control
+        self.window_list1 = List_control()
+
+        from Filler_interface.Window_settings2.settings2_control import Settings_control
+        self.window_settings2 = Settings_control()
+
+        from Filler_interface.Window_prepare.prepare_control import Prepare_control
+        self.window_prepare = Prepare_control()
+
+        from Filler_interface.Window_view.view_conrtol import View_control
+        self.window_view = View_control()
+
+        from Filler_interface.Window_error.error_conrtol import Error_control
+        self.window_error = Error_control()
+
+        from Filler_interface.Window_cip.cip_control3 import Cip_control
+        self.window_cip = Cip_control()
+
+        from Filler_interface.Window_robot.robot_control3 import Robot_control
+        self.window_robot = Robot_control()
+
+        from Filler_interface.Window_filler.filler_control2 import Filler_control
+        self.window_filler = Filler_control()
+
+        self.ready = True
+
+    
+    def connected(self):
+        from Threads.threads import Thread
+        self.threads = Thread()
+
     
     def close_windows(self):
         if self.window_focus != self.window_start.window_name:
@@ -261,10 +307,6 @@ class App(QApplication):
         if self.window_focus != self.window_list1.window_name:
             self.window_list1.hide()
             #print(f'close: {self.window_list1.window_name}')
-        
-        if self.window_focus != self.window_statistic.window_name:
-            self.window_statistic.hide()
-            #print(f'close: {self.window_statistic.window_name}')
 
         if self.window_focus != self.window_settings2.window_name:
             self.window_settings2.hide()
@@ -308,14 +350,6 @@ class App(QApplication):
             case self.window_list1.window_name:
                 self.window_list1.show()
 
-            case self.window_statistic.window_name:
-                self.window_statistic.hide()
-                self.window_statistic.show()
-            
-            # case self.window_settings1.window_name:
-            #     self.window_settings1.hide()
-            #     self.window_settings1.show()
-                
             case self.window_settings2.window_name:
                 self.window_settings2.hide()
                 self.window_settings2.show()
@@ -350,62 +384,8 @@ class App(QApplication):
     
 
 app = App(sys.argv)
-
-
-from Filler_interface.Window_start.start_conrtol import window_start
-app.window_start = window_start
-
-from Filler_interface.Window_datetime.datetime_control import window_datetime
-app.window_datetime = window_datetime
-
-# from Filler_interface.Window_pop_up.pop_up_control import window_pop_up
-# app.window_pop_up = window_pop_up
-
-from Filler_interface.Window_pop_up.pop_up_control2 import Window_confirm
-app.window_pop_up = Window_confirm()
-
-from Filler_interface.Window_low.low_control import window_low
-app.window_low = window_low
-
-from Filler_interface.Window_main.main_filler_conrtol import main_filler_window
-app.window_main_filler = main_filler_window 
-
-from Filler_interface.Window_list1.list1_control import window_list1
-app.window_list1 = window_list1
-
-from Filler_interface.Window_statistic.statistic_control import window_statistic
-app.window_statistic = window_statistic
-
-# from Filler_interface.Window_settings1.settings_control2 import window_setting1
-# app.window_settings1 = window_setting1
-
-from Filler_interface.Window_settings2.settings2_control import window_setting2
-app.window_settings2 = window_setting2
-
-from Filler_interface.Window_prepare.prepare_control import window_prepare
-app.window_prepare = window_prepare
-
-from Filler_interface.Window_view.view_conrtol import window_view
-app.window_view = window_view
-
-from Filler_interface.Window_error.error_conrtol import window_error
-app.window_error = window_error
-
-from Filler_interface.Window_cip.cip_control3 import window_cip
-app.window_cip = window_cip
-
-from Filler_interface.Window_robot.robot_control3 import Window_robot
-app.window_robot = Window_robot()
-
-from Filler_interface.Window_filler.filler_control2 import window_filler
-app.window_filler = window_filler
-
-
-app.ready = True
-
-from Threads.threads import Thread
-app.threads = Thread()
-
+app.create_windows()
+app.connected()
 
 
 

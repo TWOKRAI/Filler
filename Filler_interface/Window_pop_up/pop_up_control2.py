@@ -7,7 +7,7 @@ import os
 from Filler_interface.app import app
 
 
-class Window_confirm(QMainWindow):
+class Confirm_control(QMainWindow):
     def __init__(self):
         super().__init__()
 

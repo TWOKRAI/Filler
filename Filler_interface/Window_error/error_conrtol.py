@@ -114,6 +114,3 @@ class Error_control(QMainWindow):
         self.label_warning.setWordWrap(False)
 
         self.label_warning.setText(label_name[self.lang])
-
-    
-window_error = Error_control()

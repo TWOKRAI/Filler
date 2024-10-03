@@ -50,6 +50,14 @@ class View_control(QMainWindow):
 
 
     def show(self, id = 0):
+        stylesheet = app.styleSheet()
+        new_stylesheet = stylesheet.replace(
+            'background-color: qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0, stop: 0 white, stop: 0.4 #DCDCDC, stop: 0.9 #878787);',
+            'background-color: None'
+        )
+        
+        app.setStyleSheet(new_stylesheet)
+    
         self.hide()
 
         if app.window_filler.play == False:
@@ -131,7 +139,3 @@ class View_control(QMainWindow):
     #     qimage = QPixmap()
     #     qimage.loadFromData(buffer.getvalue())
     #     self.label.setPixmap(qimage)
-
-
-      
-window_view = View_control()

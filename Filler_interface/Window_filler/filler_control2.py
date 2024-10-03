@@ -8,7 +8,7 @@ from Filler_interface.app import app
 from Filler_interface.Window_filler.filler_template import Control
 
 
-class Control(Control):
+class Filler_control(Control):
     start_filler = pyqtSignal()
     stop_filler = pyqtSignal()
 
@@ -44,7 +44,7 @@ class Control(Control):
         self.button_menu.released.connect(self.button_menu_released)
 
         self.button_view.setMinimumSize(button_size)
-        self.button_view.setIconSize(QSize(80, 80))
+        self.button_view.setIconSize(QSize(70, 70))
 
         self.button_view.clicked.connect(self.view)
 
@@ -234,7 +234,7 @@ class Control(Control):
 
     
     def view(self):
-        app.window_view.show()
+        app.window_list1.show()
         
 
     def label_window_update(self):
@@ -321,7 +321,6 @@ class Control(Control):
 
     
     def stop_pump_1(self):
-
         self.min_value = 0
         self.value_update_pump_1()
 
@@ -695,6 +694,3 @@ class Control(Control):
             # app.threads.robot_filler.all_stop()
 
         # self.button_start_update()            
-
-
-window_filler = Control()

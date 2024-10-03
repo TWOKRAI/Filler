@@ -586,6 +586,3 @@ class Cip_control(Control):
         self.minus()
         self.button2.setGeometry(0, 0, 1, 1)
         self.button2.setEnabled(False)
-
-
-window_cip = Cip_control()

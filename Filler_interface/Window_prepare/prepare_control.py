@@ -426,7 +426,3 @@ class Prepare_control(QMainWindow):
 
 
         self.label.setText(label_name[self.lang])
-                
-
-
-window_prepare = Prepare_control()

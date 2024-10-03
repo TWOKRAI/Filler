@@ -115,7 +115,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QPushButton" name="button_start">
+         <widget class="QPushButton" name="button_view">
           <property name="minimumSize">
            <size>
             <width>160</width>
@@ -189,7 +189,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="button_statistics">
+         <widget class="QPushButton" name="button_qrcode">
           <property name="minimumSize">
            <size>
             <width>160</width>

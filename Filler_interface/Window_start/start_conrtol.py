@@ -115,6 +115,3 @@ class Start_control(QMainWindow, Ui_MainWindow):
         self.hide()
 
         QTimer.singleShot(1200, self.hide)
-    
-
-window_start = Start_control()

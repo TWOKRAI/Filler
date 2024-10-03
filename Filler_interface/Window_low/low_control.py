@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from Filler_interface.app import app 
 
 
-class low_control(QMainWindow, Ui_low):
+class Low_control(QMainWindow, Ui_low):
     def __init__(self):
         super().__init__()
         # self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.WindowTransparentForInput)
@@ -34,6 +34,3 @@ class low_control(QMainWindow, Ui_low):
     def close(self):
         app.close_windows()
         app.show_windows()
-
-
-window_low = low_control()

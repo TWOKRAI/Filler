@@ -126,7 +126,7 @@ class Thread():
                 app.button_stop.connect(self.robot_filler.filler_stop)
 
                 app.button_calibration.connect(self.robot_filler.calibration_only_run)
-
+                app.button_motor.connect(self.robot_filler.enable_on_off)
 
                 # app.window_filler.stop_filler.connect(self.robot_filler.robot.stop_motors)
                 # app.window_filler.stop_filler.connect(self.robot_filler.neuron.forget)
@@ -154,7 +154,6 @@ class Thread():
 
                 self.robot_filler.pump_station.block_data_on.connect(app.block_on)
                 self.robot_filler.pump_station.block_data_off.connect(app.block_off)
-
 
 
             self.robot_filler.start()

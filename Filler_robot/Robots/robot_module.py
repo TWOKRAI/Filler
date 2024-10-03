@@ -180,6 +180,8 @@ class Robot_module(QObject):
 		self.time_start_y = 0
 		self.time_start_z = 0
 
+		self.enable_status = False
+
 		#self.connect_0.laser.laser_on = False
 		
 
@@ -191,6 +193,8 @@ class Robot_module(QObject):
 		self.axis_x.motor.enable_on(value)
 		self.axis_y.motor.enable_on(value)
 		self.axis_z.motor.enable_on(value)
+		
+		self.enable_status = value
 
 	
 	def stop_motors(self):

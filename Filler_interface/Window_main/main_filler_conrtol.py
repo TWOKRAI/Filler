@@ -70,7 +70,7 @@ class Main_filler_control(QMainWindow):
         self.button_settings.released.connect(self.settings)
 
 
-        self.view_text = [' ВИД', ' VISION', ' VISION']
+        self.view_text = [' ФУНКЦИИ', ' FUNCTIONS', ' FUNKTIONEN']
         self.button_view.setMinimumSize(button_size)
         self.button_view.setMaximumSize(button_size)
         self.button_view.setIconSize(QSize(55, 55))
@@ -142,7 +142,7 @@ class Main_filler_control(QMainWindow):
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-automation-100.png')
         self.button_settings.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
         self.button_view.setIcon(QIcon(file_path))
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-водяной-шланг-100.png')
@@ -208,17 +208,10 @@ class Main_filler_control(QMainWindow):
     
     @enable_marker_decorator('enable_marker')
     def view(self):
-        self.setFocus()
         self.all_enable_off()
 
-        stylesheet = app.styleSheet()
-        new_stylesheet = stylesheet.replace(
-            'background-color: qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0, stop: 0 white, stop: 0.4 #DCDCDC, stop: 0.9 #878787);',
-            'background-color: None'
-        )
-        
-        app.setStyleSheet(new_stylesheet)
-        app.window_view.show(1)
+        self.setFocus()
+        app.window_list1.show()
         
         #self.hide()
 
@@ -233,5 +226,3 @@ class Main_filler_control(QMainWindow):
 
         #self.hide()
 
-
-main_filler_window = Main_filler_control()

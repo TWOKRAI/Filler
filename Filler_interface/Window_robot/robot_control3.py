@@ -8,7 +8,7 @@ from Filler_interface.app import app, enable_marker_decorator
 from Filler_interface.Window_settings1.settings_template import Control
 
 
-class Window_robot(Control):
+class Robot_control(Control):
     def __init__(self):
         super().__init__()
 

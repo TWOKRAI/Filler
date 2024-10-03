@@ -364,7 +364,6 @@ class Robot_filler(QThread):
         # self.robot.enable_motors(False)
 
 
-
     def pumping(self):
         self.robot.pumping_find = True
         self.robot.find = False
@@ -410,6 +409,10 @@ class Robot_filler(QThread):
             self.robot.find = False
 
             # self.pumping_ready = True
+
+
+    def enable_on_off(self):
+        self.robot.enable_motors(not self.robot.enable_status)
 
 
     def stop_pumping(self):

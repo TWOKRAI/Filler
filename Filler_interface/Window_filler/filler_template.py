@@ -95,7 +95,7 @@ class Control(QMainWindow):
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-закрыть-окно-96')
         self.button_menu.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-menu-100.png')
         self.button_view.setIcon(QIcon(file_path))
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-circled-play-100.png')
@@ -270,4 +270,4 @@ class Control(QMainWindow):
         pass
 
 
-window_setting = Control()
+# window_setting = Control()
