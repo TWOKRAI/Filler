@@ -50,9 +50,10 @@ class Motor:
 
 		self.time_distance = 0
 
-		self.step_info = 0
+		self.step_info_1 = 0
 		self.step_info_2 = 0
-
+		self.step_info_2_2 = 0
+		self.step_info_3 = 0
 
     
 	def null_value(self):
@@ -283,8 +284,10 @@ class Motor:
 
 		constant_speed_steps = steps - acceleration_steps - deceleration_steps
 		
-		self.step_info = 0
+		self.step_info_1 = 0
 		self.step_info_2 = 0
+		self.step_info_2_2 = 0
+		self.step_info_3 = 0
 
 		for i in range(acceleration_steps):
 			if self.stop == True:
@@ -293,6 +296,8 @@ class Motor:
 			current_speed = start_speed + (speed - start_speed) * (i + 1) / acceleration_steps
 			self.pin_step.frequency = current_speed
 			self.pin_step.value = 0.5
+			self.step_info_1 = i
+
 			await asyncio.sleep(1 / current_speed)
 
 		self.pin_step.frequency = speed
@@ -302,11 +307,10 @@ class Motor:
 				break
 
 			self.pin_step.value = 0.5
+			self.step_info_2 = i
+
 			await asyncio.sleep(1 / speed)
-
-			self.step_info = i
-
-
+			
 		for i in range(deceleration_steps):
 			if self.stop == True:
 				break
@@ -314,6 +318,8 @@ class Motor:
 			current_speed = speed - (speed - end_speed) * (i + 1) / deceleration_steps
 			self.pin_step.frequency = current_speed
 			self.pin_step.value = 0.5
+			self.step_info_3 = i
+
 			await asyncio.sleep(1 / current_speed)		
 
 

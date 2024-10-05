@@ -6,9 +6,11 @@ from PyQt5.QtCore import QSize, QTimer, QEvent
 from PyQt5.QtGui import QCursor, QFontDatabase
 
 #from Server.database import DatabaseManager
+from Server.server_control import ServerManager
 from Server.database_postgresql import DatabaseManager
 
 from Filler_interface.Style_windows.style import Style
+
 
 
 def enable_marker_decorator(marker_attr):
@@ -22,6 +24,7 @@ def enable_marker_decorator(marker_attr):
     return decorator
 
 
+
 class App(QApplication):
     button_start = pyqtSignal()
     button_stop = pyqtSignal()
@@ -31,8 +34,11 @@ class App(QApplication):
     button_motor = pyqtSignal()
 
 
-    def __init__(self, argv: List[str]) -> None:
-        super().__init__(argv)
+    def __init__(self) -> None:
+        super().__init__(sys.argv)
+
+        self.server = ServerManager()
+        self.server.start_server()
 
         self.styling = Style()
 
@@ -383,7 +389,7 @@ class App(QApplication):
         sys.exit(self.exec_())
     
 
-app = App(sys.argv)
+app = App()
 app.create_windows()
 app.connected()
 

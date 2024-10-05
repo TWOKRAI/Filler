@@ -13,14 +13,17 @@ from Filler_interface.app import app
 class Pump(QObject):
     stop_pump = pyqtSignal()
 
-    def __init__(self, name, motor):
+    def __init__(self, name, motor_step, motor_dir, motor_enable):
         super().__init__()
 
         self.print_on = True
 
         self.name = name
 
-        self.motor = motor
+        self.motor = Motor(name,  motor_step, motor_dir, motor_enable)
+        self.motor.speed_def = 0.000005
+        self.motor.enable_on(False)
+
         
         self.turn = 0
         self.ml = 30
@@ -118,17 +121,11 @@ class Pump_station(QObject):
 
         self.running = True
 
-        self.motor_1 = Motor('pumps_1', pins.motor_p1_step, pins.motor_p1_dir, pins.motor_p1p2_enable)
-        self.motor_1.speed_def = 0.000005
-        self.motor_1.enable_on(False)
-        self.pump_1 = Pump('pumps_1', self.motor_1)
+        self.pump_1 = Pump('pumps_1', pins.motor_p1_step, pins.motor_p1_dir, pins.motor_p1p2_enable)
         self.pump_1_enable = True
         self.pump_1.dir = -1
 
-        self.motor_2 = Motor('pumps_2',  pins.motor_p2_step, pins.motor_p2_dir, pins.motor_p1p2_enable)
-        self.motor_2.speed_def = 0.000005
-        self.motor_2.enable_on(False)
-        self.pump_2 = Pump('pumps_2', self.motor_2)
+        self.pump_2 = Pump('pumps_2',pins.motor_p2_step, pins.motor_p2_dir, pins.motor_p1p2_enable)
         self.pump_2_enable = True
         self.pump_2.dir = 1
         
@@ -259,8 +256,8 @@ class Pump_station(QObject):
 
     
     def enable_motors(self, value = False):
-        self.motor_1.enable_on(value)
-        self.motor_2.enable_on(value)
+        self.pump_1.motor.enable_on(value)
+        self.pump_2.motor.enable_on(value)
 
     
     def stop_pumps(self):
@@ -289,40 +286,24 @@ class Pump_station(QObject):
                 raise asyncio.CancelledError()
             
             await asyncio.sleep(0.1)
-            
-            if self.filler_run:
-                # if self.pump_1.motor.time_distance >= self.pump_1.motor.time_distance_2:
-                #     self.pump_1.motor.time_distance_2 = self.pump_1.motor.time_distance + 1
-                #     self.bottle_1.emit()
-                #     #print(self.pump_1.motor.time_distance)
-                
-                # await asyncio.sleep(0.1)
 
-                # if self.pump_2.motor.time_distance >= self.pump_2.motor.time_distance_2:
-                #     self.pump_2.motor.time_distance_2 = self.pump_2.motor.time_distance + 1 
-                #     #print(self.pump_2.motor.time_distance)
-                #     self.bottle_2.emit()
-                
-                # await asyncio.sleep(0.1)
 
-                print('self.pump_1.motor.step_info', self.pump_1.motor.step_info)
-                if  self.pump_1.motor.step_info >= self.pump_1.motor.step_info_2:
-                    self.pump_1.motor.step_info_2 = self.pump_1.motor.step_info + 1000
-                    self.bottle_1.emit()
-                    #print(self.pump_1.motor.time_distance)
-                
-                await asyncio.sleep(0.1)
+    async def _monitor_filler(self):
+        while self.filler_run:
+            if  self.pump_1.motor.step_info_2 >= self.pump_1.motor.step_info_2_2:
+                self.pump_1.motor.step_info_2_2 = self.pump_1.motor.step_info_2_2 + 1000
+                self.bottle_1.emit()
+        
+            if self.pump_2.motor.step_info_2 >= self.pump_2.motor.step_info_2_2:
+                self.pump_2.motor.step_info_2_2 = self.pump_2.motor.step_info_2 + 1000
+                self.bottle_2.emit()
+                #print(self.pump_1.motor.time_distance)
 
-                if  self.pump_2.motor.step_info >= self.pump_2.motor.step_info_2:
-                    self.pump_2.motor.step_info_2 = self.pump_2.motor.step_info + 1000
-                    self.bottle_2.emit()
-                    #print(self.pump_1.motor.time_distance)
-                
-                await asyncio.sleep(0.1)
+            await asyncio.sleep(0.5)
 
     
-    async def _pour_async2(self, motor, turn):
-        await motor._freq_async2(1000, 1, turn)
+    # async def _pour_async2(self, motor, turn):
+    #     await motor._freq_async2(1000, 1, turn)
 
 
     async def _all_pour_async(self, turn1, turn2, stop = True):
@@ -353,6 +334,8 @@ class Pump_station(QObject):
             tasks.append(asyncio.create_task(self.pump_2._pour_async(turn2)))
         else:
             self.pump_2.ready = True
+
+        tasks.append(asyncio.create_task(self._monitor_filler()))
 
         try:
             await asyncio.gather(*tasks)

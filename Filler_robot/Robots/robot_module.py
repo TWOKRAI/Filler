@@ -222,8 +222,8 @@ class Robot_module(QObject):
 
 		self.stopped = False
 
-		self.connect_0.pump_station.motor_1.stop = False
-		self.connect_0.pump_station.motor_2.stop = False
+		self.connect_0.pump_station.pump_1.motor.stop = False
+		self.connect_0.pump_station.pump_2.motor.stop = False
 
 		self.axis_x.motor.stop = False
 		self.axis_y.motor.stop = False

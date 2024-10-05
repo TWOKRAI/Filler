@@ -450,4 +450,8 @@ class Robot_filler(QThread):
     def no_error_button(self):
         self.button_error = False
         self.robot.button_stop = False
+
+        self.robot.enable_motors(False)
+
+
         

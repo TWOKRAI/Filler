@@ -137,7 +137,7 @@ class Motor_monitor(QThread):
             tasks.append(asyncio.create_task(self._detect_sensor()))
 
         #tasks.append(asyncio.create_task(self.motor._freq_async(self.motor_speed, 1, distance)))
-        tasks.append(asyncio.create_task(self.motor._freq_async_new(distance, 3000, 300, 300, 500, 500)))
+        tasks.append(asyncio.create_task(self.motor._freq_async_new(distance, 3000, 300, 300, 100, 100)))
             
         try:
             await asyncio.gather(*tasks)
