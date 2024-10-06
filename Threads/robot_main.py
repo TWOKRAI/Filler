@@ -12,8 +12,6 @@ from Raspberry.Temperature import check_temperature, write_to_file, clear_file
 
 from Filler_interface import app
 
-from Server.database_redis import RedisClient
-
 
 class Robot_filler(QThread):
     prepare = pyqtSignal()

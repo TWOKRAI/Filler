@@ -23,30 +23,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateStatus(status) {
         statusText.textContent = status ? translations.on : translations.off;
-        statusText.style.color = status ? 'green' : 'red';
+        statusText.style.color = status ? '#0f6121' : 'red';
         statusSwitch.checked = status;
         statusInput.value = status; // Обновим значение скрытого поля
     }
 
     function updateStatusInfo(info) {
         const statusInfo = document.getElementById('status_info');
+        const statusInfo2 = document.getElementById('status_info2');
         const statusCircle = document.getElementById('status_circle');
 
         statusInfo.textContent = translations.info[info];
+
+        const color_green = '#116d25'
 
         switch (info) {
             case 0:
             case 1:
             case 2:
-                statusInfo.style.color = 'green';
-                statusCircle.style.backgroundColor = '#90EE90'; // Светло-зеленый цвет
+                statusInfo.style.color = color_green;
+                statusInfo2.style.color = color_green;
+                statusCircle.style.backgroundColor = color_green; // Светло-зеленый цвет
                 break;
             case 3:
                 statusInfo.style.color = 'orange';
+                statusInfo2.style.color = 'orange';
                 statusCircle.style.backgroundColor = 'orange';
                 break;
             case 4:
                 statusInfo.style.color = 'red';
+                statusInfo2.style.color = 'red';
                 statusCircle.style.backgroundColor = 'red';
                 break;
             default:

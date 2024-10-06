@@ -19,13 +19,13 @@
             <form method="POST">
                 {% csrf_token %}
                 <div class="language-buttons">
-                    <button type="submit" name="language" value="en">{% trans "English" %}</button>
+                    <button type="submit" name="language" value="en">English </button>
                 </div>
                 <div class="language-buttons">
-                    <button type="submit" name="language" value="ru">{% trans "Русский" %}</button>
+                    <button type="submit" name="language" value="ru">Русский</button>
                 </div>
                 <div class="language-buttons">
-                    <button type="submit" name="language" value="de">{% trans "Deutsch" %}</button>
+                    <button type="submit" name="language" value="de">Deutsch</button>
                 </div>
                 <div class="settings-buttons2">
                     <a href="{% url 'index' %}"><button type="button" id="backButton">{% trans "Back" %}</button></a>

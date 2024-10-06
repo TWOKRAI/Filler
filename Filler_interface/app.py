@@ -6,8 +6,8 @@ from PyQt5.QtCore import QSize, QTimer, QEvent
 from PyQt5.QtGui import QCursor, QFontDatabase
 
 #from Server.database import DatabaseManager
-from Server.server_control import ServerManager
-from Server.database_postgresql import DatabaseManager
+from Server2.server_control import ServerManager
+from Server2.database_manager import DatabaseManager
 
 from Filler_interface.Style_windows.style import Style
 

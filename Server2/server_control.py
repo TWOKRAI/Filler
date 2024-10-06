@@ -9,13 +9,13 @@ class ServerManager:
 
     def run_server(self):
         self.server_module_process = subprocess.Popen(
-            ['/bin/bash', '-c', 'source /home/innotech/Project/Filler/Server/myenv/bin/activate && python /home/innotech/Project/Filler/Server/myproject/manage.py runserver 0.0.0.0:8000'],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
+            ['/bin/bash', '-c', 'source /home/innotech/Project/Filler/Server2/myenv/bin/activate && python /home/innotech/Project/Filler/Server2/myproject/manage.py runserver 0.0.0.0:8000'],
+            # stdout=subprocess.DEVNULL,
+            # stderr=subprocess.DEVNULL
         )
 
     def stop_server(self):
-        subprocess.Popen(['pkill', '-f', 'python /home/innotech/Project/Filler/Server/myproject/manage.py runserver 0.0.0.0:8000'])
+        subprocess.Popen(['pkill', '-f', 'python /home/innotech/Project/Filler/Server2/myproject/manage.py runserver 0.0.0.0:8000'])
 
     def start_server(self):
         self.stop_server_process()

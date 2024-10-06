@@ -62,7 +62,7 @@ msgstr "Вы хотите включить/выключить питание д�
 
 #: myapp/templates/index.html:6
 msgid "Innotech filler"
-msgstr "Наполнитель Innotech"
+msgstr "Innotech - наливатор"
 
 #: myapp/templates/index.html:13 myapp/templates/settings1.html:15
 msgid "Logo"
@@ -70,7 +70,7 @@ msgstr "Логотип"
 
 #: myapp/templates/index.html:16
 msgid "Filler Parameters"
-msgstr "Параметры наполнителя"
+msgstr "Параметры наливатора"
 
 #: myapp/templates/index.html:20
 msgid "Drink 1"

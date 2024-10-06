@@ -18,7 +18,6 @@ def index(request):
             filler = Filler()
 
         filler.info = 1
-        print('filler.info ', filler.info)
 
         # Получаем данные из POST-запроса
         drink1 = request.POST.get('drink1', 0)

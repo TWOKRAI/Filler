@@ -93,7 +93,7 @@ body.expanded {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 17px;
+    margin-bottom: 21px;
 }
 
 .header img {
@@ -204,44 +204,24 @@ body.expanded {
     display: flex;
     align-items: center; /* Выравнивание по вертикали по центру */
     justify-content: center; /* Выравнивание по горизонтали по центру */
-    margin-top: 22px;
-    margin-bottom: 12px;
 }
 
 .status_circle {
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    margin-right: 7px;
+    margin-right: 5px;
     display: inline-block;
     vertical-align: middle;
 }
 
 .status_info {
-    font-size: 17px;
-    font-weight: bold;
+    font-size: 18px;
     color: #313131;
     display: inline-block;
     vertical-align: middle;
 }
 
-
-.status-container2 {
-    display: flex;
-    align-items: center; /* Выравнивание по вертикали по центру */
-    justify-content: center; /* Выравнивание по горизонтали по центру */
-    margin-top: 16px;
-    margin-bottom: 12px;
-    margin-left: 12px;
-    margin-right: 12px;
-}
-
-.status_info2 {
-    font-size: 16px;
-    color: #313131;
-    display: inline-block;
-    vertical-align: middle;
-}
 
 .todo-list input {
     margin-right: 10px;
@@ -289,8 +269,8 @@ body.expanded {
 }
 
 .switch {
-    margin-top: 10px;
-    margin-bottom: 5px;
+    margin-top: 15px;
+    margin-bottom: 12px;
     position: relative;
     display: inline-block;
     width: 75px;
@@ -339,13 +319,10 @@ input:checked + .slider:before {
 
 
 #statusText {
-    margin-top: 6px;
-    margin-left: 5px;
+    margin-left: 10px;
     font-size: 18px;
     color: #313131;
-    color: #116d25;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: bold;
 }
 
 .button-group {
@@ -421,10 +398,6 @@ input:checked + .slider:before {
 
 .settings-buttons2 button:hover {
     transform: scale(1.1); /* Легкое увеличение при наведении */
-}
-
-.control-buttons {
-    margin-bottom: 12px; /* Увеличенное расстояние между кнопками */
 }
 
 .control-buttons button {
