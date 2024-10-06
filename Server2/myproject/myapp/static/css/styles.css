@@ -383,7 +383,7 @@ input:checked + .slider:before {
 }
 
 .control-buttons button {
-    width: 180px; /* Увеличенная ширина */
+    width: 190px; /* Увеличенная ширина */
     height: 60px; /* Увеличенная высота */
     margin: 5px;
     background: linear-gradient(to bottom, #1e599c, #113e68); /* Темно-синий градиент */

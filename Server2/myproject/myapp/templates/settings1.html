@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% trans "Innotech filler - Language Settings" %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles2.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <div class="container">
@@ -20,13 +20,18 @@
                 {% csrf_token %}
                 <div class="language-buttons">
                     <button type="submit" name="language" value="en">{% trans "English" %}</button>
+                </div>
+                <div class="language-buttons">
                     <button type="submit" name="language" value="ru">{% trans "Русский" %}</button>
+                </div>
+                <div class="language-buttons">
                     <button type="submit" name="language" value="de">{% trans "Deutsch" %}</button>
                 </div>
-                <div class="button-group">
-                    <a href="{% url 'index' %}"><button class="icon-button"><img src="{% static 'images/icons8-back-100.png' %}" alt="{% trans 'Back' %}"></button></a>
+                <div class="settings-buttons2">
+                    <a href="{% url 'index' %}"><button type="button" id="backButton">{% trans "Back" %}</button></a>
                 </div>
             </form>
+            <div class="divider"></div>
         </main>
     </div>
     <script src="{% static 'js/scripts2.js' %}"></script>

@@ -17,11 +17,21 @@ def index(request):
         if not filler:
             filler = Filler()
 
+        filler.info = 1
+        print('filler.info ', filler.info)
+
         # Получаем данные из POST-запроса
         drink1 = request.POST.get('drink1', 0)
         drink2 = request.POST.get('drink2', 0)
         status = request.POST.get('status', 'false')
 
+        # Преобразуем drink1 и drink2 в целые числа, если они не пустые
+        drink1 = int(drink1) if drink1 else 0
+        drink2 = int(drink2) if drink2 else 0
+
+        # Ограничиваем значения от 0 до 500
+        drink1 = max(0, min(500, drink1))
+        drink2 = max(0, min(500, drink2))
 
         # Преобразуем status в булево значение
         status = status.lower() == 'true'
@@ -44,7 +54,12 @@ def index(request):
         # Сохраняем изменения
         filler.save()
 
-        return JsonResponse({'status': filler.status})
+        return JsonResponse({
+            'status': filler.status,
+            'info': filler.info,
+            'drink1': filler.drink1,
+            'drink2': filler.drink2
+        })
 
     # Получаем первый объект Filler или создаем новый, если его нет
     filler = Filler.objects.first()
@@ -53,6 +68,20 @@ def index(request):
         filler.save()
 
     return render(request, 'index.html', {'filler': filler})
+
+
+def get_data(request):
+    filler = Filler.objects.first()
+    if not filler:
+        filler = Filler()
+        filler.save()
+
+    return JsonResponse({
+        'drink1': filler.drink1,
+        'drink2': filler.drink2,
+        'status': filler.status,
+        'info': filler.info,
+    })
 
 
 def settings1_view(request):
@@ -116,19 +145,6 @@ def settings2_view(request):
         robot.save()
 
     return render(request, 'settings2.html', {'robot': robot})
-
-
-def get_data(request):
-    filler = Filler.objects.first()
-    if not filler:
-        filler = Filler()
-        filler.save()
-
-    return JsonResponse({
-        'drink1': filler.drink1,
-        'drink2': filler.drink2,
-        'status': filler.status
-    })
 
 
 def reset_to_default(request):
