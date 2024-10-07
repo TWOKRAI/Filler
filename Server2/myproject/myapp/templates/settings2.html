@@ -12,7 +12,9 @@
 <body>
     <div class="container2">
         <header class="header">
-            <img src="{% static 'images/logo.png' %}" alt=Logo>
+            <a href="{% url 'innotech' %}">
+                <img src="{% static 'images/logo.png' %}" alt="{% trans "Logo" %}">
+            </a>
         </header>
         <main class="main">
             <h2>{% trans "Robot parameters" %}</h2>

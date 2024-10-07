@@ -4,9 +4,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-# # Подключение к Redis
-# redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
-
 class Filler(models.Model):
     DEFAULT_FILLER = 0
     DEFAULT_DRINK1 = 0
@@ -16,6 +13,9 @@ class Filler(models.Model):
     drink2 = models.IntegerField(default=0)
     status = models.BooleanField(default=False)
     info = models.IntegerField(default=0)
+    info2 = models.IntegerField(default=0)
+    info3 = models.IntegerField(default=0)
+
 
     def save(self, *args, **kwargs):
         # Проверка и обработка значений перед сохранением

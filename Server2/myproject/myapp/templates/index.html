@@ -13,7 +13,9 @@
 <body>
     <div class="container">
         <header class="header">
-            <img src="{% static 'images/logo.png' %}" alt="{% trans "Logo" %}">
+            <a href="{% url 'innotech' %}">
+                <img src="{% static 'images/logo.png' %}" alt="{% trans "Logo" %}">
+            </a>
         </header>
         <main class="main">
             <h2>{% trans "Filler Parameters" %}</h2>
@@ -38,14 +40,10 @@
                 </div>
                 <div class="status-container">
                     <span class="status_circle" id="status_circle"></span>
-                    <span class="status_info" id="status_info">
-                        {{ filler.get_info_display }}
-                    </span>
+                    <span class="status_info" id="status_info">Unknow</span>
                 </div>
                 <div class="status-container2">
-                    <span class="status_info2" id="status_info2">
-                        {% trans 'Drücken Sie „ON“ und stellen Sie das Glas in den Arbeitsbereich' %}
-                    </span>
+                    <span class="status_info2" id="status_info2">Unknow</span>
                 </div>
             </form>
         </main>
@@ -58,12 +56,23 @@
     <div id="translations" style="display: none;">
         <span id="trans-on">{% trans 'ON' %}</span>
         <span id="trans-off">{% trans 'OFF' %}</span>
+        
+        <span id="trans-info-0">{% trans 'System not calibrated' %}</span>
+        <span id="trans-info-1">{% trans 'System ready' %}</span>
+        <span id="trans-info-2">{% trans 'Emergency button pressed' %}</span>
 
-        <span id="trans-info-0">{% trans 'System ready' %}</span>
-        <span id="trans-info-1">{% trans 'System not calibrated' %}</span>
-        <span id="trans-info-2">{% trans 'Info 2' %}</span>
-        <span id="trans-info-3">{% trans 'Info 3' %}</span>
-        <span id="trans-info-4">{% trans 'Info 4' %}</span>
+
+        <span id="trans-info2-0">{% trans 'Switch to "On" mode to turn on the system' %}</span>
+        <span id="trans-info2-1">{% trans 'System ready' %}</span>
+        <span id="trans-info2-2">{% trans 'Scanning in progress, place the glass in the work area' %}</span>
+        <span id="trans-info2-3">{% trans 'Glass found' %}</span>
+        <span id="trans-info2-4">{% trans 'Filling process in progress' %}</span>
+        <span id="trans-info2-5">{% trans 'The drink is ready' %}</span>
+        <span id="trans-info2-6">{% trans 'Switch to "On" and place the glass in the work area' %}</span>
+
+        <span id="trans-info2-7">{% trans 'Info 2' %}</span>
+        <span id="trans-info2-8">{% trans 'Info 3' %}</span>
+        <span id="trans-info2-9">{% trans 'Info 4' %}</span>
     </div>
     <script src="{% static 'js/DrinkForm.js' %}"></script>
 </body>

@@ -17,7 +17,8 @@ def index(request):
         if not filler:
             filler = Filler()
 
-        filler.info = 1
+        filler.info = 0
+        filler.info2 = 1
 
         # Получаем данные из POST-запроса
         drink1 = request.POST.get('drink1', 0)
@@ -56,6 +57,7 @@ def index(request):
         return JsonResponse({
             'status': filler.status,
             'info': filler.info,
+            'info2': filler.info2,
             'drink1': filler.drink1,
             'drink2': filler.drink2
         })
@@ -80,7 +82,13 @@ def get_data(request):
         'drink2': filler.drink2,
         'status': filler.status,
         'info': filler.info,
+        'info2': filler.info2,
+        'info3': filler.info3,
     })
+
+
+def innotech(request):
+    return render(request, 'innotech.html')
 
 
 def settings1_view(request):

@@ -218,9 +218,11 @@ body.expanded {
 }
 
 .status_info {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: bold;
     color: #313131;
+    color: #d88200;
+    color: #0e7c26;
     display: inline-block;
     vertical-align: middle;
 }
@@ -230,14 +232,14 @@ body.expanded {
     display: flex;
     align-items: center; /* Выравнивание по вертикали по центру */
     justify-content: center; /* Выравнивание по горизонтали по центру */
-    margin-top: 16px;
+    margin-top: 12px;
     margin-bottom: 12px;
     margin-left: 12px;
     margin-right: 12px;
 }
 
 .status_info2 {
-    font-size: 16px;
+    font-size: 15px;
     color: #313131;
     display: inline-block;
     vertical-align: middle;
@@ -340,7 +342,7 @@ input:checked + .slider:before {
 
 #statusText {
     margin-top: 6px;
-    margin-left: 5px;
+    margin-left: 0px;
     font-size: 18px;
     color: #313131;
     color: #116d25;
@@ -515,3 +517,44 @@ input:checked + .slider:before {
     margin-bottom: 20px;
 }
 
+
+
+.main2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.main2 h2 {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #313131;
+}
+
+.information {
+    margin: -20px 20px;
+}
+
+.paragraph1 {
+    text-indent: 20px;
+    text-align: justify;
+    margin-bottom: 21px;
+    word-wrap: break-word; 
+}
+
+.paragraph2 {
+    /* Стили для второго абзаца */
+    margin-bottom: 15px;
+}
+
+.paragraph3 {
+    /* Стили для третьего абзаца */
+    margin-left: 100px;
+    margin-bottom: 30px;
+    text-align: right;
+}
+
+.settings-buttons2 {
+    margin-top: 20px;
+}

@@ -1,0 +1,42 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "InnoFiller - Inforamtion" %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="{% url 'innotech' %}">
+                <img src="{% static 'images/logo.png' %}" alt="{% trans "Logo" %}">
+            </a>
+        </header>
+        <main class="main2">
+            <h2>{% trans "Добро пожаловать в приложение InnoFiller" %}</h2>
+            <div class="information"> 
+                <p class="paragraph1">
+                    Мы рады приветствовать вас в нашем приложении для управления вашим новым наливатором!
+                    Наша компания стремится предоставить вам самые инновационные и удобные решения.
+                    Желаем вам приятного использования!
+                </p>
+                <p class="paragraph3">
+                    С уважением,<br>
+                    команда Innotech!
+                </p>
+            </div>
+           
+            <div class="settings-buttons2">
+                <a href="{% url 'index' %}"><button type="button" id="backButton">{% trans "Back" %}</button></a>
+            </div>
+
+            <div class="divider"></div>
+        </main>
+    </div>
+    <script src="{% static 'js/scripts2.js' %}"></script>
+</body>
+</html>
