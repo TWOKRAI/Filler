@@ -252,7 +252,6 @@ class Neuron:
 		xr_center_2 = obj[11]
 		yr_center_2 = obj[12]
 		
-
 		image_1 = self.connect_0.camera.image_copy
 		image_2 = self.connect_0.camera.read_cam()
 
@@ -269,10 +268,12 @@ class Neuron:
 		# image_2_gray = image_2
 
 		cropped_image_1 = image_1_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 2, x1 + 10 : x1 + w - 10]
-		cv2.imwrite('cropped_image.png', cropped_image_1)
-		
 		cropped_image_2 = image_2_gray[y1 + abs(y1 - yr_center) + 30: y1 + h + 2, x1 + 10: x1 + w  - 10]
-		cv2.imwrite('cropped_image_2.png', cropped_image_2)
+
+		current_dir = os.path.dirname(os.path.abspath(__file__))
+
+		cv2.imwrite(os.path.join(current_dir, 'cropped_image.png'), cropped_image_1)
+		cv2.imwrite(os.path.join(current_dir, 'cropped_image_2.png'), cropped_image_2)
 
 		#sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.012, edgeThreshold=100)
 		sift = cv2.SIFT_create(nfeatures=1129, contrastThreshold=0.007, edgeThreshold=100)
@@ -285,8 +286,8 @@ class Neuron:
 		cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 		cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 
-		cv2.imwrite('cropped_image_1_with_keypoints.png', cropped_image_1_with_keypoints)
-		cv2.imwrite('cropped_image_2_with_keypoints.png', cropped_image_2_with_keypoints)
+		cv2.imwrite(os.path.join(current_dir, 'cropped_image_1_with_keypoints.png'), cropped_image_1_with_keypoints)
+		cv2.imwrite(os.path.join(current_dir, 'cropped_image_2_with_keypoints.png'), cropped_image_2_with_keypoints)
 
 		if len(kp2) >= len(kp1) * 0.6:
 			print('Стакан есть')

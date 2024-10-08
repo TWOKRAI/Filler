@@ -158,10 +158,8 @@ class Settings_control(Control):
 
 
     def on_timer_reset(self):
-        #server.stop()
-        app.threads.stop_server()
+        app.server.stop_server()
         app.exit()
-
 
 
     def get_parametrs(self): 

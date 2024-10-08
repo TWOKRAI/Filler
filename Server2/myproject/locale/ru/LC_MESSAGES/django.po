@@ -50,11 +50,11 @@ msgstr "Отменить"
 
 #: myapp/templates/control.html:51
 msgid "Do you want to start calibrating the robot?"
-msgstr "Хотите начать калибровку робота?"
+msgstr "Вы хотите начать калибровку робота?"
 
 #: myapp/templates/control.html:52
 msgid "Do you want to pull out the panel?"
-msgstr "Хотите выдвинуть панель?"
+msgstr "Вы хотите выдвинуть панель?"
 
 #: myapp/templates/control.html:53
 msgid "Do you want to turn on/off the power to the motors?"
@@ -62,7 +62,7 @@ msgstr "Вы хотите включить/выключить питание д�
 
 #: myapp/templates/index.html:6
 msgid "Innotech filler"
-msgstr "Innotech - наливатор"
+msgstr "Innotech наливатор"
 
 #: myapp/templates/index.html:13 myapp/templates/settings1.html:15
 msgid "Logo"
@@ -126,7 +126,7 @@ msgstr "Инфо 4"
 
 #: myapp/templates/settings1.html:8
 msgid "Innotech filler - Language Settings"
-msgstr "Наполнитель Innotech - Настройки языка"
+msgstr "Innotech наливатор - Настройки языка"
 
 #: myapp/templates/settings1.html:22
 msgid "English"
@@ -201,18 +201,21 @@ msgstr "По умолчанию"
 
 #: myapp/templates/settings2.html:98
 msgid "Do you want to apply the settings?"
-msgstr "Хотите применить настройки?"
+msgstr "Вы хотите применить настройки?"
 
 #: myapp/templates/settings2.html:107
 msgid "Do you want to make default settings?"
-msgstr "Хотите сделать настройки по умолчанию?"
+msgstr "Вы хотите сделать настройки по умолчанию?"
 
 
-msgid "Welcome to the InnoFiller app!"
-msgstr "Добро пожаловать в приложение InnoFiller!"
+msgid "Welcome to the InnoFiller app"
+msgstr "Добро пожаловать в приложение InnoFiller"
 
 msgid "We are delighted to welcome you to our app for managing your new dispenser! Our company aims to provide you with the most innovative and convenient solutions. We wish you a pleasant experience!"
 msgstr "Мы рады приветствовать вас в нашем приложении для управления вашим новым наливатором! Наша компания стремится предоставить вам самые инновационные и удобные решения. Желаем вам приятного использования!"
 
-msgid "Sincerely, the Innotech team!"
-msgstr "С уважением, команда Innotech!"
+msgid "Sincerely, the"
+msgstr "С уважением,"
+
+msgid " team"
+msgstr " команда"

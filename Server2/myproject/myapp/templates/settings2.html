@@ -89,10 +89,10 @@
         <button id="toggleButton">{% trans "Show More" %}</button>
 
         <div class="settings-buttons2">
-            <button type="button" id="defaultButton">{% trans "Default" %}</button>
-            <button type="button" id="applyButton">{% trans "Apply" %}</button>
-        </div>
-        <div class="settings-buttons2">
+            <div class="apply-default-buttons">
+                <button type="button" id="defaultButton">{% trans "Default" %}</button>
+                <button type="button" id="applyButton">{% trans "Apply" %}</button>
+            </div>
             <a href="{% url 'index' %}"><button type="button" id="backButton">{% trans "Back" %}</button></a>
         </div>
         <div class="divider"></div>

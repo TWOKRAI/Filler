@@ -44,7 +44,7 @@ body.expanded {
 }
 
 .container2.expanded {
-    height: 1260px;
+    height: 1240px;
     margin-top: 0px;
 }
 
@@ -77,7 +77,8 @@ body.expanded {
     transition: background-color 0.3s;
     opacity: 0.7;
     z-index: 1;
-    font-size: 18px;
+    font-weight: bold;
+    font-size: 21px;
 }
 
 #toggleButton:hover {
@@ -185,6 +186,7 @@ body.expanded {
 
 .input-group2 span {
     margin-left: 10px;
+    margin-bottom: 10px;
 }
 
 .todo-lists {
@@ -343,7 +345,8 @@ input:checked + .slider:before {
 
 #statusText {
     margin-top: 6px;
-    margin-left: 0px;
+    margin-left: 5px;
+    margin-right: 25px;
     font-size: 18px;
     color: #313131;
     color: #116d25;
@@ -392,11 +395,12 @@ input:checked + .slider:before {
     background: linear-gradient(to bottom, #1e599c, #113e68); /* Темно-синий градиент */
     border: none;
     border-radius: 15px; /* Скругленные углы */
-    color: white;
-    font-size: 16px;
+    color: white;;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень для объема */
     transition: transform 0.3s;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .language-buttons button:hover {
@@ -438,7 +442,6 @@ input:checked + .slider:before {
     border: none;
     border-radius: 15px; /* Скругленные углы */
     color: white;
-    font-size: 16px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень для объема */
     transition: transform 0.3s;
@@ -447,6 +450,8 @@ input:checked + .slider:before {
     vertical-align: top;
     text-align: center;
     padding: 10px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .control-buttons button:hover {
@@ -528,6 +533,8 @@ input:checked + .slider:before {
 
 .main2 h2 {
     font-size: 18px;
+    margin-left: 25px;
+    margin-right: 25px;
     margin-bottom: 25px;
     color: #313131;
 }
@@ -542,21 +549,97 @@ input:checked + .slider:before {
     text-align: justify;
     margin-bottom: 21px;
     word-wrap: break-word; 
+    font-style: italic;
 }
 
 .paragraph2 {
-    /* Стили для второго абзаца */
     margin-bottom: 15px;
 }
 
 .paragraph3 {
-    /* Стили для третьего абзаца */
-    /* margin-left: 100px; */
+    margin-left: 0px;
     font-size: 15px;
     margin-bottom: 20px;
     text-align: right;
+    font-style: italic;
 }
 
+
+.paragraph3 a {
+    text-decoration: none; /* Убирает подчеркивание */
+    font-weight: bold;
+    color: #084d9c; /* Тёмно-синий цвет */
+}
+
+.paragraph3 a:hover {
+    color: #1570d8; /* Тёмно-синий цвет */
+}
+
+
+
 .settings-buttons2 {
-    margin-top: 20px;
+    position: absolute;
+    bottom: 62px; /* 40px (высота divider) + 22px (отступ) */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    opacity: 0; /* Скрыть кнопки по умолчанию */
+    pointer-events: none; /* Отключить взаимодействие с кнопками по умолчанию */
+    transition: opacity 0.3s ease 0.6s, pointer-events 0.3s ease 1s; /* Задержка в 1 секунду */
+}
+
+
+.container .settings-buttons2 {
+    opacity: 1; /* Показать кнопки в раскрытом состоянии */
+    pointer-events: auto; /* Включить взаимодействие с кнопками в раскрытом состоянии */
+}
+
+.container2 .settings-buttons2 {
+    opacity: 0; /* Показать кнопки в раскрытом состоянии */
+    pointer-events: none; /* Включить взаимодействие с кнопками в раскрытом состоянии */
+}
+
+
+.container2.expanded .settings-buttons2 {
+    opacity: 1; /* Показать кнопки в раскрытом состоянии */
+    pointer-events: auto; /* Включить взаимодействие с кнопками в раскрытом состоянии */
+}
+
+.settings-buttons2 button {
+    width: 120px; /* Увеличенная ширина */
+    height: 60px; /* Увеличенная высота */
+    margin: 5px;
+    background: linear-gradient(to bottom, #1e599c, #113e68); /* Темно-синий градиент */
+    border: none;
+    border-radius: 15px; /* Скругленные углы */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень для объема */
+    transition: transform 0.3s;
+    line-height: 1.2; /* Контроль межстрочного интервала */
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    padding: 10px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.settings-buttons2 button:hover {
+    transform: scale(1.1); /* Легкое увеличение при наведении */
+}
+
+.settings-buttons2 .apply-default-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px; /* Отступ между кнопками "Apply" и "Default" и кнопкой "Back" */
+}
+
+.settings-buttons2 .apply-default-buttons button {
+    width: 45%; /* Ширина кнопок "Apply" и "Default" */
 }
