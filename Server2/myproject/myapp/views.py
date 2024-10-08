@@ -94,6 +94,7 @@ def innotech(request):
 def settings1_view(request):
     if request.method == 'POST':
         language = request.POST.get('language')
+        print('language', language)
         if language:
             activate(language)
             request.session['django_language'] = language
@@ -105,6 +106,7 @@ def settings1_view(request):
         # return redirect('index')
 
     return render(request, 'settings1.html')
+
 
 def settings2_view(request):
     if request.method == 'POST':
@@ -154,15 +156,17 @@ def settings2_view(request):
     return render(request, 'settings2.html', {'robot': robot})
 
 
-def reset_to_default(request):
-    if request.method == 'POST':
-        robot = Robot.objects.first()
+def reset_to_default(request): 
+    filler = Filler.objects.first()
+    robot = Robot.objects.first()
+    control = Control.objects.first()
 
-        if robot:
-            robot.reset_to_default()
+    filler.reset_to_default()
+    robot.reset_to_default()
+    control.reset_to_default()
 
-        return redirect('settings2')
     return redirect('settings2')
+
 
 def control(request):
     return render(request, 'control.html')

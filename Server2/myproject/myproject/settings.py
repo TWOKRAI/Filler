@@ -119,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 USE_I18N = True
 USE_L10N = True
 
-LANGUAGE_CODE = 'en-us'  # или другой язык по умолчанию
+LANGUAGE_CODE = 'de' 
 
 LANGUAGES = [
     ('en', 'English'),

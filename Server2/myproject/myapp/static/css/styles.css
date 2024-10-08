@@ -290,6 +290,7 @@ body.expanded {
     outline: none;
 }
 
+
 .switch {
     margin-top: 10px;
     margin-bottom: 5px;
@@ -513,10 +514,9 @@ input:checked + .slider:before {
 .input-group2 img {
     width: 210px;
     height: auto;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
-
 
 
 .main2 {
@@ -537,6 +537,7 @@ input:checked + .slider:before {
 }
 
 .paragraph1 {
+    font-size: 15px;
     text-indent: 20px;
     text-align: justify;
     margin-bottom: 21px;
@@ -550,8 +551,9 @@ input:checked + .slider:before {
 
 .paragraph3 {
     /* Стили для третьего абзаца */
-    margin-left: 100px;
-    margin-bottom: 30px;
+    /* margin-left: 100px; */
+    font-size: 15px;
+    margin-bottom: 20px;
     text-align: right;
 }
 

@@ -181,8 +181,11 @@ msgid "Checking for glass availability"
 msgstr "Проверка наличия стакана"
 
 #: myapp/templates/settings2.html:78
-msgid "QR code for application address:"
-msgstr "QR-код для адреса приложения:"
+msgid "QR code for application address"
+msgstr "QR-код для адреса приложения"
+
+msgid "IP-address"
+msgstr "IP-адрес"
 
 #: myapp/templates/settings2.html:85
 msgid "Show More"
@@ -203,3 +206,13 @@ msgstr "Хотите применить настройки?"
 #: myapp/templates/settings2.html:107
 msgid "Do you want to make default settings?"
 msgstr "Хотите сделать настройки по умолчанию?"
+
+
+msgid "Welcome to the InnoFiller app!"
+msgstr "Добро пожаловать в приложение InnoFiller!"
+
+msgid "We are delighted to welcome you to our app for managing your new dispenser! Our company aims to provide you with the most innovative and convenient solutions. We wish you a pleasant experience!"
+msgstr "Мы рады приветствовать вас в нашем приложении для управления вашим новым наливатором! Наша компания стремится предоставить вам самые инновационные и удобные решения. Желаем вам приятного использования!"
+
+msgid "Sincerely, the Innotech team!"
+msgstr "С уважением, команда Innotech!"

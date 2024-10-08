@@ -148,7 +148,7 @@ class App(QApplication):
             
             self.window_robot.database_update()
             self.data_control = self.database.read_data('myapp_control')
-
+            print(self.data_control)
             
             if self.data_control[0][1] == True:
                 self.button_calibration.emit()

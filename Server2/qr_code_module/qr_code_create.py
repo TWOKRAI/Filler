@@ -27,15 +27,13 @@ class QRCodeGenerator:
         img = self.qr.make_image(fill_color="black", back_color="white")
         img.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), filename))
 
-# Пример использования класса
+
 if __name__ == "__main__":
     qr_generator = QRCodeGenerator()
 
-    # Генерация QR-кода для URL
-    url = 'http://192.168.3.24:8000'
+    url = 'http://192.168.1.108:8000'
     qr_generator.generate_url_qr(url)
 
-    # Генерация QR-кода для Wi-Fi
     ssid = 'Keenetic-6348'
     password = 'UfPFYaTH'
     wifi_type = 'WPA'
