@@ -16,7 +16,7 @@ class Pump(QObject):
     def __init__(self, name, motor_step, motor_dir, motor_enable):
         super().__init__()
 
-        self.print_on = True
+        self.print_on = False
 
         self.name = name
 
@@ -67,7 +67,7 @@ class Pump(QObject):
 
         speed = int(self.speed_k * self.speed)
 
-        print('speed', self.speed_k, speed, self.turn)
+        #print('speed', self.speed_k, speed, self.turn)
 
         #await self.motor._freq_async(speed, 1, self.turn)
         await self.motor._freq_async_new(int(self.turn), speed, 300, 300, 100, 100)
@@ -176,7 +176,7 @@ class Pump_station(QObject):
 
         self.autovalue = app.window_robot.autovalue
 
-        print('АВТООБЪЕМ', self.autovalue)
+        #print('АВТООБЪЕМ', self.autovalue)
 
         if self.autovalue:
             all_ml = ml_1 + ml_2
@@ -188,7 +188,7 @@ class Pump_station(QObject):
                 ml_1 = self.cap_value * ratio_1 * 0.95
                 ml_2 = self.cap_value * ratio_2 * 0.95
 
-                print('new_ml', ml_1, ml_2, 'ratio', ratio_1, ratio_2)
+                #print('new_ml', ml_1, ml_2, 'ratio', ratio_1, ratio_2)
 
                 ml_1 = int(ml_1)
                 ml_2 = int(ml_2)
@@ -231,7 +231,7 @@ class Pump_station(QObject):
         # if ml_2 < all_value * 0.2:
         #     ml_2 = ml_2 * 2
 
-        print('RUSSIAN RULLETE', ml_1, ml_2)
+        #print('RUSSIAN RULLETE', ml_1, ml_2)
 
         return ml_1, ml_2
 
@@ -289,7 +289,7 @@ class Pump_station(QObject):
 
 
     async def _monitor_filler(self):
-        while self.filler_run:
+        while not self.stop2:
             if  self.pump_1.motor.step_info_2 >= self.pump_1.motor.step_info_2_2:
                 self.pump_1.motor.step_info_2_2 = self.pump_1.motor.step_info_2_2 + 1000
                 self.bottle_1.emit()
@@ -309,8 +309,8 @@ class Pump_station(QObject):
     async def _all_pour_async(self, turn1, turn2, stop = True):
         self.start_pump.emit()
 
-        print( ' self.pump_1.motor.stop', self.pump_1.motor.stop,  self.pump_2.motor.stop)
-        print( ' turn1, turn2', turn1,  turn2)
+        # print( ' self.pump_1.motor.stop', self.pump_1.motor.stop,  self.pump_2.motor.stop)
+        # print( ' turn1, turn2', turn1,  turn2)
 
         self.stop2 = False
         self.pump_1.ready = False
@@ -348,7 +348,7 @@ class Pump_station(QObject):
         
     
     async def _all_pour_async2(self):
-        print('START DOWN')
+        #print('START DOWN')
 
         self.stop2 = False
         self.pump_1.ready = False

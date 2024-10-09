@@ -92,7 +92,7 @@ class filler_control(QMainWindow):
         self.update()
 
         app.window_focus = self.window_name
-        print(app.window_focus)
+        #print(app.window_focus)
         app.close_windows()
 
         self.play = True
@@ -167,7 +167,7 @@ class filler_control(QMainWindow):
         icon_size = QSize(70, 70)
         self.button_pause.setIconSize(icon_size)
 
-        print(self.play)
+        #print(self.play)
 
         if self.play == True:
             file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-pause-button-100.png')
@@ -185,7 +185,7 @@ class filler_control(QMainWindow):
 
     def button_pause_clicked(self):
         self.play = not self.play
-        print('PAUSE')
+        #print('PAUSE')
 
         self.button_pause_update()
         self.progressBar_recolor()
@@ -419,12 +419,12 @@ class filler_control(QMainWindow):
 
 
     def update_bottle_1(self, bottle_1_ml):
-        print('НАСОСЫ ОБНОВИЛИСЬ', bottle_1_ml )
+        #print('НАСОСЫ ОБНОВИЛИСЬ', bottle_1_ml )
         self.progressBar_1.setValue(bottle_1_ml)
 
 
     def update_bottle_2(self, bottle_2_ml):
-        print('НАСОСЫ ОБНОВИЛИСЬ',  bottle_2_ml )
+        #print('НАСОСЫ ОБНОВИЛИСЬ',  bottle_2_ml )
         self.progressBar_2.setValue(bottle_2_ml)
 
     

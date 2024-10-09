@@ -74,8 +74,6 @@ class Motor_monitor(QThread):
 
                 self.direct = False
         
-        print('поехал')
-        #time.sleep(1)
         asyncio.run(self._move_async(distance, detect = True))
         self.direction = not self.direction
 
@@ -86,14 +84,12 @@ class Motor_monitor(QThread):
         switch_in = pins.switch_in.get_value()
         
         if switch_in == 0:
-            print('switch_in', switch_in)
             self.motor.enable_on(False)
 
             distance = self.distance
             asyncio.run(self._move_async(distance, detect = True))
 
             self.motor.enable_on(True)
-
         
 
     async def _detect_sensor(self):
@@ -119,8 +115,6 @@ class Motor_monitor(QThread):
                 raise asyncio.CancelledError()
 
             if (switch_in and self.direct == False) or (switch_out and self.direct == True):
-                print('SWITCH')
-
                 if switch_out:
                     self.on_signal.emit()
 
@@ -137,7 +131,7 @@ class Motor_monitor(QThread):
             tasks.append(asyncio.create_task(self._detect_sensor()))
 
         #tasks.append(asyncio.create_task(self.motor._freq_async(self.motor_speed, 1, distance)))
-        tasks.append(asyncio.create_task(self.motor._freq_async_new(distance, 3000, 300, 300, 100, 100)))
+        tasks.append(asyncio.create_task(self.motor._freq_async_new(distance, 3000, 500, 500, 1, 1)))
             
         try:
             await asyncio.gather(*tasks)
@@ -146,7 +140,6 @@ class Motor_monitor(QThread):
                 if not task.done():
                     task.cancel()
                 
-        print('ready')
         self.motor.enable_on(True)
         self.motor.ready = False
 

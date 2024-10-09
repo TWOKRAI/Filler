@@ -5,7 +5,6 @@ from Raspberry.pins_table import pins
 from Filler_robot.Monitor.motor_monitor import Motor_monitor
 
 
-
 class Input_request(QThread):
     pin_values_updated = pyqtSignal(dict)
     show_error = pyqtSignal()
@@ -48,11 +47,7 @@ class Input_request(QThread):
 
 
     def request(self):
-        #db_manager.create_connection()
-
         while self.running:
-           # db_manager.read_data()
-
             if not self.first:
                 self.motor_monitor.down()
                 self.first = True
@@ -73,13 +68,14 @@ class Input_request(QThread):
                     self.button_error = False
                 
                 if pins.button.get_value():
-                    if not self.block: 
+                    if not self.block:
+                        self.button_monitor.emit()
+                        self.starting.emit()
+
                         self.motor_monitor.start()
 
                         #self.time_request = 200
 
-                        self.button_monitor.emit()
-                        self.starting.emit()
                 
                 if self.monitor_run == True:
                     if not self.block: 

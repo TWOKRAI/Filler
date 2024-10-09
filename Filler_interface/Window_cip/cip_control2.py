@@ -195,7 +195,7 @@ class Cip_control(Control):
         filler.param41 = self.param_list[5]
 
 
-        print(filler.param11, filler.param21, filler.param31, filler.param41)
+        #print(filler.param11, filler.param21, filler.param31, filler.param41)
 
 
     def memory_write(self, data):
@@ -735,7 +735,7 @@ class Cip_control(Control):
         self.update()
 
         self.memory_write(self.param_list)
-        print('pressed')
+        #print('pressed')
 
 
     def plus_enable(self):
@@ -782,7 +782,7 @@ class Cip_control(Control):
         if self.param_num > 1:
             self.param_num -= 1
 
-        print(self.param_num)
+        #print(self.param_num)
 
         self.enable_control()
         self.update()

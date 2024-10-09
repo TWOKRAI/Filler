@@ -59,7 +59,6 @@ class Start_control(QMainWindow, Ui_MainWindow):
         self.timer.start()
 
         app.window_focus = self.window_name
-        print(app.window_focus)
         app.close_windows()
 
         self.show_marker = 1

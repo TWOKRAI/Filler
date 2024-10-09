@@ -95,7 +95,7 @@ class Robot_module(QObject):
 
 		self.start = False
 
-		self.print_on = True
+		self.print_on = False
 
 		self.first_go = False
 
@@ -386,32 +386,6 @@ class Robot_module(QObject):
 		# print('x0, y0, z0', x0, y0, z0)
 
 		return angle_x, angle_y, angle_z, error
-	
-	
-	# def find_angle(self, x0, y0, z0):
-	# 	angle_x = self.axis_x.angle_0
-	# 	angle_y = self.axis_y.angle_0
-	# 	angle_z = self.axis_z.angle_0
-
-
-	# 	while True:
-	# 		x, y, z, error_limit_x, error_limit_y, error_limit_z = self.angle_to_coord(angle_x, angle_y, angle_z)
-
-	# 		if y <= y0:
-	# 			angle_y -= 1
-	# 			angle_z += 1
-	# 		else:
-	# 			if x0 > 0:
-	# 				if x < x0:
-	# 					angle_x += 1
-	# 			elif x0 < 0:
-	# 				if x > x0:
-	# 					angle_x -= 1 
-
-	# 			if abs(x) >= abs(x0):
-	# 				if z <= z0:
-
-
 
 
 	def steps_find(self, angle_y, angle_z):
@@ -424,7 +398,7 @@ class Robot_module(QObject):
 		# self.axis_z.motor.value = (self.axis_z.motor.value * self.axis_z.step_angle + delta_y) / self.axis_z.step_angle 
 		# print('self.axis_z.motor.value2', self.axis_z.motor.value)
 
-		print('angle_real', angle_real, angle_z)
+		#print('angle_real', angle_real, angle_z)
 	
 		
 		new_angle_z = angle_real - delta_y
@@ -433,7 +407,7 @@ class Robot_module(QObject):
 			new_angle_z = 35
 		
 
-		print('new_angle_z, angle_z', new_angle_z, angle_z)
+		#print('new_angle_z, angle_z', new_angle_z, angle_z)
 
 		delta_z = abs(new_angle_z - angle_z)
 
@@ -608,14 +582,11 @@ class Robot_module(QObject):
 	
 		self.move(self.distance_x, self.distance_y, self.distance_z)
 		
-		print('go_to_point Приехал в координаты:', 
-			'x:', x1, 'angle x:', self.axis_x.angle_real(),
-			'y:', y1, 'angle y:', self.axis_y.angle_real(), 
-			'z:', z1, 'angle z:', self.axis_z.angle_real())
-		
-
-		# input('&&&&&')
-		#time.sleep(1)
+		if self.print_on:
+			print('go_to_point Приехал в координаты:', 
+				'x:', x1, 'angle x:', self.axis_x.angle_real(),
+				'y:', y1, 'angle y:', self.axis_y.angle_real(), 
+				'z:', z1, 'angle z:', self.axis_z.angle_real())
 
 
 	def check_limit(self, x, y, z):
@@ -638,7 +609,7 @@ class Robot_module(QObject):
 		switch_y = pins.switch_y.get_value()
 
 		if not switch_y and self.button_stop == False:
-			print('Не на свитче Y')
+			#print('Не на свитче Y')
 			self.calibration()
 
 		if not self.calibration_ready and self.button_stop == False:
@@ -648,10 +619,10 @@ class Robot_module(QObject):
 		list_objects = self.connect_0.neuron.objects_filter
 		list_coord = self.connect_0.neuron.list_coord
 
-		# if self.print_on:
-		print('move_objects list_objects', list_objects)
+		if self.print_on:
+			print('move_objects list_objects', list_objects)
 	
-		print('move_objects list_coord', list_coord)
+			print('move_objects list_coord', list_coord)
 
 		i = 0
 		limit = False
@@ -659,8 +630,6 @@ class Robot_module(QObject):
 		completed = False
 
 		for coord in list_coord:
-			print('self.button_stop', self.button_stop)
-			
 			if self.start == False and self.pumping_find == False:
 				break
 
@@ -694,7 +663,6 @@ class Robot_module(QObject):
 				# z = z + 2
 				
 				self.enable_motors(True)
-
 
 				if self.joker >= 2:
 					self.joker_move()
@@ -822,7 +790,6 @@ class Robot_module(QObject):
 			
 			asyncio.run(self._calibration_y_async())
 
-			print('111111111111111111111')
 			self.move(0, -10, 0)
 
 			asyncio.run(self._calibration_x_async())
@@ -860,8 +827,6 @@ class Robot_module(QObject):
 		self.home = True
 
 		self.null_value()
-
-		print('go home')
 
 	
 	def joker_move(self):

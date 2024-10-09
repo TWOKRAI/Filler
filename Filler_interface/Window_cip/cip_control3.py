@@ -228,7 +228,7 @@ class Cip_control(Control):
         self.pumps_speed = self.param_list[1]
         self.pumps_state = self.param_list[2]
 
-        print(self.pumps_speed, self.pumps_state)
+        #print(self.pumps_speed, self.pumps_state)
 
 
     def memory_write(self, data):
@@ -526,7 +526,7 @@ class Cip_control(Control):
         self.update()
 
         self.memory_write(self.param_list)
-        print('pressed')
+        #print('pressed')
 
 
     def plus_enable(self):
@@ -548,7 +548,7 @@ class Cip_control(Control):
         if self.param_num > 1:
             self.param_num -= 1
 
-        print(self.param_num)
+        #print(self.param_num)
 
         self.enable_control()
         self.update()

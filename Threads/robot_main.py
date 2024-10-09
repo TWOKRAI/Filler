@@ -225,6 +225,7 @@ class Robot_filler(QThread):
                 self.camera.running()
                 
                 if not self.filler: break
+                self.robot.enable_motors(True)
                 self.neuron.neuron_vision()
 
                 self.time = 0

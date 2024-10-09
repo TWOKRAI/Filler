@@ -133,7 +133,6 @@ class Control(QMainWindow):
 
 
     def on_timer_timeout(self):
-        print('Button was held down for 2 seconds!')
         app.window_main_filler.show()
         self.hide()
 
@@ -179,7 +178,6 @@ class Control(QMainWindow):
         self.button_plus.setIcon(QIcon(file_path))
 
 
-
     def put_parametrs(self):
        filler.param1 = self.param_list[1]
        filler.param2 = self.param_list[2]
@@ -187,8 +185,6 @@ class Control(QMainWindow):
        filler.param4 = self.param_list[4]
        filler.param5 = self.param_list[5]
        filler.param6 = self.param_list[6]
-
-       print(filler.param1, filler.param2, filler.param3, filler.param4)
 
     
     def get_parametrs(self): 
@@ -317,13 +313,13 @@ class Control(QMainWindow):
     def text_color(self):
         color = self.color_text[self.param_num]
 
-        print('text_color')
+        #print('text_color')
 
         if color is not None:
             value_id = self.value_id[self.param_num]
             color = color[value_id]
 
-            print(value_id, color)
+            #print(value_id, color)
 
             if color is not None:
                 color = color
@@ -402,7 +398,7 @@ class Control(QMainWindow):
         if self.param_num > 1:
             self.param_num -= 1
 
-        print(self.param_num)
+        #print(self.param_num)
 
         self.enable_control()
         self.update_text()
@@ -427,7 +423,7 @@ class Control(QMainWindow):
         if self.param_num < len(self.param_list):
             self.param_num += 1
 
-        print(self.param_num)
+        #print(self.param_num)
 
         self.enable_control()
         self.update_text()
@@ -497,7 +493,7 @@ class Control(QMainWindow):
     def minus_enable(self):
         value = self.param_list[self.param_num]
 
-        print(value, type(value))
+        # print(value, type(value))
 
         if isinstance(value, bool) or isinstance(value, str):
             value_id = self.value_id[self.param_num]
@@ -510,7 +506,7 @@ class Control(QMainWindow):
         elif isinstance(value, int) or isinstance(value, float):
             self.step = self.value_step[self.param_num]
 
-            print(self.param_list[self.param_num], self.param_list)
+            # print(self.param_list[self.param_num], self.param_list)
             
             if value < self.step:
                 self.button_minus.setEnabled(False)
@@ -567,12 +563,9 @@ class Control(QMainWindow):
     def plus_enable(self):
         value = self.param_list[self.param_num]
 
-        print(value, type(value))
 
         if isinstance(value, bool) or isinstance(value, str):
             value_id = self.value_id[self.param_num]
-
-            print('sssssssssssssssss', self.value_step)
 
             if value_id >= len(self.value_step[self.param_num]) - 1:
                 self.button_plus.setEnabled(False)

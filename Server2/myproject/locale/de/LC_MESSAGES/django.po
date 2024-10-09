@@ -214,8 +214,11 @@ msgstr "Willkommen bei der InnoFiller app"
 msgid "We are delighted to welcome you to our app for managing your new dispenser! Our company aims to provide you with the most innovative and convenient solutions. We wish you a pleasant experience!"
 msgstr "Wir freuen uns, Sie in unserer App zur Verwaltung Ihres neuen Spenders begrüßen zu dürfen! Unser Unternehmen strebt danach, Ihnen die innovativsten und bequemsten Lösungen zu bieten. Wir wünschen Ihnen eine angenehme Nutzung!"
 
-msgid "Sincerely, the"
-msgstr "Mit freundlichen Grüßen, das"
+msgid "Sincerely, "
+msgstr "Mit freundlichen Grüßen, "
 
-msgid " team"
-msgstr " team"
+msgid "the"
+msgstr "das"
+
+msgid " Innotech team"
+msgstr "Innotech Team"

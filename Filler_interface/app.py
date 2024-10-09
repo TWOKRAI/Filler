@@ -148,7 +148,7 @@ class App(QApplication):
             
             self.window_robot.database_update()
             self.data_control = self.database.read_data('myapp_control')
-            print(self.data_control)
+            # print(self.data_control)
             
             if self.data_control[0][1] == True:
                 self.button_calibration.emit()
@@ -186,12 +186,12 @@ class App(QApplication):
     
     def block_on(self):
         self.block_database = True
-        print('Block data')
+        #print('Block data')
     
 
     def block_off(self):
         self.block_database = False
-        print('UNBlock data')
+        #print('UNBlock data')
     
     
     def database_reset(self):

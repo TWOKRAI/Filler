@@ -186,7 +186,7 @@ class Robot_control(Control):
 
     def get_parametrs(self): 
         self.data_robot = app.database.read_data('myapp_robot')
-        print('self.data_robot', self.data_robot)
+        #print('self.data_robot', self.data_robot)
 
         self.speed_robot = self.data_robot[0][1]
         self.time_robot = self.data_robot[0][2]
@@ -226,7 +226,7 @@ class Robot_control(Control):
         self.autovalue = bool(self.autovalue)
         self.presence_cup = bool(self.presence_cup)
 
-        print( 'PUT robot myapp_robot', self.param_list[1], self.time_robot, self.laser_mode, self.autovalue, self.presence_cup)
+        # print( 'PUT robot myapp_robot', self.param_list[1], self.time_robot, self.laser_mode, self.autovalue, self.presence_cup)
 
         app.database.update_data('myapp_robot', 'speed', self.param_list[1])
         app.database.update_data('myapp_robot', 'time_wait', self.time_robot)
@@ -562,7 +562,7 @@ class Robot_control(Control):
         self.update()
         self.enable_control()
 
-        print('click') 
+        # print('click') 
        
     
     @enable_marker_decorator('enable_marker')
@@ -674,7 +674,7 @@ class Robot_control(Control):
         self.update()
 
         self.memory_write(self.param_list)
-        print('pressed')
+        # print('pressed')
 
 
     def plus_enable(self):
@@ -714,7 +714,7 @@ class Robot_control(Control):
         if self.param_num > 1:
             self.param_num -= 1
 
-        print(self.param_num)
+        # print(self.param_num)
 
         self.enable_control()
         self.update()

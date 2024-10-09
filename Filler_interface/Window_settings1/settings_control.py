@@ -19,7 +19,7 @@ class Control(Control):
        filler.param5 = self.param_list[5]
        filler.param6 = self.param_list[6]
 
-       print(filler.param1, filler.param2, filler.param3, filler.param4)
+    #    print(filler.param1, filler.param2, filler.param3, filler.param4)
 
     
     def get_parametrs(self): 

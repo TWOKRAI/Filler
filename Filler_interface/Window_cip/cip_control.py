@@ -39,7 +39,7 @@ class Control(Control):
        filler.param31 = self.param_list[3]
        filler.param41 = self.param_list[4]
 
-       print(filler.param11, filler.param21, filler.param31, filler.param41)
+       #print(filler.param11, filler.param21, filler.param31, filler.param41)
 
 
     def default_parametrs(self):
@@ -134,12 +134,11 @@ class Control(Control):
     def plus(self):
         super().plus()
 
-        print(self.param_list)
+        #print(self.param_list)
 
         if self.param_list[2] or self.param_list[4]:
             self.button2.setGeometry(0, 0, self.width(), self.height())
             self.button2.setEnabled(True)
-            print('ssssssssss')
 
 
     def close(self):

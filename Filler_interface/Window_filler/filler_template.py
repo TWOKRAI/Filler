@@ -50,7 +50,8 @@ class Control(QMainWindow):
         super().show()
 
         app.window_focus = self.window_name
-        print(app.window_focus)
+        #print(app.window_focus)
+        
         app.close_windows()
 
 
@@ -68,7 +69,6 @@ class Control(QMainWindow):
 
 
     def on_timer_timeout(self):
-        print('Button was held down for 2 seconds!')
         app.window_main_filler.show()
         self.hide()
 
@@ -187,7 +187,6 @@ class Control(QMainWindow):
 
     def left_pressed_2(self):
         self.timer_left_pressed.start()
-        print('preeeesed minus')
         self.pressed_left.stop()
 
     
@@ -207,7 +206,6 @@ class Control(QMainWindow):
     def right_pressed_2(self):
         self.pressed_right.stop()
         self.timer_right_pressed.start()
-        print('preeeesed minus')
 
 
     def right_released(self):
@@ -231,7 +229,6 @@ class Control(QMainWindow):
     
     def minus_pressed_2(self):
         self.timer_minus_pressed.start()
-        print('preeeesed minus')
         self.pressed_minus.stop()
 
 
@@ -257,7 +254,6 @@ class Control(QMainWindow):
     def plus_pressed_2(self):
         self.pressed_plus.stop()
         self.timer_plus_pressed.start()
-        print('preeeesed minus')
 
 
     def plus_released(self):

@@ -1,11 +1,9 @@
 from PyQt5.QtCore import QTimer, QSize
 from PyQt5.QtGui import QIcon, QFont
 import os
-import subprocess
 
 from Lib.memory import Memory
 from Filler_interface.app import app
-#from Server.server_control import server
 
 from Filler_interface.Window_settings1.settings_template import Control
 
@@ -827,8 +825,6 @@ class Settings_control(Control):
         self.update()
         self.enable_control()
 
-        print('click') 
-    
 
     def plus_released(self):
         super().plus_released()
@@ -876,7 +872,6 @@ class Settings_control(Control):
         self.update()
 
         self.memory_write(self.param_list)
-        print('pressed')
 
 
     def plus_enable(self):
@@ -945,8 +940,6 @@ class Settings_control(Control):
     def left(self):
         if self.param_num > 1:
             self.param_num -= 1
-
-        print(self.param_num)
 
         self.enable_control()
         self.update()

@@ -111,7 +111,6 @@ class Main_filler_control(QMainWindow):
         super().show()
 
         app.window_focus = self.window_name
-        print(app.window_focus)
         #app.close_windows()
 
         QTimer.singleShot(500, self.no_focus_button)
@@ -161,9 +160,7 @@ class Main_filler_control(QMainWindow):
         self.button_settings.clearFocus()
         self.button_view.clearFocus()
         self.button_cip.clearFocus()
-
-        print('NO FOCUS')
-
+        
     
     def all_enable_on(self):
         self.enable_marker = True

@@ -577,7 +577,7 @@ class Control(Control):
         self.update()
 
         self.memory_write(self.param_list)
-        print('pressed')
+        # print('pressed')
 
 
     def plus_enable(self):
@@ -615,7 +615,7 @@ class Control(Control):
         if self.param_num > 1:
             self.param_num -= 1
 
-        print(self.param_num)
+        # print(self.param_num)
 
         self.enable_control()
         self.update()

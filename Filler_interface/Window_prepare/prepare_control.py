@@ -96,7 +96,6 @@ class Prepare_control(QMainWindow):
         self.update_text()
 
         app.window_focus = self.window_name
-        print(app.window_focus)
         #app.close_windows()
 
         self.setFocus()
@@ -283,7 +282,7 @@ class Prepare_control(QMainWindow):
         if self.param_num >= 6:
             self.param_num = 6
 
-        print('self.param_num', self.param_num)
+        # print('self.param_num', self.param_num)
 
         if app.threads.robot_filler.pumping_ready == True:
             self.param_num = 6

@@ -50,13 +50,13 @@ class List_control(QMainWindow):
         self.button_view.clicked.connect(self.view)
 
 
-        self.game_text = [' ИГРА', ' GAME', ' SPIEL']
+        self.game_text = [' НАСТРОЙКИ', ' SETTINGS', 'EINSTELLUNGEN']
         
         self.button_game.setMinimumSize(button_size)
         self.button_game.setIconSize(icon_size)
         self.button_game.setFont(font)
 
-        self.button_game.clicked.connect(self.game)
+        self.button_game.clicked.connect(self.settings)
 
 
         self.statistics_text = [' QR-KОД', ' QR-СODE', ' QR-СODE']
@@ -83,7 +83,6 @@ class List_control(QMainWindow):
         super().show()
         
         app.window_focus = self.window_name
-        print(app.window_focus)
         app.close_windows()
 
 
@@ -94,7 +93,7 @@ class List_control(QMainWindow):
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-preview-pane-100.png')
         self.button_view.setIcon(QIcon(file_path))
 
-        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-game-controller-100.png')
+        file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-automation-100.png')
         self.button_game.setIcon(QIcon(file_path))
 
         file_path = os.path.join('/home/innotech/Project/Filler/Filler_interface', 'Style_windows', 'icons_black', 'icons8-qr-code-96.png')
@@ -120,14 +119,9 @@ class List_control(QMainWindow):
         self.timer.stop()
 
 
-    def game(self):
-        app.check_timer()
-        pass
-    
-
     def settings(self):
         app.window_settings2.show()
-        self.hide()
+        # self.hide()
 
     
     def statistics(self):

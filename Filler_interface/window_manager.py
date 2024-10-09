@@ -101,55 +101,55 @@ class WindowManager:
     def close_windows(self, window_focus):
         if window_focus != self.window_start.window_name:
             self.window_start.hide()
-            print(f'close: {self.window_start.window_name}')
+            #print(f'close: {self.window_start.window_name}')
 
         if window_focus != self.window_datetime.window_name:
             self.window_datetime.hide()
-            print(f'close: {self.window_datetime.window_name}')
+            #print(f'close: {self.window_datetime.window_name}')
 
         if window_focus != self.window_main_filler.window_name:
             self.window_main_filler.hide()
-            print(f'close: {self.window_main_filler.window_name}')
+            #print(f'close: {self.window_main_filler.window_name}')
 
         if window_focus != self.window_list1.window_name:
             self.window_list1.hide()
-            print(f'close: {self.window_list1.window_name}')
+            #print(f'close: {self.window_list1.window_name}')
 
         if window_focus != self.window_statistic.window_name:
             self.window_statistic.hide()
-            print(f'close: {self.window_statistic.window_name}')
+            #print(f'close: {self.window_statistic.window_name}')
 
         if window_focus != self.window_settings1.window_name:
             self.window_settings1.hide()
-            print(f'close: {self.window_settings1.window_name}')
+            #print(f'close: {self.window_settings1.window_name}')
 
         if window_focus != self.window_settings2.window_name:
             self.window_settings2.hide()
-            print(f'close: {self.window_settings2.window_name}')
+            #print(f'close: {self.window_settings2.window_name}')
 
         if window_focus != self.window_prepare.window_name:
             self.window_prepare.hide()
-            print(f'close: {self.window_prepare.window_name}')
+            #print(f'close: {self.window_prepare.window_name}')
 
         if window_focus != self.window_view.window_name:
             self.window_view.close()
-            print(f'close: {self.window_view.window_name}')
+            #print(f'close: {self.window_view.window_name}')
 
         if window_focus != self.window_filler.window_name:
             self.window_filler.hide()
-            print(f'close: {self.window_filler.window_name}')
+            #print(f'close: {self.window_filler.window_name}')
 
         if window_focus != self.window_error.window_name:
             self.window_error.hide()
-            print(f'close: {self.window_error.window_name}')
+            #print(f'close: {self.window_error.window_name}')
 
         if window_focus != self.window_cip.window_name:
             self.window_cip.hide()
-            print(f'close: {self.window_cip.window_name}')
+            #print(f'close: {self.window_cip.window_name}')
 
         if window_focus != self.window_robot.window_name:
             self.window_robot.hide()
-            print(f'close: {self.window_robot.window_name}')
+            #print(f'close: {self.window_robot.window_name}')
 
     def show_window(self, window_focus):
         match window_focus:

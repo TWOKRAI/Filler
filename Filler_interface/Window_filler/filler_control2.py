@@ -585,7 +585,7 @@ class Filler_control(Control):
         self.put_parametrs()
 
         self.memory_write(self.param_list)
-        print('pressed')
+        #print('pressed')
 
 
     def plus_enable(self):
@@ -680,7 +680,7 @@ class Filler_control(Control):
 
     def button_start_clicked(self):
         self.play = not self.play
-        print('start')
+        # print('start')
 
         if self.play == True:
             self.start_filler.emit()

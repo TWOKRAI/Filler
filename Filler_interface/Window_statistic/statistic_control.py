@@ -29,8 +29,6 @@ class Control(Control):
        filler.param21 = self.param_list[2]
        filler.param31 = self.param_list[3]
 
-       print(filler.param11, filler.param21, filler.param31, filler.param41)
-
 
     def default_parametrs(self):
         filler.static_time = filler.static_time_def

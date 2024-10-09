@@ -111,10 +111,10 @@ class Neuron:
 			data.append(tuple_obj)
 			self.connect_0.interface.running()
 
-			self.connect_0.camera.running()
-			tuple_obj = self.find_objects()
-			data.append(tuple_obj)
-			self.connect_0.interface.running()
+			# self.connect_0.camera.running()
+			# tuple_obj = self.find_objects()
+			# data.append(tuple_obj)
+			# self.connect_0.interface.running()
 		
 			sorted_data = sorted(data, key=lambda x: x[1])
 			max_value_second = max(sorted_data, key=lambda x: x[1])[1]
@@ -132,7 +132,7 @@ class Neuron:
 			for obj in self.memory_objects:
 				lenght_2 += obj[7]
 
-			print('abs(lenght_1 - lenght_2)', abs(lenght_1 - lenght_2))
+			#print('abs(lenght_1 - lenght_2)', abs(lenght_1 - lenght_2))
 
 			if abs(lenght_1 - lenght_2) >= 50:
 				self.memory_objects = self.objects_filter
@@ -261,8 +261,8 @@ class Neuron:
 		image_1_gray = cv2.GaussianBlur(image_1_gray, (5, 5), 0)
 		image_2_gray = cv2.GaussianBlur(image_2_gray, (5, 5), 0)
 
-		image_1_gray = cv2.medianBlur(image_1_gray, 5)
-		image_2_gray = cv2.medianBlur(image_2_gray, 5)
+		image_1_gray = cv2.medianBlur(image_1_gray, 3)
+		image_2_gray = cv2.medianBlur(image_2_gray, 3)
 
 		# image_1_gray = image_1
 		# image_2_gray = image_2
@@ -281,7 +281,7 @@ class Neuron:
 		kp1, des1 = sift.detectAndCompute(cropped_image_1, None)
 		kp2, des2 = sift.detectAndCompute(cropped_image_2, None)
 
-		print('len(kp1)', len(kp1), len(kp2))
+		#print('len(kp1)', len(kp1), len(kp2))
 
 		cropped_image_1_with_keypoints = cv2.drawKeypoints(cropped_image_1, kp1, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
 		cropped_image_2_with_keypoints = cv2.drawKeypoints(cropped_image_2, kp2, None, flags=cv2.DrawMatchesFlags_DRAW_RICH_KEYPOINTS)
@@ -290,10 +290,10 @@ class Neuron:
 		cv2.imwrite(os.path.join(current_dir, 'cropped_image_2_with_keypoints.png'), cropped_image_2_with_keypoints)
 
 		if len(kp2) >= len(kp1) * 0.6:
-			print('Стакан есть')
+			#print('Стакан есть')
 			return True
 		else:
-			print('Стакан нету')
+			#print('Стакан нету')
 			return False
 		
 
