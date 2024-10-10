@@ -372,6 +372,19 @@ class Filler_control(Control):
 
         self.value_2.setText(str(f'2: {value_2}'))
 
+
+    def value_update_pumps(self, value1, value2):
+        if value1 <= 0: 
+            value1 = 0
+
+        if value2 <= 0: 
+            value2 = 0
+
+        print('update', value1, value2)
+
+        self.value.setText(str(f'1: {value1}'))
+        self.value_2.setText(str(f'2: {value2}'))
+
     
     def value_mini_update(self):
         match self.param_num:

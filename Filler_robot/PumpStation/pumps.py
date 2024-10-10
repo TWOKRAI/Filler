@@ -2,111 +2,16 @@ import asyncio
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 import random
 
-from Filler_robot.MotorModules.motor import Motor
-# from Filler_robot.NeuroModules.neuron import neuron
-
+from Filler_robot.PumpStation.pump import Pump
 from Raspberry.pins_table import pins
-
 from Filler_interface.app import app
 
-
-class Pump(QObject):
-    stop_pump = pyqtSignal()
-
-    def __init__(self, name, motor_step, motor_dir, motor_enable):
-        super().__init__()
-
-        self.print_on = False
-
-        self.name = name
-
-        self.motor = Motor(name,  motor_step, motor_dir, motor_enable)
-        self.motor.speed_def = 0.000005
-        self.motor.enable_on(False)
-
-        
-        self.turn = 0
-        self.ml = 30
-        self.amount = 1
-        self.step_amount = 0.003
-        self.speed = 10
-        self.speed_k = 100
-
-        self.dir = 1
-
-        self.bottle_ml = 1000
-        self.bottle_min = 100
-
-        self.warnning = False
-        self.ready = False
-    
-
-    def ml_to_steps(self, ml):
-        steps = 0
-        if ml >= 0:
-            steps = int(ml) / self.step_amount
-        else:
-            steps = int(ml) / self.step_amount
-
-        if self.print_on:
-            print(self.ml, self.step_amount)
-            print(f'pump {self.name}, ml_to_steps // output: steps = {steps} bottle {self.bottle_ml}')
-
-        return steps
-    
-
-    def step_to_ml(self):
-        return int(self.motor.value * self.amount / self.step_amount)
-
-
-    async def _pour_async(self, ml):
-        self.motor.stop = False
-        self.ready = False
-        
-        self.turn = self.ml_to_steps(ml)
-
-        speed = int(self.speed_k * self.speed)
-
-        #print('speed', self.speed_k, speed, self.turn)
-
-        #await self.motor._freq_async(speed, 1, self.turn)
-        await self.motor._freq_async_new(int(self.turn), speed, 300, 300, 100, 100)
-
-        self.stop_pump.emit()
-
-        #await self.motor._freq_async(speed, 1, -800 * self.dir, accuration = False)
-        await self.motor._freq_async_new(int(-600 * self.dir), speed, 300, 300, 100, 100)
-
-        self.ready = True
-        
-
-    def pour(self, ml, async_mode: bool = False):
-        self.motor.stop = False
-        self.ready = False
-
-        self.motor.value = 0
-        self.motor.error_limit = False
-        
-        if async_mode:
-            return self._pour_async(ml)
-        else:
-            asyncio.run(self._pour_async(ml))
-    
-
-    async def _pour_async_down(self, dir):
-        # self.motor.stop = False
-        self.ready = False
-
-        if dir == True:
-            await self.motor._freq_async(10, 1, -500 * self.dir, accuration = False)
-        else:
-            await self.motor._freq_async(10, 1, -500 * self.dir, accuration = False)
-    
 
 class Pump_station(QObject):
     minus_pump = pyqtSignal()
     bottle_1 = pyqtSignal()
     bottle_2 = pyqtSignal()
+    bottles_value = pyqtSignal(int, int)
     start_pump = pyqtSignal()
     stop_pump = pyqtSignal()
 
@@ -128,6 +33,9 @@ class Pump_station(QObject):
         self.pump_2 = Pump('pumps_2',pins.motor_p2_step, pins.motor_p2_dir, pins.motor_p1p2_enable)
         self.pump_2_enable = True
         self.pump_2.dir = 1
+
+        self.turn1 = 0
+        self.turn2 = 0
         
         self.mode_game = False
         self.level = 1
@@ -203,7 +111,7 @@ class Pump_station(QObject):
 
         self.enable_motors(False)
 
-        self.stop_pump.emit()
+        #self.stop_pump.emit()
 
 
     def russian_rullete(self, ml_1, ml_2):
@@ -290,15 +198,22 @@ class Pump_station(QObject):
 
     async def _monitor_filler(self):
         while not self.stop2:
-            if  self.pump_1.motor.step_info_2 >= self.pump_1.motor.step_info_2_2:
-                self.pump_1.motor.step_info_2_2 = self.pump_1.motor.step_info_2_2 + 1000
-                self.bottle_1.emit()
+            # if  self.pump_1.motor.step_info_2 >= self.pump_1.motor.step_info_2_2:
+            #     self.pump_1.motor.step_info_2_2 = self.pump_1.motor.step_info_2_2 + 1000
+            #     self.bottle_1.emit(self.pump_1.motor.step_info_2_2)
         
-            if self.pump_2.motor.step_info_2 >= self.pump_2.motor.step_info_2_2:
-                self.pump_2.motor.step_info_2_2 = self.pump_2.motor.step_info_2 + 1000
-                self.bottle_2.emit()
-                #print(self.pump_1.motor.time_distance)
+            # if self.pump_2.motor.step_info_2 >= self.pump_2.motor.step_info_2_2:
+            #     self.pump_2.motor.step_info_2_2 = self.pump_2.motor.step_info_2 + 1000
+            #     self.bottle_2.emit(self.pump_2.motor.step_info_2_2)
+            #     #print(self.pump_1.motor.time_distance)
 
+            value1 = self.turn1 - self.pump_1.motor.step_info_2 * self.pump_1.step_amount
+            value2 = self.turn2 - self.pump_1.motor.step_info_2 * self.pump_2.step_amount
+            
+            value1 = int(round(value1, 0))
+            value2 = int(round(value2, 0))
+            
+            self.bottles_value.emit(value1, value2)
             await asyncio.sleep(0.5)
 
     
@@ -308,6 +223,9 @@ class Pump_station(QObject):
 
     async def _all_pour_async(self, turn1, turn2, stop = True):
         self.start_pump.emit()
+
+        self.turn1 = turn1
+        self.turn2 = turn2
 
         # print( ' self.pump_1.motor.stop', self.pump_1.motor.stop,  self.pump_2.motor.stop)
         # print( ' turn1, turn2', turn1,  turn2)

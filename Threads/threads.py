@@ -138,6 +138,8 @@ class Thread():
 
             self.robot_filler.pump_station.bottle_1.connect(app.window_filler.value_update_pump_1)
             self.robot_filler.pump_station.bottle_2.connect(app.window_filler.value_update_pump_2)
+            self.robot_filler.pump_station.bottles_value.connect(app.window_filler.value_update_pumps)
+
             self.robot_filler.pump_station.start_pump.connect(app.window_filler.start_pump)
             self.robot_filler.pump_station.stop_pump.connect(app.window_filler.stop_pump)
 
